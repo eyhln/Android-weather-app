@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Weather</string>
+
+    // Location screen
+    <string name="use_current_location">Use Current Location</string>
+    <string name="choose_location">Choose Location</string>
+</resources>
