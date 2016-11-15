@@ -1,9 +1,11 @@
-package com.mariebyleen.weather;
+package com.mariebyleen.weather.base;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.mariebyleen.weather.R;
 
 /**
  * Created by marie on 11/14/16. Pulled directly from the Big Nerd Ranch guide to android
