@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/choose_location_button"
+        android:id="@+id/button_choose_location"
         android:layout_width="@dimen/button_width"
         android:layout_height="wrap_content"
         android:text="@string/choose_location"
@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"/>
 
     <Button
-        android:id="@+id/use_current_location_button"
+        android:id="@+id/button_use_current_location"
         android:layout_width="288dp"
         android:layout_height="wrap_content"
         android:text="@string/use_current_location"
