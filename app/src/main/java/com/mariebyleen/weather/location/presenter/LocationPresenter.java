@@ -17,6 +17,13 @@ public class LocationPresenter implements LocationPresenterContract {
         this.availability = availability;
     }
 
+    @Override
+    public void useCurrentLocation() {
+        if (isPlayServicesAvailableOnDevice()) {
+
+        }
+    }
+
     public boolean isPlayServicesAvailableOnDevice() {
         int status = availability.isGooglePlayServicesAvailable(context);
         if(status == ConnectionResult.SUCCESS)

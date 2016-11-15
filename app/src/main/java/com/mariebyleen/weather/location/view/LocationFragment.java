@@ -40,9 +40,7 @@ public class LocationFragment extends Fragment implements LocationViewContract {
 
     @OnClick(R.id.button_use_current_location)
     public void useCurrentLocation() {
-        if (presenterContract.isPlayServicesAvailableOnDevice()) {
-
-        }
+        presenterContract.useCurrentLocation();
     }
 
 
