@@ -17,11 +17,8 @@ public class LocationPresenter
 
     @BindString(R.string.find_current_location_progress_dialog) String dialogText;
 
-    @Inject
-    LocationViewContract view;
-
-    @Inject
-    CurrentLocationFinder currentLocationFinder;
+    private LocationViewContract view;
+    private CurrentLocationFinder currentLocationFinder;
 
     @Inject
     public LocationPresenter(LocationViewContract view,

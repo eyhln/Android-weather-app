@@ -2,6 +2,7 @@ package com.mariebyleen.weather.location.di.module;
 
 import android.content.Context;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.di.scope.PerActivity;
@@ -33,8 +34,9 @@ public class LocationModule {
 
     @PerActivity
     @Provides
-    CurrentLocationFinder provideCurrentLocationFinder(GoogleApiClient client) {
-        return new CurrentLocationFinder(client);
+    CurrentLocationFinder provideCurrentLocationFinder(GoogleApiClient client, Context context,
+                                                       GoogleApiAvailability availability) {
+        return new CurrentLocationFinder(client, context, availability);
     }
 
     @PerActivity
@@ -42,6 +44,12 @@ public class LocationModule {
     GoogleApiClient provideGoogleApiClient() {
         return new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).build();
+    }
+
+    @PerActivity
+    @Provides
+    GoogleApiAvailability provideGoogleApiAvailability() {
+        return GoogleApiAvailability.getInstance();
     }
 
     @PerActivity

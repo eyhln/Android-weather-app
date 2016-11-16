@@ -13,10 +13,6 @@ import com.google.android.gms.location.LocationListener;
 
 import javax.inject.Inject;
 
-/**
- * Created by marie on 11/16/16.
- */
-
 public class CurrentLocationFinder implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
         LocationListener {
@@ -26,13 +22,23 @@ public class CurrentLocationFinder implements GoogleApiClient.OnConnectionFailed
     private GoogleApiAvailability availability;
 
     @Inject
-    public CurrentLocationFinder(GoogleApiClient client ) {
+    public CurrentLocationFinder(GoogleApiClient client, Context context,
+                                 GoogleApiAvailability availability) {
         this.client = client;
-
+        this.context = context;
+        this.availability = availability;
     }
 
     public Location getCurrentLocation() {
+        if (isPlayServicesAvailableOnDevice()) {
+
+        }
         return null;
+    }
+
+    public boolean isPlayServicesAvailableOnDevice() {
+        int status = availability.isGooglePlayServicesAvailable(context);
+        return (status == ConnectionResult.SUCCESS);
     }
 
     @Override
