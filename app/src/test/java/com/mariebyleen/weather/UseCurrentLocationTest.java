@@ -1,12 +1,11 @@
 package com.mariebyleen.weather;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.mariebyleen.weather.location.presenter.LocationPresenter;
-import com.mariebyleen.weather.location.presenter.LocationViewContract;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.mariebyleen.weather.location.CurrentLocationFinder;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,10 +20,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UseCurrentLocationTest {
 
-    private LocationPresenter presenter;
-
-    @Mock
-    private LocationViewContract view;
+    private CurrentLocationFinder finder;
 
     @Mock
     private Context context;
@@ -33,24 +29,24 @@ public class UseCurrentLocationTest {
     private GoogleApiAvailability availability;
 
     @Mock
-    private Log log;
+    private GoogleApiClient client;
 
     @Before
     public void initialize() {
-        presenter = new LocationPresenter(context, availability, view);
+        finder = new CurrentLocationFinder(client, context, availability);
     }
 
     @Test
     public void on_check_for_Google_Services_available_determine_true_when_receive_SUCCESS() {
         when(availability.isGooglePlayServicesAvailable(context))
                 .thenReturn(ConnectionResult.SUCCESS);
-        assertTrue(presenter.isPlayServicesAvailableOnDevice());
+        assertTrue(finder.isPlayServicesAvailableOnDevice());
     }
 
     @Test
     public void on_check_for_Google_Services_available_determine_false_when_receive_SERVICE_MISSING() {
         when(availability.isGooglePlayServicesAvailable(context))
                 .thenReturn(ConnectionResult.SERVICE_MISSING);
-        assertFalse(presenter.isPlayServicesAvailableOnDevice());
+        assertFalse(finder.isPlayServicesAvailableOnDevice());
     }
 }
