@@ -4,4 +4,6 @@
     // Location screen
     <string name="use_current_location">Use Current Location</string>
     <string name="choose_location">Choose Location</string>
+
+    <string name="find_current_location_progress_dialog">Finding Location...</string>
 </resources>

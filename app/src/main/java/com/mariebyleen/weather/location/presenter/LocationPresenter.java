@@ -1,34 +1,28 @@
 package com.mariebyleen.weather.location.presenter;
 
-import android.content.Context;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.location.CurrentLocationFinder;
 import com.mariebyleen.weather.location.view.LocationPresenterContract;
+
+import butterknife.BindString;
 
 public class LocationPresenter implements LocationPresenterContract {
 
+    @BindString(R.string.find_current_location_progress_dialog) String dialogText;
     private LocationViewContract view;
-    private Context context;
-    private GoogleApiAvailability availability;
+    private CurrentLocationFinder currentLocationFinder;
 
-    public LocationPresenter(Context context, GoogleApiAvailability availability,
-                             LocationViewContract view) {
-        this.context = context;
-        this.availability = availability;
+    public LocationPresenter(LocationViewContract view,
+                             CurrentLocationFinder currentLocationFinder) {
         this.view = view;
+        this.currentLocationFinder = currentLocationFinder;
     }
 
     @Override
     public void useCurrentLocation() {
-        if (isPlayServicesAvailableOnDevice()) {
-
-        }
-    }
-
-    public boolean isPlayServicesAvailableOnDevice() {
-        int status = availability.isGooglePlayServicesAvailable(context);
-        return (status == ConnectionResult.SUCCESS);
+        view.showProgressDialog(dialogText);
+        currentLocationFinder.getCurrentLocation();
+        view.hideProgressDialog();
     }
 
 }
