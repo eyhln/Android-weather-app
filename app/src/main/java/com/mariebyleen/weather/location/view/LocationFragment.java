@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.location.presenter.LocationPresenter;
@@ -17,6 +18,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LocationFragment extends Fragment implements LocationViewContract {
+
+    private final static int REQUEST_CODE_GOOGLE_SERVICES_UPDATE = 0;
 
     private LocationPresenterContract presenterContract;
     private Context context;
@@ -35,21 +38,11 @@ public class LocationFragment extends Fragment implements LocationViewContract {
     private void onCreateViewCreateDependencies() {
         context = getContext();
         availability = GoogleApiAvailability.getInstance();
-        presenterContract = new LocationPresenter(context, availability);
+        presenterContract = new LocationPresenter(context, availability, this);
     }
 
     @OnClick(R.id.button_use_current_location)
     public void useCurrentLocation() {
         presenterContract.useCurrentLocation();
     }
-
-
-
-
-
-
-
-
-
-
 }
