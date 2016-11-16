@@ -11,6 +11,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 
+import javax.inject.Inject;
+
 /**
  * Created by marie on 11/16/16.
  */
@@ -23,7 +25,7 @@ public class CurrentLocationFinder implements GoogleApiClient.OnConnectionFailed
     private Context context;
     private GoogleApiAvailability availability;
 
-
+    @Inject
     public CurrentLocationFinder(GoogleApiClient client ) {
         this.client = client;
 

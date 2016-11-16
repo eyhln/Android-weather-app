@@ -1,7 +1,6 @@
 package com.mariebyleen.weather.location.view;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,21 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.location.CurrentLocationFinder;
-import com.mariebyleen.weather.location.presenter.LocationPresenter;
+import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
+import com.mariebyleen.weather.location.di.module.LocationModule;
 import com.mariebyleen.weather.location.presenter.LocationViewContract;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LocationFragment extends Fragment implements LocationViewContract {
 
-    private LocationPresenterContract presenter;
     private ProgressDialog dialog;
+
+    @Inject
+    LocationPresenterContract presenter;
 
     @Nullable
     @Override
@@ -36,12 +36,9 @@ public class LocationFragment extends Fragment implements LocationViewContract {
     }
 
     private void onCreateViewCreateDependencies() {
-        Context context = getContext();
-        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
-
-        presenter  = new LocationPresenter(this,
-                new CurrentLocationFinder(new GoogleApiClient.Builder(getContext())
-                        .addApi(LocationServices.API).build()));
+        DaggerLocationComponent.builder()
+                .locationModule(new LocationModule(this, getContext()))
+                .build().inject(this);
     }
 
     @OnClick(R.id.button_use_current_location)
