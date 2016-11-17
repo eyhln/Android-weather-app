@@ -1,6 +1,5 @@
 package com.mariebyleen.weather.base;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,8 +13,6 @@ import com.mariebyleen.weather.R;
  */
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
-
-    private ProgressDialog dialog;
 
     protected abstract Fragment createFragment();
 
@@ -34,6 +31,5 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     .commit();
         }
     }
-
 
 }

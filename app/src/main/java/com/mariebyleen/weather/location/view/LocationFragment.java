@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.mariebyleen.weather.base.WeatherApplication.getAndroidComponent;
+
 public class LocationFragment extends Fragment implements LocationViewContract {
 
     private ProgressDialog dialog;
@@ -36,6 +38,7 @@ public class LocationFragment extends Fragment implements LocationViewContract {
 
     private void onCreateViewResolveDaggerDependency() {
         DaggerLocationComponent.builder()
+                .androidComponent(getAndroidComponent())
                 .locationModule(new LocationModule(this, getContext()))
                 .build().inject(this);
     }
