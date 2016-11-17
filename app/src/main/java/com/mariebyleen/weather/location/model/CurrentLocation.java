@@ -1,22 +1,28 @@
 package com.mariebyleen.weather.location.model;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 
 import javax.inject.Inject;
 
 public class CurrentLocation implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
         LocationListener {
+
+    private final static String TAG = "CurrentLocation";
 
     private Location currentLocation;
 
@@ -60,13 +66,25 @@ public class CurrentLocation implements GoogleApiClient.OnConnectionFailedListen
 
         @Override
         public void onConnected(@Nullable Bundle bundle) {
-            /**
-            Location lastLocation = LocationServices.FusedLocationApi
-                    .getLastLocation(googleApiClient);
-            if (lastLocation != null)
-                currentLocation = lastLocation;
-             */
+            boolean permissionGranted = checkCourseLocationPermission();
+            if (!permissionGranted) {
+                //requestPermission();
+            }
+            else {
+                Location lastLocation = LocationServices.FusedLocationApi
+                        .getLastLocation(googleApiClient);
+                if (lastLocation != null)
+                    currentLocation = lastLocation;
+            }
         }
+
+            private boolean checkCourseLocationPermission() {
+                return (ContextCompat.checkSelfPermission(context,
+                        Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED);
+            }
+
+
 
         @Override
         public void onConnectionSuspended(int i) {
@@ -87,8 +105,11 @@ public class CurrentLocation implements GoogleApiClient.OnConnectionFailedListen
 
     }
 
+
     public void closeConnections() {
         if (googleApiClient.isConnected())
             googleApiClient.disconnect();
     }
+
+
 }
