@@ -3,7 +3,7 @@ package com.mariebyleen.weather.location.presenter;
 import android.util.Log;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.location.CurrentLocationFinder;
+import com.mariebyleen.weather.location.model.CurrentLocation;
 import com.mariebyleen.weather.location.view.LocationPresenterContract;
 
 import javax.inject.Inject;
@@ -18,11 +18,11 @@ public class LocationPresenter
     @BindString(R.string.find_current_location_progress_dialog) String dialogText;
 
     private LocationViewContract view;
-    private CurrentLocationFinder currentLocationFinder;
+    private CurrentLocation currentLocationFinder;
 
     @Inject
     public LocationPresenter(LocationViewContract view,
-                             CurrentLocationFinder currentLocationFinder) {
+                             CurrentLocation currentLocationFinder) {
         this.view = view;
         this.currentLocationFinder = currentLocationFinder;
     }
@@ -33,6 +33,10 @@ public class LocationPresenter
         Log.d(TAG, "using current location");
         currentLocationFinder.getCurrentLocation();
         view.hideProgressDialog();
+    }
+
+    public void onStop() {
+        currentLocationFinder.closeConnections();
     }
 
 }

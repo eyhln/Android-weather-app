@@ -5,7 +5,7 @@ import android.content.Context;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.mariebyleen.weather.location.CurrentLocationFinder;
+import com.mariebyleen.weather.location.model.CurrentLocation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UseCurrentLocationTest {
 
-    private CurrentLocationFinder finder;
+    private CurrentLocation finder;
 
     @Mock
     private Context context;
@@ -33,7 +33,7 @@ public class UseCurrentLocationTest {
 
     @Before
     public void initialize() {
-        finder = new CurrentLocationFinder(client, context, availability);
+        finder = new CurrentLocation(client, context, availability);
     }
 
     @Test

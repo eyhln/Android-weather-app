@@ -22,8 +22,7 @@ public class LocationFragment extends Fragment implements LocationViewContract {
 
     private ProgressDialog dialog;
 
-    @Inject
-    LocationPresenterContract presenter;
+    @Inject LocationPresenterContract presenter;
 
     @Nullable
     @Override
@@ -31,11 +30,11 @@ public class LocationFragment extends Fragment implements LocationViewContract {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_location, container, false);
         ButterKnife.bind(this, view);
-        onCreateViewCreateDependencies();
+        onCreateViewResolveDaggerDependency();
         return view;
     }
 
-    private void onCreateViewCreateDependencies() {
+    private void onCreateViewResolveDaggerDependency() {
         DaggerLocationComponent.builder()
                 .locationModule(new LocationModule(this, getContext()))
                 .build().inject(this);
@@ -60,5 +59,11 @@ public class LocationFragment extends Fragment implements LocationViewContract {
     public void hideProgressDialog() {
         if (dialog != null && dialog.isShowing())
             dialog.dismiss();
+    }
+
+    @Override
+    public void onStop() {
+        presenter.onStop();
+        super.onStop();
     }
 }
