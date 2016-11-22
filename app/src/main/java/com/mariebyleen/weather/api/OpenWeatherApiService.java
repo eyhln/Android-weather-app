@@ -6,10 +6,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
 
-/**
- * Created by marie on 11/22/16.
- */
-
 public interface OpenWeatherApiService {
 
     @GET("/weather?lat={lat}&lon={lon}")
