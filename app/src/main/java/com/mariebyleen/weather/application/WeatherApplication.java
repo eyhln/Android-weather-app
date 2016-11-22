@@ -1,10 +1,10 @@
-package com.mariebyleen.weather.base;
+package com.mariebyleen.weather.application;
 
 import android.app.Application;
 
-import com.mariebyleen.weather.di.component.AndroidComponent;
-import com.mariebyleen.weather.di.component.DaggerAndroidComponent;
-import com.mariebyleen.weather.di.module.AndroidModule;
+import com.mariebyleen.weather.application.di.component.AndroidComponent;
+import com.mariebyleen.weather.application.di.component.DaggerAndroidComponent;
+import com.mariebyleen.weather.application.di.module.AndroidModule;
 
 public class WeatherApplication extends Application {
 

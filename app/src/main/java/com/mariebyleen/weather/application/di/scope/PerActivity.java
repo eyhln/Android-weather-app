@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.di.scope;
+package com.mariebyleen.weather.application.di.scope;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

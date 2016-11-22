@@ -1,10 +1,10 @@
-package com.mariebyleen.weather.di.component;
+package com.mariebyleen.weather.application.di.component;
 
 import android.content.Context;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.mariebyleen.weather.di.module.AndroidModule;
+import com.mariebyleen.weather.application.di.module.AndroidModule;
 
 import javax.inject.Singleton;
 
