@@ -45,6 +45,5 @@ public class NetworkModule {
                 .addCallAdapterFactory(adapterFactory)
                 .client(client)
                 .build();
-
     }
 }
