@@ -1,7 +1,7 @@
 package com.mariebyleen.weather.location.di.component;
 
-import com.mariebyleen.weather.di.component.AndroidComponent;
-import com.mariebyleen.weather.di.scope.PerActivity;
+import com.mariebyleen.weather.application.di.component.AndroidComponent;
+import com.mariebyleen.weather.application.di.scope.PerActivity;
 import com.mariebyleen.weather.location.di.module.LocationModule;
 import com.mariebyleen.weather.location.view.LocationFragment;
 

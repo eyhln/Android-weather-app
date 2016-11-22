@@ -1,6 +1,8 @@
 package com.mariebyleen.weather;
 
 import android.content.Context;
+import android.location.Criteria;
+import android.location.LocationManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -31,9 +33,15 @@ public class UseCurrentLocationTest {
     @Mock
     private GoogleApiClient client;
 
+    @Mock
+    private LocationManager manager;
+
+    @Mock
+    private Criteria criteria;
+
     @Before
     public void initialize() {
-        finder = new CurrentLocation(client, context, availability);
+        finder = new CurrentLocation(client, context, availability, manager, criteria);
     }
 
     @Test

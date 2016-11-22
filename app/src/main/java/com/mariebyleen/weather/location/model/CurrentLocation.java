@@ -4,11 +4,14 @@ package com.mariebyleen.weather.location.model;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -18,38 +21,44 @@ import com.google.android.gms.location.LocationServices;
 
 import javax.inject.Inject;
 
+import static android.content.ContentValues.TAG;
+
 public class CurrentLocation implements GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks,
         LocationListener {
-
-    private final static String TAG = "CurrentLocation";
 
     private Location currentLocation;
 
     private GoogleApiClient googleApiClient;
     private Context context;
     private GoogleApiAvailability availability;
+    private LocationManager locationManager;
+    private Criteria criteria;
 
     @Inject
     public CurrentLocation(GoogleApiClient googleApiClient, Context context,
-                           GoogleApiAvailability availability) {
+                           GoogleApiAvailability availability, LocationManager locationManager,
+                           Criteria criteria) {
         this.googleApiClient = googleApiClient;
         this.context = context;
         this.availability = availability;
-
+        this.locationManager = locationManager;
+        this.criteria = criteria;
     }
 
-    public Location getCurrentLocation() {
+    public Location getLocation() {
         if (currentLocation == null)
-            requestCurrentLocation();
+            requestLastLocation();
         return currentLocation;
     }
 
-    private void requestCurrentLocation() {
-        if (isPlayServicesAvailableOnDevice())
+    private void requestLastLocation() {
+        if (isPlayServicesAvailableOnDevice()) {
             requestLocationUsingFusedLocationProvider();
-        else
+        }
+        else {
             requestLocationUsingNetworkProvider();
+        }
 
     }
 
@@ -101,8 +110,17 @@ public class CurrentLocation implements GoogleApiClient.OnConnectionFailedListen
             currentLocation = location;
         }
 
-    private void requestLocationUsingNetworkProvider() {
 
+    private void requestLocationUsingNetworkProvider() {
+        boolean permissionGranted = checkCourseLocationPermission();
+        if (!permissionGranted) {
+            // request permissions
+        }
+        else {
+            String providerName = locationManager.getBestProvider(criteria, false);
+            currentLocation = locationManager.getLastKnownLocation(providerName);
+            Log.d(TAG, "Network Provider... " + currentLocation.toString());
+        }
     }
 
 

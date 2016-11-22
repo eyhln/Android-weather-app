@@ -1,10 +1,12 @@
 package com.mariebyleen.weather.location.di.module;
 
 import android.content.Context;
+import android.location.Criteria;
+import android.location.LocationManager;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.mariebyleen.weather.di.scope.PerActivity;
+import com.mariebyleen.weather.application.di.scope.PerActivity;
 import com.mariebyleen.weather.location.model.CurrentLocation;
 import com.mariebyleen.weather.location.presenter.LocationPresenter;
 import com.mariebyleen.weather.location.presenter.LocationViewContract;
@@ -34,14 +36,30 @@ public class LocationModule {
     @PerActivity
     @Provides
     CurrentLocation provideCurrentLocationFinder(GoogleApiClient client, Context context,
-                                                 GoogleApiAvailability availability) {
-        return new CurrentLocation(client, context, availability);
+                                                 GoogleApiAvailability availability,
+                                                 LocationManager manager, Criteria criteria) {
+        return new CurrentLocation(client, context, availability, manager, criteria);
     }
 
     @PerActivity
     @Provides
     LocationViewContract provideLocationViewContract() {
         return view;
+    }
+
+    @PerActivity
+    @Provides
+    LocationManager provideLocationManager() {
+        return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @PerActivity
+    @Provides
+    Criteria provideCriteria() {
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_LOW);
+        criteria.setCostAllowed(false);
+        return criteria;
     }
 
 }

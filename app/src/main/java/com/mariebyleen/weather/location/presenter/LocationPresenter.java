@@ -1,7 +1,5 @@
 package com.mariebyleen.weather.location.presenter;
 
-import android.util.Log;
-
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.location.model.CurrentLocation;
 import com.mariebyleen.weather.location.view.LocationPresenterContract;
@@ -30,8 +28,7 @@ public class LocationPresenter
     @Override
     public void useCurrentLocation() {
         view.showProgressDialog(dialogText);
-        Log.d(TAG, "using current location");
-        currentLocationFinder.getCurrentLocation();
+        currentLocationFinder.getLocation();
         view.hideProgressDialog();
     }
 
