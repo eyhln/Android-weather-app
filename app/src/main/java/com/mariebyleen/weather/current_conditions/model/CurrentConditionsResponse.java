@@ -1,6 +1,7 @@
 package com.mariebyleen.weather.current_conditions.model;
 
 public class CurrentConditionsResponse {
+
     private int dt;
     private CurrentConditionsResponseCoord coord;
     private CurrentConditionsResponseWeather[] weather;
