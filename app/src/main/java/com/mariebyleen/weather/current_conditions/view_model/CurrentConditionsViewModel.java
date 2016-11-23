@@ -20,12 +20,12 @@ public class CurrentConditionsViewModel extends BaseObservable
     private double lat = 0;
     private double lon = 0;
 
-    @Inject
-    OpenWeatherApiService weatherApiService;
-
+    private OpenWeatherApiService weatherApiService;
     private CurrentConditionsResponse response;
 
-    public CurrentConditionsViewModel() {
+    @Inject
+    public CurrentConditionsViewModel(OpenWeatherApiService weatherApiService) {
+        this.weatherApiService = weatherApiService;
         refreshWeatherData();
     }
 
@@ -40,7 +40,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onCompleted() {
-        Log.i(TAG, "Current condition weather data successfully updated");
+        Log.i(TAG, "Current condition weather data update successfully completed");
     }
 
     @Override
