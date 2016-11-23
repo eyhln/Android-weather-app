@@ -2,8 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="main"
-                  type="com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain"/>
+        <variable name="conditions"
+          type="com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel"/>
     </data>
     <LinearLayout
                   android:orientation="vertical"
@@ -14,19 +14,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{main.temp}"
+            android:text="@{conditions.temperature}"
             tools:text="temp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{main.humidity}"
+            android:text="@{conditions.humidity}"
             tools:text="humidity"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{main.pressure}"
+            android:text="@{conditions.pressure}"
             tools:text="pressure"/>
 
     </LinearLayout>

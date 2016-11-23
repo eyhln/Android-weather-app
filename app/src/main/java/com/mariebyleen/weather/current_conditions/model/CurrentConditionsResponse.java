@@ -1,9 +1,6 @@
 package com.mariebyleen.weather.current_conditions.model;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
-
-public class CurrentConditionsResponse extends BaseObservable {
+public class CurrentConditionsResponse {
     private int dt;
     private CurrentConditionsResponseCoord coord;
     private CurrentConditionsResponseWeather[] weather;
@@ -31,7 +28,6 @@ public class CurrentConditionsResponse extends BaseObservable {
         this.coord = coord;
     }
 
-    @Bindable
     public CurrentConditionsResponseWeather[] getWeather() {
         return this.weather;
     }
@@ -56,7 +52,6 @@ public class CurrentConditionsResponse extends BaseObservable {
         this.cod = cod;
     }
 
-    @Bindable
     public CurrentConditionsResponseMain getMain() {
         return this.main;
     }
@@ -65,7 +60,6 @@ public class CurrentConditionsResponse extends BaseObservable {
         this.main = main;
     }
 
-    @Bindable
     public CurrentConditionsResponseClouds getClouds() {
         return this.clouds;
     }
