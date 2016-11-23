@@ -14,7 +14,7 @@ public class WeatherApplication extends Application {
 
   private static AndroidComponent androidComponent;
   private static NetworkComponent networkComponent;
-  private static final String baseUrl = "http://api.openweathermap.org/data/2.5";
+  private static final String baseUrl = "http://api.openweathermap.org/data/2.5/";
 
   @Override
   public void onCreate() {

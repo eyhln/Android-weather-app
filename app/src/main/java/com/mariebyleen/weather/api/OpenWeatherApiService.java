@@ -3,12 +3,12 @@ package com.mariebyleen.weather.api;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface OpenWeatherApiService {
 
-    @GET("/weather?lat={lat}&lon={lon}")
+    @GET("weather")
     Observable<CurrentConditionsResponse> getCurrentConditions(
-            @Path("lat") double lat, @Path("lon") double lon);
+            @Query("lat") double lat, @Query("lon") double lon);
 }
