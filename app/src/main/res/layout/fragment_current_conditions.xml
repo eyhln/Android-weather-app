@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="main"
                   type="com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain"/>
     </data>
     <LinearLayout
-                  android:orientation="horizontal"
+                  android:orientation="vertical"
                   android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+                  android:layout_height="match_parent"
+                android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{main.temp}"/>
+            android:text="@{main.temp}"
+            tools:text="temp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{main.humidity}"/>
+            android:text="@{main.humidity}"
+            tools:text="humidity"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{main.pressure}"/>
+            android:text="@{main.pressure}"
+            tools:text="pressure"/>
 
     </LinearLayout>
 </layout>
