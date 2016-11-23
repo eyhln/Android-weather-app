@@ -1,5 +1,7 @@
 package com.mariebyleen.weather.application.di.module;
 
+import com.mariebyleen.weather.api.OpenWeatherApiService;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -45,5 +47,11 @@ public class NetworkModule {
                 .addCallAdapterFactory(adapterFactory)
                 .client(client)
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    OpenWeatherApiService provideOpenWeatherApiService(Retrofit retrofit) {
+        return retrofit.create(OpenWeatherApiService.class);
     }
 }
