@@ -1,42 +1,55 @@
 package com.mariebyleen.weather.application;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
-import com.mariebyleen.weather.application.di.component.AndroidComponent;
-import com.mariebyleen.weather.application.di.component.DaggerAndroidComponent;
-import com.mariebyleen.weather.application.di.component.DaggerNetworkComponent;
-import com.mariebyleen.weather.application.di.component.NetworkComponent;
-import com.mariebyleen.weather.application.di.module.AndroidModule;
-import com.mariebyleen.weather.application.di.module.NetworkModule;
+import com.google.gson.Gson;
+import com.mariebyleen.weather.application.di.component.ApplicationComponent;
+import com.mariebyleen.weather.application.di.component.DaggerApplicationComponent;
+import com.mariebyleen.weather.application.di.module.ApplicationModule;
+import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
 
 public class WeatherApplication extends Application {
 
-  private static AndroidComponent androidComponent;
-  private static NetworkComponent networkComponent;
+  private static ApplicationComponent applicationComponent;
   private static final String baseUrl = "http://api.openweathermap.org/data/2.5/";
+  private static final String apiKey = "bb5dd17d68b943dbf98a7512901fcc04";
+
+  private SharedPreferences preferences;
 
   @Override
   public void onCreate() {
     super.onCreate();
     initializeAndroidComponents();
+    checkForFirstRun();
   }
 
   private void initializeAndroidComponents() {
-    androidComponent = DaggerAndroidComponent.builder()
-            .androidModule(new AndroidModule(this))
-            .build();
-
-    networkComponent = DaggerNetworkComponent.builder()
-            .networkModule(new NetworkModule(baseUrl))
+    applicationComponent = DaggerApplicationComponent.builder()
+            .applicationModule(new ApplicationModule(this, baseUrl))
             .build();
   }
 
-  public static AndroidComponent getAndroidComponent() {
-    return androidComponent;
+  public static ApplicationComponent getApplicationComponent() {
+    return applicationComponent;
   }
-  public static NetworkComponent getNetworkComponent() {
-    return networkComponent;
+  public static String getApiKey() {return apiKey;}
+
+  private void checkForFirstRun() {
+    preferences = getSharedPreferences("com.mariebyleen.weather", MODE_PRIVATE);
+    if (preferences.getBoolean("firstrun", true)) {
+      populateSharedPrefsWithDefaultModel();
+    }
+      preferences.edit().putBoolean("firstrun", false).apply();
   }
 
+  private void populateSharedPrefsWithDefaultModel() {
+    CurrentConditionsResponse currentConditionsEmpty = InitUtils.createDefaultModel();
+    SharedPreferences.Editor prefsEditor = preferences.edit();
+    Gson gson = new Gson();
+    String json = gson.toJson(currentConditionsEmpty);
+    prefsEditor.putString("CurrentConditions", json);
+    prefsEditor.apply();
+  }
 }
