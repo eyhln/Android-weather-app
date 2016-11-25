@@ -1,10 +1,10 @@
 package com.mariebyleen.weather.current_conditions.model;
 
 public class CurrentConditionsResponseCoord {
-    private int lon;
-    private int lat;
+    private double lon;
+    private double lat;
 
-    public int getLon() {
+    public double getLon() {
         return this.lon;
     }
 
@@ -12,7 +12,7 @@ public class CurrentConditionsResponseCoord {
         this.lon = lon;
     }
 
-    public int getLat() {
+    public double getLat() {
         return this.lat;
     }
 
