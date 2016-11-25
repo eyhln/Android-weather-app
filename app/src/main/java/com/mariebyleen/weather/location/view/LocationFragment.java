@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.mariebyleen.weather.application.WeatherApplication.getAndroidComponent;
+import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
 public class LocationFragment extends Fragment implements LocationViewContract {
 
@@ -38,7 +38,7 @@ public class LocationFragment extends Fragment implements LocationViewContract {
 
     private void onCreateViewResolveDaggerDependency() {
         DaggerLocationComponent.builder()
-                .androidComponent(getAndroidComponent())
+                .applicationComponent(getApplicationComponent())
                 .locationModule(new LocationModule(this, getContext()))
                 .build().inject(this);
     }

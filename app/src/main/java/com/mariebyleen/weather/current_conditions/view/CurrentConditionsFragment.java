@@ -16,7 +16,7 @@ import com.mariebyleen.weather.databinding.FragmentCurrentConditionsBinding;
 
 import javax.inject.Inject;
 
-import static com.mariebyleen.weather.application.WeatherApplication.getNetworkComponent;
+import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
 public class CurrentConditionsFragment extends Fragment {
 
@@ -27,17 +27,17 @@ public class CurrentConditionsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_current_conditions, container, false);
         onCreateViewResolveDaggerDependency();
         FragmentCurrentConditionsBinding binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_current_conditions, container, false);
         binding.setConditions(viewModel);
-        return view;
+
+        return binding.getRoot();
     }
 
     private void onCreateViewResolveDaggerDependency() {
         DaggerCurrentConditionsComponent.builder()
-                .networkComponent(getNetworkComponent())
+                .applicationComponent(getApplicationComponent())
                 .currentConditionsModule(new CurrentConditionsModule())
                 .build().inject(this);
     }
