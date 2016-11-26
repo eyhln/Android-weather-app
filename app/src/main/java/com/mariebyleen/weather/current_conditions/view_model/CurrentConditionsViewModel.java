@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
 import javax.inject.Inject;
@@ -28,25 +30,32 @@ public class CurrentConditionsViewModel extends BaseObservable
     private OpenWeatherApiService weatherApiService;
     private Gson gson;
     private SharedPreferences preferences;
-    private CurrentConditionsResponse response;
+    private CurrentConditionsMapper mapper;
+    private CurrentConditions conditions;
 
     @Inject
-    public CurrentConditionsViewModel(OpenWeatherApiService weatherApiService, Gson gson,
-                                      SharedPreferences preferences) {
+    public CurrentConditionsViewModel(OpenWeatherApiService weatherApiService,
+                                      Gson gson,
+                                      SharedPreferences preferences,
+                                      CurrentConditionsMapper mapper) {
         this.weatherApiService = weatherApiService;
         this.gson = gson;
         this.preferences = preferences;
-        if (response == null) {
+        this.mapper = mapper;
+
+        if (conditions == null) {
             populateData();
         }
         refreshWeatherData();
     }
 
     private void populateData() {
-        String json = preferences.getString("CurrentConditions", "");
-        CurrentConditionsResponse conditions = gson.fromJson(json,
-                CurrentConditionsResponse.class);
-        response = conditions;
+        String currentConditionsJson = preferences.getString("CurrentConditions", "");
+        CurrentConditions conditions = gson.fromJson(currentConditionsJson,
+                CurrentConditions.class);
+        Log.d(TAG, "Conditions: " + conditions.toString());
+        Log.d(TAG, "Temp: " + conditions.getTemperature());
+        this.conditions = conditions;
     }
 
     private void refreshWeatherData() {
@@ -56,6 +65,13 @@ public class CurrentConditionsViewModel extends BaseObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
+    }
+
+    public void onFragmentPause() {
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        String currentConditionsJson = gson.toJson(conditions);
+        prefsEditor.putString("CurrentConditions", currentConditionsJson);
+        prefsEditor.apply();
     }
 
     @Override
@@ -71,16 +87,15 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onNext(CurrentConditionsResponse currentConditionsResponse) {
-        response = currentConditionsResponse;
-        Log.d(TAG, "Temperature: " + currentConditionsResponse.getMain().getTemp());
-        Log.d(TAG, "Location: " + currentConditionsResponse.getName());
+        conditions = mapper.mapCurrentConditions(currentConditionsResponse);
+        Log.d(TAG, "Temperature: " + conditions.getTemperature());
         notifyChange();
     }
 
     @Bindable
     public String getTemperature() {
-        if (response != null) {
-            double temperature = response.getMain().getTemp();
+        if (conditions != null) {
+            double temperature = conditions.getTemperature();
             Log.d(TAG, "getTemperature method called");
             return "Temperature: " + String.valueOf(temperature);
         }

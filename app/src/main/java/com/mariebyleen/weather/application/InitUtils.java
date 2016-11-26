@@ -1,16 +1,12 @@
 package com.mariebyleen.weather.application;
 
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain;
+import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 
 public class InitUtils {
 
-    protected static CurrentConditionsResponse createDefaultModel() {
-        CurrentConditionsResponse response = new CurrentConditionsResponse();
-        CurrentConditionsResponseMain main = new CurrentConditionsResponseMain();
-        main.setTemp(0);
-        main.setHumidity(0);
-        main.setPressure(0);
-        return response;
+    protected static CurrentConditions createDefaultModel() {
+        CurrentConditions conditions = new CurrentConditions();
+        conditions.setTemperature(0);
+        return conditions;
     }
 }

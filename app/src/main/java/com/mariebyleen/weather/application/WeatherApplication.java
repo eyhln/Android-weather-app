@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.mariebyleen.weather.application.di.component.ApplicationComponent;
 import com.mariebyleen.weather.application.di.component.DaggerApplicationComponent;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
+import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 
 
 public class WeatherApplication extends Application {
@@ -45,11 +45,11 @@ public class WeatherApplication extends Application {
   }
 
   private void populateSharedPrefsWithDefaultModel() {
-    CurrentConditionsResponse currentConditionsEmpty = InitUtils.createDefaultModel();
+    CurrentConditions currentConditionsEmpty = InitUtils.createDefaultModel();
     SharedPreferences.Editor prefsEditor = preferences.edit();
     Gson gson = new Gson();
-    String json = gson.toJson(currentConditionsEmpty);
-    prefsEditor.putString("CurrentConditions", json);
+    String currentConditionsJson = gson.toJson(currentConditionsEmpty);
+    prefsEditor.putString("CurrentConditions", currentConditionsJson);
     prefsEditor.apply();
   }
 }

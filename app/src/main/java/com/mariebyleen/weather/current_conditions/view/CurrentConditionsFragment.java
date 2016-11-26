@@ -41,4 +41,10 @@ public class CurrentConditionsFragment extends Fragment {
                 .currentConditionsModule(new CurrentConditionsModule())
                 .build().inject(this);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewModel.onFragmentPause();
+    }
 }
