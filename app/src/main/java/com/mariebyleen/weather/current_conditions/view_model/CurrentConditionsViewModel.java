@@ -81,8 +81,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onError(Throwable e) {
-        Log.e(TAG, "Error retrieving current conditions weather data");
-        e.printStackTrace();
+        Log.e(TAG, "Error retrieving current conditions weather data: " + e.toString());
     }
 
     @Override
@@ -94,12 +93,8 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getTemperature() {
-        if (conditions != null) {
-            double temperature = conditions.getTemperature();
-            Log.d(TAG, "getTemperature method called");
-            return "Temperature: " + String.valueOf(temperature);
-        }
-        else
-            return "";
+        double temperature = conditions.getTemperature();
+        Log.d(TAG, "getTemperature method called");
+        return "Temperature: " + String.valueOf(temperature);
     }
 }
