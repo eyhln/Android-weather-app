@@ -43,6 +43,12 @@ public class CurrentConditionsFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.onFragmentResume();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         viewModel.onFragmentPause();

@@ -42,7 +42,9 @@ public class CurrentConditionsViewModel extends BaseObservable
         this.gson = gson;
         this.preferences = preferences;
         this.mapper = mapper;
+    }
 
+    public void onFragmentResume() {
         if (conditions == null) {
             populateData();
         }
@@ -51,11 +53,11 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private void populateData() {
         String currentConditionsJson = preferences.getString("CurrentConditions", "");
-        CurrentConditions conditions = gson.fromJson(currentConditionsJson,
+        CurrentConditions conditionsFromJson = gson.fromJson(currentConditionsJson,
                 CurrentConditions.class);
-        Log.d(TAG, "Conditions: " + conditions.toString());
-        Log.d(TAG, "Temp: " + conditions.getTemperature());
-        this.conditions = conditions;
+        //Log.d(TAG, "Conditions: " + conditions.toString());
+        //Log.d(TAG, "Temp: " + conditions.getTemperature());
+        conditions = conditionsFromJson;
     }
 
     private void refreshWeatherData() {
@@ -81,20 +83,19 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onError(Throwable e) {
-        Log.e(TAG, "Error retrieving current conditions weather data: " + e.toString());
+        Log.e(TAG, "Error retrieving current conditions weather data: \n" + e.toString());
     }
 
     @Override
     public void onNext(CurrentConditionsResponse currentConditionsResponse) {
         conditions = mapper.mapCurrentConditions(currentConditionsResponse);
-        Log.d(TAG, "Temperature: " + conditions.getTemperature());
         notifyChange();
     }
 
     @Bindable
     public String getTemperature() {
         double temperature = conditions.getTemperature();
-        Log.d(TAG, "getTemperature method called");
+        //Log.d(TAG, "getTemperature method called");
         return "Temperature: " + String.valueOf(temperature);
     }
 }
