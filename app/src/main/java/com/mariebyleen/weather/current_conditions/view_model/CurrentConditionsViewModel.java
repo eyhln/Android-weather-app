@@ -41,7 +41,7 @@ public class CurrentConditionsViewModel extends BaseObservable
             conditions = updates.getSavedConditions();
         }
 
-        if (updates.missedMostRecentUpdate()) {
+        if (updates.needsManualUpdate()) {
             updates.getManualUpdateObservable()
                     .subscribe(this);
             Log.d(TAG, "refreshing weather data manually");
@@ -84,6 +84,7 @@ public class CurrentConditionsViewModel extends BaseObservable
         Log.d(TAG, "onNext called");
         conditions = mapper.mapCurrentConditions(currentConditionsResponse);
         notifyChange();
+        updates.notifyUpdated();
     }
 
     @Bindable

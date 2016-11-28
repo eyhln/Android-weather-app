@@ -15,23 +15,26 @@ public class AutomaticUpdateTimer implements Observer<Long> {
     private final static String TAG = "UpdateTimer";
 
     private Observable<Long> observable;
-    private long longState;
+    boolean needsUpdate = true;
 
     private final Scheduler scheduler = Schedulers.from(Executors.newSingleThreadExecutor());
 
     public AutomaticUpdateTimer() {
-        Observable<Long> counter = getCounterObservable();
-        counter.subscribe(this);
-        longState = -1L;
+        observable = Observable.interval(30, TimeUnit.SECONDS, scheduler);
+        observable.subscribe(this);
     }
 
     public Observable<Long> getCounterObservable() {
-        observable = Observable.interval(10, TimeUnit.MINUTES, scheduler);
         return observable;
     }
 
-    public Long getLastLong() {
-        return longState;
+    public boolean needsManualUpdate() {
+        return needsUpdate;
+    }
+
+    public void notifyUpdated() {
+        Log.d(TAG, "set needsUpdate to false");
+        needsUpdate = false;
     }
 
     public Scheduler getScheduler() {
@@ -50,7 +53,8 @@ public class AutomaticUpdateTimer implements Observer<Long> {
 
     @Override
     public void onNext(Long aLong) {
-        longState = aLong.longValue();
+        needsUpdate = true;
+        Log.d(TAG, "set needsUpdate to true");
         Log.i(TAG, aLong.toString());
     }
 }

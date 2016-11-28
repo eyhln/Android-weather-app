@@ -1,7 +1,6 @@
 package com.mariebyleen.weather.current_conditions.view_model;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
@@ -37,16 +36,13 @@ public class UpdateService {
         prefsEditor = preferences.edit();
     }
 
+    public void notifyUpdated() {
+        timer.notifyUpdated();
+    }
+
     public void saveData(CurrentConditions conditions) {
         String currentConditionsJson = gson.toJson(conditions);
         prefsEditor.putString("CurrentConditions", currentConditionsJson);
-
-        if (timer.getLastLong() == null)
-            prefsEditor.putLong("MostRecentUpdate", -1);
-        else {
-            long mostRecentUpdate = timer.getLastLong();
-            prefsEditor.putLong("MostRecentUpdate", mostRecentUpdate);
-        }
         prefsEditor.apply();
     }
 
@@ -56,15 +52,8 @@ public class UpdateService {
                 CurrentConditions.class);
     }
 
-    public boolean missedMostRecentUpdate() {
-        long mostRecentUpdate = preferences.getLong("MostRecentUpdate", -1);
-        Log.d(TAG, "most recent update: " + mostRecentUpdate);
-        Log.d(TAG, "current timer state: " + timer.getLastLong());
-
-        if (timer.getLastLong() == null)
-            prefsEditor.putLong("MostRecentUpdate", -1);
-
-        return (mostRecentUpdate != timer.getLastLong());
+    public boolean needsManualUpdate() {
+        return timer.needsManualUpdate();
     }
 
 
