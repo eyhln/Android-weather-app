@@ -6,4 +6,12 @@
     <string name="choose_location">Choose Location</string>
 
     <string name="find_current_location_progress_dialog">Finding Location...</string>
+
+    // Menu
+    <string name="settings">Settings</string>
+    
+    // Settings
+    <string name="update_period_title">AutoUpdate Period</string>
+    <string name="update_period_summary">How long to wait between weather data updates</string>
+
 </resources>
