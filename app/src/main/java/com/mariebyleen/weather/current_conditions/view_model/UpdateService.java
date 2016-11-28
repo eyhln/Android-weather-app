@@ -36,7 +36,7 @@ public class UpdateService {
         this.weatherApiService = weatherApiService;
     }
 
-    void saveData(CurrentConditions conditions) {
+    public void saveData(CurrentConditions conditions) {
         SharedPreferences.Editor prefsEditor = preferences.edit();
         String currentConditionsJson = gson.toJson(conditions);
         prefsEditor.putString("CurrentConditions", currentConditionsJson);
@@ -45,39 +45,37 @@ public class UpdateService {
         prefsEditor.apply();
     }
 
-    CurrentConditions getSavedConditions() {
+    public CurrentConditions getSavedConditions() {
         String currentConditionsJson = preferences.getString("CurrentConditions", "");
         return gson.fromJson(currentConditionsJson,
                 CurrentConditions.class);
     }
 
-    boolean missedMostRecentUpdate() {
+    public boolean missedMostRecentUpdate() {
         Long mostRecentUpdate = preferences.getLong("MostRecentUpdate", -1);
         Log.d(TAG, "most recent update: " + mostRecentUpdate);
         return !(mostRecentUpdate.equals(timer.getLastLong()));
     }
 
-    Observable<CurrentConditionsResponse> getAutomaticUpdateObservable() {
+    public Observable<CurrentConditionsResponse> getAutomaticUpdateObservable() {
         Observable<Long> counterObservable = timer.getCounterObservable();
         return counterObservable
                 .flatMap(new Func1<Long, Observable<CurrentConditionsResponse>>() {
                     @Override
                     public Observable<CurrentConditionsResponse> call(Long aLong) {
-                        return getApiCallObservable()
-                                .subscribeOn(timer.getScheduler())
-                                .observeOn(Schedulers.newThread());
+                        return getApiCallObservable();
                     }
                 });
     }
 
-    Observable<CurrentConditionsResponse> getManualUpdateObservable() {
-        return getApiCallObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.newThread());
+    public Observable<CurrentConditionsResponse> getManualUpdateObservable() {
+        return getApiCallObservable();
     }
 
     private Observable<CurrentConditionsResponse> getApiCallObservable() {
-        return weatherApiService.getCurrentConditions(getApiKey());
+        return weatherApiService.getCurrentConditions(getApiKey())
+                .subscribeOn(timer.getScheduler())
+                .observeOn(Schedulers.newThread());
     }
 }
 

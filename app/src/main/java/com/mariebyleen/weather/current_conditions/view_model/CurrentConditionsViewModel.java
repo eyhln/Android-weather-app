@@ -79,7 +79,6 @@ public class CurrentConditionsViewModel extends BaseObservable
         Log.e(TAG, "Error retrieving current conditions weather data: \n" + e.toString());
     }
 
-    // TODO issue: manual and automatic updates may be allowed to simultaneously call onNext
     @Override
     public void onNext(CurrentConditionsResponse currentConditionsResponse) {
         Log.d(TAG, "onNext called");
