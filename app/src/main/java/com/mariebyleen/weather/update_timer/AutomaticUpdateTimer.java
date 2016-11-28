@@ -15,13 +15,14 @@ public class AutomaticUpdateTimer implements Observer<Long> {
     private final static String TAG = "UpdateTimer";
 
     private Observable<Long> observable;
-    private Long longState;
+    private long longState;
 
     private final Scheduler scheduler = Schedulers.from(Executors.newSingleThreadExecutor());
 
     public AutomaticUpdateTimer() {
         Observable<Long> counter = getCounterObservable();
         counter.subscribe(this);
+        longState = -1L;
     }
 
     public Observable<Long> getCounterObservable() {
@@ -49,7 +50,7 @@ public class AutomaticUpdateTimer implements Observer<Long> {
 
     @Override
     public void onNext(Long aLong) {
-        longState = aLong;
+        longState = aLong.longValue();
         Log.i(TAG, aLong.toString());
     }
 }

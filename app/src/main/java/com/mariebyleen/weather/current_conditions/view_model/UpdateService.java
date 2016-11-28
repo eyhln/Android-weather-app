@@ -23,6 +23,7 @@ public class UpdateService {
     private final static String TAG = "UpdateService";
 
     private SharedPreferences preferences;
+    private SharedPreferences.Editor prefsEditor;
     private Gson gson;
     private AutomaticUpdateTimer timer;
     private OpenWeatherApiService weatherApiService;
@@ -34,14 +35,19 @@ public class UpdateService {
         this.gson = gson;
         this.timer = timer;
         this.weatherApiService = weatherApiService;
+        prefsEditor = preferences.edit();
     }
 
     public void saveData(CurrentConditions conditions) {
-        SharedPreferences.Editor prefsEditor = preferences.edit();
         String currentConditionsJson = gson.toJson(conditions);
         prefsEditor.putString("CurrentConditions", currentConditionsJson);
-        Long mostRecentUpdate = timer.getLastLong();
-        prefsEditor.putLong("MostRecentUpdate", mostRecentUpdate);
+
+        if (timer.getLastLong() == null)
+            prefsEditor.putLong("MostRecentUpdate", -1);
+        else {
+            Long mostRecentUpdate = timer.getLastLong();
+            prefsEditor.putLong("MostRecentUpdate", mostRecentUpdate);
+        }
         prefsEditor.apply();
     }
 
@@ -54,7 +60,16 @@ public class UpdateService {
     public boolean missedMostRecentUpdate() {
         Long mostRecentUpdate = preferences.getLong("MostRecentUpdate", -1);
         Log.d(TAG, "most recent update: " + mostRecentUpdate);
+        Log.d(TAG, "current timer state: " + timer.getLastLong());
+
+        if (timer.getLastLong() == null)
+            prefsEditor.putLong("MostRecentUpdate", -1);
+
         return !(mostRecentUpdate.equals(timer.getLastLong()));
+    }
+
+    private void saveNegativeUpdateId() {
+
     }
 
     public Observable<CurrentConditionsResponse> getAutomaticUpdateObservable() {
