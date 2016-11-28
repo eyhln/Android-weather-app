@@ -1,6 +1,5 @@
 package com.mariebyleen.weather.current_conditions.view_model;
 
-
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -45,7 +44,7 @@ public class UpdateService {
         if (timer.getLastLong() == null)
             prefsEditor.putLong("MostRecentUpdate", -1);
         else {
-            Long mostRecentUpdate = timer.getLastLong();
+            long mostRecentUpdate = timer.getLastLong();
             prefsEditor.putLong("MostRecentUpdate", mostRecentUpdate);
         }
         prefsEditor.apply();
@@ -58,19 +57,16 @@ public class UpdateService {
     }
 
     public boolean missedMostRecentUpdate() {
-        Long mostRecentUpdate = preferences.getLong("MostRecentUpdate", -1);
+        long mostRecentUpdate = preferences.getLong("MostRecentUpdate", -1);
         Log.d(TAG, "most recent update: " + mostRecentUpdate);
         Log.d(TAG, "current timer state: " + timer.getLastLong());
 
         if (timer.getLastLong() == null)
             prefsEditor.putLong("MostRecentUpdate", -1);
 
-        return !(mostRecentUpdate.equals(timer.getLastLong()));
+        return (mostRecentUpdate != timer.getLastLong());
     }
 
-    private void saveNegativeUpdateId() {
-
-    }
 
     public Observable<CurrentConditionsResponse> getAutomaticUpdateObservable() {
         Observable<Long> counterObservable = timer.getCounterObservable();
