@@ -7,6 +7,8 @@ import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
 import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
 import com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.current_conditions.view_model.UpdateService;
+import com.mariebyleen.weather.update_timer.AutomaticUpdateTimer;
 
 import dagger.Module;
 import dagger.Provides;
@@ -17,16 +19,23 @@ public class CurrentConditionsModule {
 
     @PerActivity
     @Provides
-    CurrentConditionsViewModel provideCurrentConditionsViewModel(OpenWeatherApiService apiService,
-                                                                 Gson gson,
-                                                                 SharedPreferences preferences,
-                                                                 CurrentConditionsMapper mapper) {
-        return new CurrentConditionsViewModel(apiService, gson, preferences, mapper);
+    CurrentConditionsViewModel provideCurrentConditionsViewModel(CurrentConditionsMapper mapper,
+                                                                 UpdateService updateService) {
+        return new CurrentConditionsViewModel(updateService, mapper);
     }
 
     @PerActivity
     @Provides
     CurrentConditionsMapper provideCurrentConditionsMapper() {
         return new CurrentConditionsMapper();
+    }
+
+    @PerActivity
+    @Provides
+    UpdateService provideUpdateService(SharedPreferences preferences,
+                               Gson gson,
+                               AutomaticUpdateTimer timer,
+                               OpenWeatherApiService weatherApiService) {
+        return new UpdateService(preferences, gson, timer, weatherApiService);
     }
 }

@@ -7,6 +7,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
+import com.mariebyleen.weather.update_timer.AutomaticUpdateTimer;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
 
 import java.util.concurrent.TimeUnit;
@@ -31,6 +32,12 @@ public class ApplicationModule {
     public ApplicationModule(Context context, String baseUrl) {
         this.context = context;
         this.baseUrl = baseUrl;
+    }
+
+    @Singleton
+    @Provides
+    AutomaticUpdateTimer provideAutomaticUpdateTimer() {
+        return new AutomaticUpdateTimer();
     }
 
     @Singleton

@@ -1,12 +1,9 @@
 package com.mariebyleen.weather.current_conditions.view_model;
 
-import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
@@ -15,10 +12,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
-import static com.mariebyleen.weather.application.WeatherApplication.getApiKey;
+import rx.Subscription;
 
 public class CurrentConditionsViewModel extends BaseObservable
         implements Observer<CurrentConditionsResponse> {
@@ -27,58 +21,57 @@ public class CurrentConditionsViewModel extends BaseObservable
     private double lat = 0;
     private double lon = 0;
 
-    private OpenWeatherApiService weatherApiService;
-    private Gson gson;
-    private SharedPreferences preferences;
+    private UpdateService updates;
     private CurrentConditionsMapper mapper;
+
     private CurrentConditions conditions;
+    private Subscription subscription;
+    private Observable<CurrentConditionsResponse> observable;
 
     @Inject
-    public CurrentConditionsViewModel(OpenWeatherApiService weatherApiService,
-                                      Gson gson,
-                                      SharedPreferences preferences,
+    public CurrentConditionsViewModel(UpdateService updateService,
                                       CurrentConditionsMapper mapper) {
-        this.weatherApiService = weatherApiService;
-        this.gson = gson;
-        this.preferences = preferences;
+        this.updates = updateService;
         this.mapper = mapper;
     }
 
     public void onFragmentResume() {
         if (conditions == null) {
-            populateData();
+            Log.d(TAG, "populating data from memory");
+            conditions = updates.getSavedConditions();
         }
-        refreshWeatherData();
-    }
 
-    private void populateData() {
-        String currentConditionsJson = preferences.getString("CurrentConditions", "");
-        CurrentConditions conditionsFromJson = gson.fromJson(currentConditionsJson,
-                CurrentConditions.class);
-        //Log.d(TAG, "Conditions: " + conditions.toString());
-        //Log.d(TAG, "Temp: " + conditions.getTemperature());
-        conditions = conditionsFromJson;
-    }
+        if (updates.missedMostRecentUpdate()) {
+            updates.getManualUpdateObservable()
+                    .subscribe(this);
+            Log.d(TAG, "refreshing weather data manually");
+        }
 
-    private void refreshWeatherData() {
-        Observable<CurrentConditionsResponse> response =
-                weatherApiService.getCurrentConditions(getApiKey());
-        response
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this);
+        observable = updates.getAutomaticUpdateObservable();
+        startUpdates();
     }
 
     public void onFragmentPause() {
-        SharedPreferences.Editor prefsEditor = preferences.edit();
-        String currentConditionsJson = gson.toJson(conditions);
-        prefsEditor.putString("CurrentConditions", currentConditionsJson);
-        prefsEditor.apply();
+        stopUpdates();
+        updates.saveData(conditions);
+    }
+
+    private void startUpdates() {
+        subscription = observable.subscribe(this);
+        Log.d(TAG, "Subscribing to observable: " + observable.toString());
+    }
+
+    private void stopUpdates() {
+        if (subscription != null) {
+            subscription.unsubscribe();
+            subscription = null;
+            Log.d(TAG, "un-subscribing");
+        }
     }
 
     @Override
     public void onCompleted() {
-        Log.i(TAG, "Current condition weather data update successfully completed");
+        Log.i(TAG, "Current conditions weather data update successfully completed");
     }
 
     @Override
@@ -86,8 +79,10 @@ public class CurrentConditionsViewModel extends BaseObservable
         Log.e(TAG, "Error retrieving current conditions weather data: \n" + e.toString());
     }
 
+    // TODO issue: manual and automatic updates may be allowed to simultaneously call onNext
     @Override
     public void onNext(CurrentConditionsResponse currentConditionsResponse) {
+        Log.d(TAG, "onNext called");
         conditions = mapper.mapCurrentConditions(currentConditionsResponse);
         notifyChange();
     }
@@ -95,7 +90,8 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Bindable
     public String getTemperature() {
         double temperature = conditions.getTemperature();
-        //Log.d(TAG, "getTemperature method called");
+        Log.d(TAG, "getTemperature called");
         return "Temperature: " + String.valueOf(temperature);
     }
+
 }
