@@ -1,32 +1,30 @@
 package com.mariebyleen.weather.current_conditions;
 
 
-import android.content.SharedPreferences;
-
-import com.google.gson.Gson;
-import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain;
 import com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.current_conditions.view_model.UpdateService;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import static junit.framework.Assert.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
 public class DataFormattingTest {
 
-    @Mock
-    private OpenWeatherApiService weatherApiService;
-    @Mock
-    private SharedPreferences preferences;
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    private Gson gson;
+
+    @Mock
+    private UpdateService updateService;
+
     private CurrentConditionsMapper mapper;
     private CurrentConditionsResponse testResponse;
     private CurrentConditionsViewModel viewModel;
@@ -34,9 +32,8 @@ public class DataFormattingTest {
     @Before
     public void init() {
         testResponse = new CurrentConditionsResponse();
-        gson = new Gson();
         mapper = new CurrentConditionsMapper();
-        viewModel = new CurrentConditionsViewModel(weatherApiService, gson, preferences, mapper);
+        viewModel = new CurrentConditionsViewModel(updateService, mapper);
     }
 
     @Test
