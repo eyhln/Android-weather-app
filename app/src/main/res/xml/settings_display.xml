@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:defaultValue="10"
-        android:selectAllOnFocus="true"
-        android:title="@string/update_period_title"
+    <ListPreference
+        android:dialogTitle="@string/update_period_dialog_title"
+        android:entries="@array/time_unit_display"
+        android:entryValues="@array/time_unit_in_minutes"
+        android:key="UPDATE_PERIOD"
         android:summary="@string/update_period_summary"
-        android:key="autoUpdatePeriod"
-        android:singleLine="true"/>
+        android:title="@string/update_period_title"/>
+
 </PreferenceScreen>

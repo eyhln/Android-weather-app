@@ -12,6 +12,27 @@
     
     // Settings
     <string name="update_period_title">AutoUpdate Period</string>
-    <string name="update_period_summary">How long to wait between weather data updates</string>
+    <string name="update_period_summary">Choose how frequently to update the weather data</string>
+    <string name="update_period_dialog_title">Update every...</string>
+
+    <string-array name="time_unit_display">
+        <item>10 Minutes</item>
+        <item>15 Minutes</item>
+        <item>20 Minutes</item>
+        <item>30 Minutes</item>
+        <item>1 Hour</item>
+        <item>2 Hours</item>
+        <item>4 Hours</item>
+    </string-array>
+
+    <string-array name="time_unit_in_minutes">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>240</item>
+    </string-array>
 
 </resources>
