@@ -6,46 +6,32 @@ import android.databinding.Bindable;
 import android.util.Log;
 
 import com.evernote.android.job.JobRequest;
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.google.gson.Gson;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.Observer;
-import rx.Subscription;
-
 public class CurrentConditionsViewModel extends BaseObservable
-        implements Observer<CurrentConditionsResponse>,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "CurrentConditionsVM";
-    private double lat = 0;
-    private double lon = 0;
 
-    private UpdateService updates;
-    private CurrentConditionsMapper mapper;
     private SharedPreferences preferences;
+    private Gson gson;
 
     private CurrentConditions conditions;
-    private Subscription subscription;
-    private Observable<CurrentConditionsResponse> observable;
-
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
-                                        UpdateService updateService,
-                                      CurrentConditionsMapper mapper) {
+                                      Gson gson) {
         this.preferences = preferences;
-        this.updates = updateService;
-        this.mapper = mapper;
+        this.gson = gson;
     }
 
     public void onFragmentResume() {
         if (conditions == null) {
             Log.d(TAG, "populating data from memory");
-            conditions = updates.getSavedConditions();
+            conditions = getSavedWeatherData();
         }
 
         new JobRequest.Builder("WeatherDataUpdateJob")
@@ -53,65 +39,37 @@ public class CurrentConditionsViewModel extends BaseObservable
                 .build()
                 .schedule();
 
-        if (updates.needsManualUpdate()) {
-            updates.getManualUpdateObservable()
-                    .subscribe(this);
-            //Log.d(TAG, "refreshing weather data manually");
-        }
-
-        observable = updates.getAutomaticUpdateObservable();
-        //startUpdates();
-
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public void onFragmentPause() {
         preferences.unregisterOnSharedPreferenceChangeListener(this);
-        stopUpdates();
-        updates.saveData(conditions);
+        saveWeatherData(conditions);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         Log.d(TAG, "onSharedPreferenceChanged");
         if (s.equals("CurrentConditions")) {
-            conditions = updates.getSavedConditions();
+            conditions = getSavedWeatherData();
             Log.i(TAG, "Data in SharedPreferences updated");
             notifyChange();
         }
     }
 
-    private void startUpdates() {
-        subscription = observable.subscribe(this);
-        //Log.d(TAG, "Subscribing to observable: " + observable.toString());
+    private void saveWeatherData(CurrentConditions conditions) {
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        String currentConditionsJson = gson.toJson(conditions);
+        prefsEditor.putString("CurrentConditions", currentConditionsJson);
+        prefsEditor.apply();
     }
 
-    private void stopUpdates() {
-        if (subscription != null) {
-            subscription.unsubscribe();
-            subscription = null;
-            //Log.d(TAG, "un-subscribing");
-        }
-    }
-
-    @Override
-    public void onCompleted() {
-        //Log.i(TAG, "Current conditions weather data update successfully completed");
-    }
-
-    @Override
-    public void onError(Throwable e) {
-        //Log.e(TAG, "Error retrieving current conditions weather data: \n" + e.toString());
-    }
-
-    @Override
-    public void onNext(CurrentConditionsResponse currentConditionsResponse) {
-        /*
-        Log.d(TAG, "onNext called");
-        conditions = mapper.mapCurrentConditions(currentConditionsResponse);
-        notifyChange();
-        updates.notifyUpdated();
-        */
+    private CurrentConditions getSavedWeatherData() {
+        String currentConditionsJson = preferences.getString("CurrentConditions", "");
+        if (currentConditionsJson.equals(""))
+            return new CurrentConditions();
+        return gson.fromJson(currentConditionsJson,
+                CurrentConditions.class);
     }
 
     @Bindable
