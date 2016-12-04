@@ -28,7 +28,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
 
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
                                 CurrentConditionsMapper mapper,
-                                SharedPreferences preferences, Gson gson) {
+                                SharedPreferences preferences,
+                                Gson gson) {
         this.weatherApiService = weatherApiService;
         this.mapper = mapper;
         this.preferences = preferences;
