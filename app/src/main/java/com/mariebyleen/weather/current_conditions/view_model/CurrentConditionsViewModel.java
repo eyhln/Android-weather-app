@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
 
+import com.evernote.android.job.JobRequest;
 import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
@@ -23,16 +24,20 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private UpdateService updates;
     private CurrentConditionsMapper mapper;
+    private JobRequest.Builder jobScheduler;
 
     private CurrentConditions conditions;
     private Subscription subscription;
     private Observable<CurrentConditionsResponse> observable;
 
+
     @Inject
     public CurrentConditionsViewModel(UpdateService updateService,
-                                      CurrentConditionsMapper mapper) {
+                                      CurrentConditionsMapper mapper,
+                                      JobRequest.Builder jobScheduler) {
         this.updates = updateService;
         this.mapper = mapper;
+        this.jobScheduler = jobScheduler;
     }
 
     public void onFragmentResume() {
