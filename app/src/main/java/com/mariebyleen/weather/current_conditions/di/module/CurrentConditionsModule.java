@@ -19,9 +19,10 @@ public class CurrentConditionsModule {
 
     @PerActivity
     @Provides
-    CurrentConditionsViewModel provideCurrentConditionsViewModel(CurrentConditionsMapper mapper,
+    CurrentConditionsViewModel provideCurrentConditionsViewModel(SharedPreferences preferences,
+                                                                 CurrentConditionsMapper mapper,
                                                                  UpdateService updateService) {
-        return new CurrentConditionsViewModel(updateService, mapper);
+        return new CurrentConditionsViewModel(preferences, updateService, mapper);
     }
 
     @PerActivity

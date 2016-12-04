@@ -26,6 +26,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private UpdateService updates;
     private CurrentConditionsMapper mapper;
+    private SharedPreferences preferences;
 
     private CurrentConditions conditions;
     private Subscription subscription;
@@ -33,8 +34,10 @@ public class CurrentConditionsViewModel extends BaseObservable
 
 
     @Inject
-    public CurrentConditionsViewModel(UpdateService updateService,
+    public CurrentConditionsViewModel(SharedPreferences preferences,
+                                        UpdateService updateService,
                                       CurrentConditionsMapper mapper) {
+        this.preferences = preferences;
         this.updates = updateService;
         this.mapper = mapper;
     }
@@ -58,15 +61,19 @@ public class CurrentConditionsViewModel extends BaseObservable
 
         observable = updates.getAutomaticUpdateObservable();
         //startUpdates();
+
+        preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public void onFragmentPause() {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
         stopUpdates();
         updates.saveData(conditions);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        Log.d(TAG, "onSharedPreferenceChanged");
         if (s.equals("CurrentConditions")) {
             conditions = updates.getSavedConditions();
             Log.i(TAG, "Data in SharedPreferences updated");

@@ -43,7 +43,6 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        Log.d(TAG, "onRunJob called");
         weatherApiService.getCurrentConditions(getApiKey())
                 .map(new Func1<CurrentConditionsResponse, CurrentConditions>() {
                     @Override
@@ -51,7 +50,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
                         return mapper.mapCurrentConditions(currentConditionsResponse);
                     }
                 })
-                .observeOn(Schedulers.newThread())
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .subscribe(this);
 
         return Result.SUCCESS;
@@ -59,12 +59,12 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
 
     @Override
     public void onCompleted() {
-        Log.i(TAG, "Current conditions weather data update successfully completed");
+        Log.i(TAG, "Weather data update successfully completed");
     }
 
     @Override
     public void onError(Throwable e) {
-        Log.e(TAG, "Error retrieving current conditions weather data: \n" + e.toString());
+        Log.e(TAG, "Error retrieving weather data: \n" + e.toString());
     }
 
     @Override
