@@ -48,6 +48,8 @@ public class UpdateService {
 
     public CurrentConditions getSavedConditions() {
         String currentConditionsJson = preferences.getString("CurrentConditions", "");
+        if (currentConditionsJson.equals(""))
+            return new CurrentConditions();
         return gson.fromJson(currentConditionsJson,
                 CurrentConditions.class);
     }
