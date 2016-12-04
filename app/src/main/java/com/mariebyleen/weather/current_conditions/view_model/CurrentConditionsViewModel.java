@@ -1,5 +1,6 @@
 package com.mariebyleen.weather.current_conditions.view_model;
 
+import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
@@ -16,7 +17,8 @@ import rx.Observer;
 import rx.Subscription;
 
 public class CurrentConditionsViewModel extends BaseObservable
-        implements Observer<CurrentConditionsResponse> {
+        implements Observer<CurrentConditionsResponse>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "CurrentConditionsVM";
     private double lat = 0;
@@ -24,7 +26,6 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private UpdateService updates;
     private CurrentConditionsMapper mapper;
-    private JobRequest.Builder jobScheduler;
 
     private CurrentConditions conditions;
     private Subscription subscription;
@@ -33,11 +34,9 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Inject
     public CurrentConditionsViewModel(UpdateService updateService,
-                                      CurrentConditionsMapper mapper,
-                                      JobRequest.Builder jobScheduler) {
+                                      CurrentConditionsMapper mapper) {
         this.updates = updateService;
         this.mapper = mapper;
-        this.jobScheduler = jobScheduler;
     }
 
     public void onFragmentResume() {
@@ -46,14 +45,19 @@ public class CurrentConditionsViewModel extends BaseObservable
             conditions = updates.getSavedConditions();
         }
 
+        new JobRequest.Builder("WeatherDataUpdateJob")
+                .setExecutionWindow(500, 1000)
+                .build()
+                .schedule();
+
         if (updates.needsManualUpdate()) {
             updates.getManualUpdateObservable()
                     .subscribe(this);
-            Log.d(TAG, "refreshing weather data manually");
+            //Log.d(TAG, "refreshing weather data manually");
         }
 
         observable = updates.getAutomaticUpdateObservable();
-        startUpdates();
+        //startUpdates();
     }
 
     public void onFragmentPause() {
@@ -61,35 +65,46 @@ public class CurrentConditionsViewModel extends BaseObservable
         updates.saveData(conditions);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        if (s.equals("CurrentConditions")) {
+            conditions = updates.getSavedConditions();
+            Log.i(TAG, "Data in SharedPreferences updated");
+            notifyChange();
+        }
+    }
+
     private void startUpdates() {
         subscription = observable.subscribe(this);
-        Log.d(TAG, "Subscribing to observable: " + observable.toString());
+        //Log.d(TAG, "Subscribing to observable: " + observable.toString());
     }
 
     private void stopUpdates() {
         if (subscription != null) {
             subscription.unsubscribe();
             subscription = null;
-            Log.d(TAG, "un-subscribing");
+            //Log.d(TAG, "un-subscribing");
         }
     }
 
     @Override
     public void onCompleted() {
-        Log.i(TAG, "Current conditions weather data update successfully completed");
+        //Log.i(TAG, "Current conditions weather data update successfully completed");
     }
 
     @Override
     public void onError(Throwable e) {
-        Log.e(TAG, "Error retrieving current conditions weather data: \n" + e.toString());
+        //Log.e(TAG, "Error retrieving current conditions weather data: \n" + e.toString());
     }
 
     @Override
     public void onNext(CurrentConditionsResponse currentConditionsResponse) {
+        /*
         Log.d(TAG, "onNext called");
         conditions = mapper.mapCurrentConditions(currentConditionsResponse);
         notifyChange();
         updates.notifyUpdated();
+        */
     }
 
     @Bindable

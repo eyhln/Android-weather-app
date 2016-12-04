@@ -1,7 +1,5 @@
 package com.mariebyleen.weather.update_timer;
 
-import android.util.Log;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +13,7 @@ public class AutomaticUpdateTimer implements Observer<Long> {
     private final static String TAG = "UpdateTimer";
 
     private Observable<Long> observable;
-    boolean needsUpdate = true;
+    private boolean needsUpdate = true;
 
     private final Scheduler scheduler = Schedulers.from(Executors.newSingleThreadExecutor());
 
@@ -33,7 +31,7 @@ public class AutomaticUpdateTimer implements Observer<Long> {
     }
 
     public void notifyUpdated() {
-        Log.d(TAG, "set needsUpdate to false");
+        //Log.d(TAG, "set needsUpdate to false");
         needsUpdate = false;
     }
 
@@ -43,18 +41,18 @@ public class AutomaticUpdateTimer implements Observer<Long> {
 
     @Override
     public void onCompleted() {
-        Log.e(TAG, "Completed");
+        //Log.e(TAG, "Completed");
     }
 
     @Override
     public void onError(Throwable e) {
-        Log.e(TAG, "Error: " + e.toString());
+        //Log.e(TAG, "Error: " + e.toString());
     }
 
     @Override
     public void onNext(Long aLong) {
         needsUpdate = true;
-        Log.d(TAG, "set needsUpdate to true");
-        Log.i(TAG, aLong.toString());
+        //Log.d(TAG, "set needsUpdate to true");
+        //Log.i(TAG, aLong.toString());
     }
 }

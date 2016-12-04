@@ -9,7 +9,7 @@
 
     // Menu
     <string name="settings">Settings</string>
-    
+
     // Settings
     <string name="update_period_title">AutoUpdate Period</string>
     <string name="update_period_summary">Choose how frequently to update the weather data</string>

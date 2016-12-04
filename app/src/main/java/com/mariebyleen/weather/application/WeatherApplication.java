@@ -1,18 +1,12 @@
 package com.mariebyleen.weather.application;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import com.evernote.android.job.JobManager;
-import com.google.gson.Gson;
-import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.application.di.component.ApplicationComponent;
 import com.mariebyleen.weather.application.di.component.DaggerApplicationComponent;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
 import com.mariebyleen.weather.job.WeatherJobCreator;
-
-import javax.inject.Inject;
 
 
 public class WeatherApplication extends Application {
@@ -21,23 +15,11 @@ public class WeatherApplication extends Application {
   private static final String baseUrl = "http://api.openweathermap.org/data/2.5/";
   private static final String apiKey = "bb5dd17d68b943dbf98a7512901fcc04";
 
-  @Inject
-  SharedPreferences preferences;
-  @Inject
-  Gson gson;
-  @Inject
-  OpenWeatherApiService weatherApiService;
-  @Inject
-  CurrentConditionsMapper mapper;
-
   @Override
   public void onCreate() {
     super.onCreate();
     initializeAndroidComponents();
-    JobManager.create(this).addJobCreator(new WeatherJobCreator(weatherApiService,
-                                                                mapper,
-                                                                preferences,
-                                                                gson));
+    JobManager.create(this).addJobCreator(new WeatherJobCreator());
   }
 
   private void initializeAndroidComponents() {

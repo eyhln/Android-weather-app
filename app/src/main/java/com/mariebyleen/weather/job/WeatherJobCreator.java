@@ -12,25 +12,10 @@ import javax.inject.Inject;
 
 public class WeatherJobCreator implements JobCreator {
 
-    private OpenWeatherApiService weatherApiService;
-    private CurrentConditionsMapper mapper;
-    private SharedPreferences preferences;
-    private Gson gson;
-
-    @Inject
-    public WeatherJobCreator(OpenWeatherApiService weatherApiService,
-                             CurrentConditionsMapper mapper,
-                             SharedPreferences preferences, Gson gson) {
-        this.weatherApiService = weatherApiService;
-        this.mapper = mapper;
-        this.preferences = preferences;
-        this.gson = gson;
-    }
-
     @Override
     public Job create(String tag) {
         if (tag.equals(WeatherDataUpdateJob.TAG))
-            return new WeatherDataUpdateJob(weatherApiService, mapper, preferences, gson);
+            return new WeatherDataUpdateJob();
         throw new IllegalArgumentException("Invalid job tag");
     }
 }
