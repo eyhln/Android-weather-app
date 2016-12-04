@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
-import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
 import com.mariebyleen.weather.current_conditions.view.CurrentConditionsFragment;
 import com.mariebyleen.weather.job.WeatherDataUpdateJob;
@@ -23,7 +22,6 @@ public interface ApplicationComponent {
     GoogleApiClient exposeGoogleApiClient();
     GoogleApiAvailability exposeGoogleApiAvailability();
     Context exposeContext();
-    OpenWeatherApiService exposeOpenWeatherApiService();
     SharedPreferences exposeSharedPreferences();
     Gson exposeGson();
     Navigator exposeNavigator();
