@@ -9,7 +9,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
 import com.mariebyleen.weather.current_conditions.view.CurrentConditionsFragment;
-import com.mariebyleen.weather.job.WeatherDataUpdateJob;
+import com.mariebyleen.weather.job.WeatherJobCreator;
 import com.mariebyleen.weather.navigation.Navigator;
 
 import javax.inject.Singleton;
@@ -28,7 +28,7 @@ public interface ApplicationComponent {
     Navigator exposeNavigator();
     JobManager exposeJobManager();
 
-    void inject(WeatherDataUpdateJob weatherDataUpdateJob);
+    void inject(WeatherJobCreator weatherJobCreator);
     void inject(CurrentConditionsFragment currentConditionsFragment);
 
 }

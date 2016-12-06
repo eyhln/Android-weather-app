@@ -13,6 +13,7 @@ import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApiKey;
@@ -53,6 +54,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
                         return mapper.mapCurrentConditions(currentConditionsResponse);
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
 
         return Result.SUCCESS;

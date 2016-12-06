@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -13,8 +12,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
-import com.mariebyleen.weather.job.WeatherDataUpdateJob;
 import com.mariebyleen.weather.job.WeatherJobCreator;
 import com.mariebyleen.weather.navigation.Navigator;
 
@@ -51,17 +48,8 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    JobCreator provideJobCreator(Job weatherDataUpdateJob) {
-        return new WeatherJobCreator(weatherDataUpdateJob);
-    }
-
-    @Singleton
-    @Provides
-    Job provideWeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
-                                    CurrentConditionsMapper mapper,
-                                    Gson gson,
-                                    SharedPreferences preferences) {
-        return new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences);
+    JobCreator provideJobCreator() {
+        return new WeatherJobCreator();
     }
 
     @Singleton
