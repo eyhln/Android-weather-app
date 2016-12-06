@@ -1,13 +1,21 @@
 package com.mariebyleen.weather.application.di.module;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import com.evernote.android.job.Job;
+import com.evernote.android.job.JobCreator;
+import com.evernote.android.job.JobManager;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.mariebyleen.weather.job.WeatherDataUpdateJob;
+import com.mariebyleen.weather.job.WeatherJobCreator;
 import com.mariebyleen.weather.navigation.Navigator;
 
 import java.util.concurrent.TimeUnit;
@@ -21,17 +29,39 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static android.content.Context.MODE_PRIVATE;
-
 @Module
 public class ApplicationModule {
 
     private Context context;
     private String baseUrl;
+    private Application application;
 
-    public ApplicationModule(Context context, String baseUrl) {
+    public ApplicationModule(Context context, String baseUrl, Application application) {
         this.context = context;
         this.baseUrl = baseUrl;
+        this.application = application;
+    }
+
+    @Singleton
+    @Provides
+    JobManager provideJobManager(JobCreator jobCreator) {
+        JobManager.create(application).addJobCreator(jobCreator);
+        return JobManager.instance();
+    }
+
+    @Singleton
+    @Provides
+    JobCreator provideJobCreator(Job weatherDataUpdateJob) {
+        return new WeatherJobCreator(weatherDataUpdateJob);
+    }
+
+    @Singleton
+    @Provides
+    Job provideWeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
+                                    CurrentConditionsMapper mapper,
+                                    Gson gson,
+                                    SharedPreferences preferences) {
+        return new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences);
     }
 
     @Singleton
@@ -57,7 +87,7 @@ public class ApplicationModule {
     @Singleton
     @Provides
     SharedPreferences provideSharedPreferences() {
-        return context.getSharedPreferences("com.mariebyleen.weather", MODE_PRIVATE);
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Singleton

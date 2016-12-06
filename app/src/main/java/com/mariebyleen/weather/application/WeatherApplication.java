@@ -2,11 +2,9 @@ package com.mariebyleen.weather.application;
 
 import android.app.Application;
 
-import com.evernote.android.job.JobManager;
 import com.mariebyleen.weather.application.di.component.ApplicationComponent;
 import com.mariebyleen.weather.application.di.component.DaggerApplicationComponent;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
-import com.mariebyleen.weather.job.WeatherJobCreator;
 
 
 public class WeatherApplication extends Application {
@@ -19,12 +17,11 @@ public class WeatherApplication extends Application {
   public void onCreate() {
     super.onCreate();
     initializeAndroidComponents();
-    JobManager.create(this).addJobCreator(new WeatherJobCreator());
   }
 
   private void initializeAndroidComponents() {
     applicationComponent = DaggerApplicationComponent.builder()
-            .applicationModule(new ApplicationModule(this, baseUrl))
+            .applicationModule(new ApplicationModule(getBaseContext(), baseUrl, this))
             .build();
   }
 

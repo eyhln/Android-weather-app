@@ -5,12 +5,10 @@ import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain;
 import com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel;
-import com.mariebyleen.weather.current_conditions.view_model.UpdateService;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -22,9 +20,6 @@ public class DataFormattingTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 
-    @Mock
-    private UpdateService updateService;
-
     private CurrentConditionsMapper mapper;
     private CurrentConditionsResponse testResponse;
     private CurrentConditionsViewModel viewModel;
@@ -33,14 +28,12 @@ public class DataFormattingTest {
     public void init() {
         testResponse = new CurrentConditionsResponse();
         mapper = new CurrentConditionsMapper();
-        viewModel = new CurrentConditionsViewModel(updateService, mapper);
     }
 
     @Test
     public void tempFormattedWithTemperatureLabel() {
         setFakeTemperature(287.1);
 
-        viewModel.onNext(testResponse);
         String result = viewModel.getTemperature();
 
         assertEquals(result, "Temperature: 287.1");

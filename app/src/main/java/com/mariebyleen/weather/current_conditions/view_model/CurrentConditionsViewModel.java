@@ -5,9 +5,10 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
 
-import com.evernote.android.job.JobRequest;
+import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
+import com.mariebyleen.weather.job.WeatherDataUpdateJob;
 
 import javax.inject.Inject;
 
@@ -18,14 +19,17 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private SharedPreferences preferences;
     private Gson gson;
+    private JobManager jobManager;
 
     private CurrentConditions conditions;
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
-                                      Gson gson) {
+                                      Gson gson,
+                                      JobManager jobManager) {
         this.preferences = preferences;
         this.gson = gson;
+        this.jobManager = jobManager;
     }
 
     public void onFragmentResume() {
@@ -34,10 +38,7 @@ public class CurrentConditionsViewModel extends BaseObservable
             conditions = getSavedWeatherData();
         }
 
-        new JobRequest.Builder("WeatherDataUpdateJob")
-                .setExecutionWindow(500, 1000)
-                .build()
-                .schedule();
+        jobManager.schedule(WeatherDataUpdateJob.buildJobRequest());
 
         preferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -52,7 +53,6 @@ public class CurrentConditionsViewModel extends BaseObservable
         Log.d(TAG, "onSharedPreferenceChanged");
         if (s.equals("CurrentConditions")) {
             conditions = getSavedWeatherData();
-            Log.i(TAG, "Data in SharedPreferences updated");
             notifyChange();
         }
     }
@@ -78,5 +78,4 @@ public class CurrentConditionsViewModel extends BaseObservable
         Log.d(TAG, "getTemperature called");
         return "Temperature: " + String.valueOf(temperature);
     }
-
 }

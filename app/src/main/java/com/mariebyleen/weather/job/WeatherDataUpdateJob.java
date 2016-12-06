@@ -5,39 +5,42 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.evernote.android.job.Job;
+import com.evernote.android.job.JobRequest;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
-import javax.inject.Inject;
-
 import rx.Observer;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApiKey;
-import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
 public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditions> {
 
     public final static String TAG = "WeatherDataUpdateJob";
 
-    @Inject
-    OpenWeatherApiService weatherApiService;
-    @Inject
-    CurrentConditionsMapper mapper;
-    @Inject
-    Gson gson;
-    @Inject
-    SharedPreferences preferences;
+    private OpenWeatherApiService weatherApiService;
+    private CurrentConditionsMapper mapper;
+    private Gson gson;
+    private SharedPreferences preferences;
 
-    private SharedPreferences.Editor prefsEditor;
+    public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
+                                CurrentConditionsMapper mapper,
+                                Gson gson,
+                                SharedPreferences preferences) {
+        this.weatherApiService = weatherApiService;
+        this.mapper = mapper;
+        this.gson = gson;
+        this.preferences = preferences;
+    }
 
-    public WeatherDataUpdateJob() {
-        getApplicationComponent().inject(this);
-        prefsEditor = preferences.edit();
+    public static JobRequest buildJobRequest() {
+        return new JobRequest.Builder("WeatherDataUpdateJob")
+                .setExecutionWindow(500, 1000)
+                .setPersisted(true)
+                .build();
     }
 
     @NonNull
@@ -50,11 +53,10 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
                         return mapper.mapCurrentConditions(currentConditionsResponse);
                     }
                 })
-                .observeOn(Schedulers.io())
-                .subscribeOn(Schedulers.newThread())
                 .subscribe(this);
 
         return Result.SUCCESS;
+        // TODO return success only when the data is successfully transferred
     }
 
     @Override
@@ -73,7 +75,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
     }
 
     private void saveData(CurrentConditions conditions) {
-        Log.d(TAG, "Data saved to shared preferences");
+        SharedPreferences.Editor prefsEditor = preferences.edit();
         String currentConditionsJson = gson.toJson(conditions);
         prefsEditor.putString("CurrentConditions", currentConditionsJson);
         prefsEditor.apply();
