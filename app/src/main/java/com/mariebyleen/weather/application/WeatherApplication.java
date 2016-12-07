@@ -21,7 +21,7 @@ public class WeatherApplication extends Application {
 
   private void initializeAndroidComponents() {
     applicationComponent = DaggerApplicationComponent.builder()
-            .applicationModule(new ApplicationModule(getBaseContext(), baseUrl, this))
+            .applicationModule(new ApplicationModule(getApplicationContext(), baseUrl, this))
             .build();
   }
 
