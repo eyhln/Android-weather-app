@@ -32,20 +32,26 @@ public class CurrentConditionsViewModel extends BaseObservable
         this.jobManager = jobManager;
     }
 
-    public void onFragmentResume() {
+    public void onViewCreate() {
+        preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    public void onViewResume() {
+
         if (conditions == null) {
             Log.d(TAG, "populating data from memory");
             conditions = getSavedWeatherData();
         }
 
         jobManager.schedule(WeatherDataUpdateJob.buildJobRequest());
-
-        preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
-    public void onFragmentPause() {
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
+    public void onViewPause() {
         saveWeatherData(conditions);
+    }
+
+    public void onViewDestroy() {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -75,7 +81,7 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Bindable
     public String getTemperature() {
         double temperature = conditions.getTemperature();
-        Log.d(TAG, "getTemperature called");
-        return "Temperature: " + String.valueOf(temperature);
+        Log.d(TAG, "getTemperature called: " + temperature);
+        return String.valueOf(temperature);
     }
 }

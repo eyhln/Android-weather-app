@@ -45,6 +45,8 @@ public class CurrentConditionsFragment extends Fragment {
                 R.layout.fragment_current_conditions, container, false);
         binding.setConditions(viewModel);
 
+        viewModel.onViewCreate();
+
         return binding.getRoot();
     }
 
@@ -59,13 +61,13 @@ public class CurrentConditionsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        viewModel.onFragmentResume();
+        viewModel.onViewResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        viewModel.onFragmentPause();
+        viewModel.onViewPause();
     }
 
     @Override
@@ -84,5 +86,11 @@ public class CurrentConditionsFragment extends Fragment {
                 super.onOptionsItemSelected(item);
                 return true;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.onViewDestroy();
     }
 }
