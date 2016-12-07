@@ -6,7 +6,7 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.mariebyleen.weather.mapper.WeatherMapper;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ public class WeatherJobCreator implements JobCreator {
     @Inject
     OpenWeatherApiService weatherApiService;
     @Inject
-    CurrentConditionsMapper mapper;
+    WeatherMapper mapper;
     @Inject
     Gson gson;
     @Inject

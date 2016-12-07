@@ -8,7 +8,8 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.mariebyleen.weather.forecast.model.ForecastResponse;
+import com.mariebyleen.weather.mapper.WeatherMapper;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
@@ -22,14 +23,14 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
     public final static String TAG = "WeatherDataUpdateJob";
 
     private OpenWeatherApiService weatherApiService;
-    private CurrentConditionsMapper mapper;
+    private WeatherMapper mapper;
     private Gson gson;
     private SharedPreferences preferences;
 
     private boolean jobSuccess = false;
 
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
-                                CurrentConditionsMapper mapper,
+                                WeatherMapper mapper,
                                 Gson gson,
                                 SharedPreferences preferences) {
         this.weatherApiService = weatherApiService;
@@ -48,11 +49,14 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
-        weatherApiService.getCurrentConditions(getApiKey())
+        float latitude = preferences.getFloat("lat", 0);
+        float longitude = preferences.getFloat("lon", 0);
+        weatherApiService.getCurrentConditions(latitude, longitude, getApiKey())
                 .map(new Func1<CurrentConditionsResponse, CurrentConditions>() {
                     @Override
                     public CurrentConditions call(CurrentConditionsResponse currentConditionsResponse) {
-                        return mapper.mapCurrentConditions(currentConditionsResponse);
+                        return mapper.mapCurrentConditions(currentConditionsResponse,
+                                new ForecastResponse());
                     }
                 })
                 .subscribe(this);
@@ -83,4 +87,5 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
         prefsEditor.putString("CurrentConditions", currentConditionsJson);
         prefsEditor.apply();
     }
+
 }

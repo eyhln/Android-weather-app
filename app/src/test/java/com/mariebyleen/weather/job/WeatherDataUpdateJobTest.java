@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.mariebyleen.weather.mapper.WeatherMapper;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 
 import org.junit.Before;
@@ -27,7 +27,7 @@ public class WeatherDataUpdateJobTest {
 
     private SharedPreferences preferences;
     private Gson gson;
-    private CurrentConditionsMapper mapper;
+    private WeatherMapper mapper;
 
     private WeatherDataUpdateJob job;
 
@@ -35,7 +35,7 @@ public class WeatherDataUpdateJobTest {
     public void init() {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
-        mapper = new CurrentConditionsMapper();
+        mapper = new WeatherMapper();
         job = new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences);
     }
 

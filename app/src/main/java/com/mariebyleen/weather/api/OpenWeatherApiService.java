@@ -8,6 +8,8 @@ import rx.Observable;
 
 public interface OpenWeatherApiService {
 
-    @GET("weather?lat=38.9716700&lon=-95.2352500")
-    Observable<CurrentConditionsResponse> getCurrentConditions(@Query("APPID") String apiKey);
+    @GET("weather")
+    Observable<CurrentConditionsResponse> getCurrentConditions(@Query("lat") float lat,
+                                                               @Query("lon") float lon,
+                                                               @Query("APPID") String apiKey);
 }

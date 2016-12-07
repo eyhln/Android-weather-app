@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.mariebyleen.weather.mapper.WeatherMapper;
 import com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel;
 
 import dagger.Module;
@@ -25,7 +25,7 @@ public class CurrentConditionsModule {
 
     @PerActivity
     @Provides
-    CurrentConditionsMapper provideCurrentConditionsMapper() {
-        return new CurrentConditionsMapper();
+    WeatherMapper provideCurrentConditionsMapper() {
+        return new WeatherMapper();
     }
 }

@@ -1,7 +1,7 @@
 package com.mariebyleen.weather.current_conditions;
 
 
-import com.mariebyleen.weather.current_conditions.mapper.CurrentConditionsMapper;
+import com.mariebyleen.weather.mapper.WeatherMapper;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain;
 import com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel;
@@ -20,14 +20,14 @@ public class DataFormattingTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 
-    private CurrentConditionsMapper mapper;
+    private WeatherMapper mapper;
     private CurrentConditionsResponse testResponse;
     private CurrentConditionsViewModel viewModel;
 
     @Before
     public void init() {
         testResponse = new CurrentConditionsResponse();
-        mapper = new CurrentConditionsMapper();
+        mapper = new WeatherMapper();
     }
 
     @Test
