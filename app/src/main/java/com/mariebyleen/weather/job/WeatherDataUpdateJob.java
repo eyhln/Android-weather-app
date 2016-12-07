@@ -13,7 +13,6 @@ import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 
 import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApiKey;
@@ -27,6 +26,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
     private Gson gson;
     private SharedPreferences preferences;
 
+    private boolean jobSuccess = false;
+
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
                                 CurrentConditionsMapper mapper,
                                 Gson gson,
@@ -39,7 +40,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
 
     public static JobRequest buildJobRequest() {
         return new JobRequest.Builder("WeatherDataUpdateJob")
-                .setExecutionWindow(500, 1000)
+                .setPeriodic(900000)
                 .setPersisted(true)
                 .build();
     }
@@ -54,21 +55,21 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
                         return mapper.mapCurrentConditions(currentConditionsResponse);
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
 
-        return Result.SUCCESS;
-        // TODO return success only when the data is successfully transferred
+        return jobSuccess ? Result.SUCCESS : Result.FAILURE;
     }
 
     @Override
     public void onCompleted() {
-        Log.i(TAG, "Weather data update successfully completed");
+        Log.i(TAG, "Weather data saved");
+        jobSuccess = true;
     }
 
     @Override
     public void onError(Throwable e) {
         Log.e(TAG, "Error retrieving weather data: \n" + e.toString());
+        jobSuccess = false;
     }
 
     @Override
