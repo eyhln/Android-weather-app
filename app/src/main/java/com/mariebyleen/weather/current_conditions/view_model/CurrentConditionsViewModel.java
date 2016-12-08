@@ -45,7 +45,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
         if (jobManager.getAllJobRequestsForTag("WeatherDataUpdateJob").size() == 0)
             Log.d(TAG, "Scheduling period updates");
-            jobManager.schedule(WeatherDataUpdateJob.buildJobRequest());
+            jobManager.schedule(WeatherDataUpdateJob.buildJobRequest(preferences));
     }
 
     public void onViewPause() {
