@@ -1,6 +1,7 @@
 package com.mariebyleen.weather.location.di.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.LocationManager;
 
@@ -40,14 +41,15 @@ public class LocationModule {
 
     @PerActivity
     @Provides
-    LocationPresenterContract provideLocationPresenterContract(WeatherLocation finder) {
-        return new LocationPresenter(view, finder);
+    LocationPresenterContract provideLocationPresenterContract(WeatherLocation location) {
+        return new LocationPresenter(view, location);
     }
 
     @PerActivity
     @Provides
-    WeatherLocation provideWeatherLocation(LocationFetcher locationFetcher) {
-        return new WeatherLocation(locationFetcher);
+    WeatherLocation provideWeatherLocation(LocationFetcher locationFetcher,
+                                           SharedPreferences preferences) {
+        return new WeatherLocation(locationFetcher, preferences);
     }
 
     @PerActivity
