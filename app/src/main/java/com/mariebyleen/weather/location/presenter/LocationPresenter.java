@@ -1,7 +1,7 @@
 package com.mariebyleen.weather.location.presenter;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.location.model.CurrentLocation;
+import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.view.LocationPresenterContract;
 
 import javax.inject.Inject;
@@ -16,24 +16,24 @@ public class LocationPresenter
     @BindString(R.string.find_current_location_progress_dialog) String dialogText;
 
     private LocationViewContract view;
-    private CurrentLocation currentLocationFinder;
+    private WeatherLocation location;
 
     @Inject
     public LocationPresenter(LocationViewContract view,
-                             CurrentLocation currentLocationFinder) {
+                             WeatherLocation location) {
         this.view = view;
-        this.currentLocationFinder = currentLocationFinder;
+        this.location = location;
     }
 
     @Override
     public void useCurrentLocation() {
         view.showProgressDialog(dialogText);
-        currentLocationFinder.getLocation();
+        location.updateLocationData();
         view.hideProgressDialog();
     }
 
+    @Override
     public void onStop() {
-        currentLocationFinder.closeConnections();
-    }
 
+    }
 }

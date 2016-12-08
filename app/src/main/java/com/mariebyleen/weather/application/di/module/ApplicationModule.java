@@ -7,9 +7,6 @@ import android.preference.PreferenceManager;
 
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.job.WeatherJobCreator;
@@ -50,20 +47,6 @@ public class ApplicationModule {
     @Provides
     JobCreator provideJobCreator() {
         return new WeatherJobCreator();
-    }
-
-    @Singleton
-    @Provides
-    GoogleApiClient provideGoogleApiClient() {
-        return new GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    @Singleton
-    @Provides
-    GoogleApiAvailability provideGoogleApiAvailability() {
-        return GoogleApiAvailability.getInstance();
     }
 
     @Singleton

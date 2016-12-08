@@ -4,10 +4,15 @@ import android.content.Context;
 import android.location.Criteria;
 import android.location.LocationManager;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.location.model.CurrentLocation;
+import com.mariebyleen.weather.location.model.WeatherLocation;
+import com.mariebyleen.weather.location.model.service.FusedLocation;
+import com.mariebyleen.weather.location.model.service.LocationFetcher;
+import com.mariebyleen.weather.location.model.service.NetworkLocation;
 import com.mariebyleen.weather.location.presenter.LocationPresenter;
 import com.mariebyleen.weather.location.presenter.LocationViewContract;
 import com.mariebyleen.weather.location.view.LocationPresenterContract;
@@ -29,22 +34,44 @@ public class LocationModule {
 
     @PerActivity
     @Provides
-    LocationPresenterContract provideLocationPresenterContract(CurrentLocation finder) {
+    LocationViewContract provideLocationViewContract() {
+        return view;
+    }
+
+    @PerActivity
+    @Provides
+    LocationPresenterContract provideLocationPresenterContract(WeatherLocation finder) {
         return new LocationPresenter(view, finder);
     }
 
     @PerActivity
     @Provides
-    CurrentLocation provideCurrentLocationFinder(GoogleApiClient client, Context context,
-                                                 GoogleApiAvailability availability,
-                                                 LocationManager manager, Criteria criteria) {
-        return new CurrentLocation(client, context, availability, manager, criteria);
+    WeatherLocation provideWeatherLocation(LocationFetcher locationFetcher) {
+        return new WeatherLocation(locationFetcher);
     }
 
     @PerActivity
     @Provides
-    LocationViewContract provideLocationViewContract() {
-        return view;
+    LocationFetcher provideLocationFetcher(GoogleApiAvailability availability,
+                                           Context context,
+                                           FusedLocation fusedLocation,
+                                           NetworkLocation networkLocation) {
+        int status = availability.isGooglePlayServicesAvailable(context);
+        if (status == ConnectionResult.SUCCESS)
+            return fusedLocation;
+        return networkLocation;
+    }
+
+    @PerActivity
+    @Provides
+    FusedLocation provideFusedLocation(GoogleApiClient client, Context context) {
+        return new FusedLocation(client, context);
+    }
+
+    @PerActivity
+    @Provides
+    NetworkLocation provideNetworkLocation(LocationManager manager, Criteria criteria) {
+        return new NetworkLocation(manager, criteria);
     }
 
     @PerActivity
@@ -60,6 +87,20 @@ public class LocationModule {
         criteria.setAccuracy(Criteria.ACCURACY_LOW);
         criteria.setCostAllowed(false);
         return criteria;
+    }
+
+    @PerActivity
+    @Provides
+    GoogleApiAvailability provideGoogleApiAvailability() {
+        return GoogleApiAvailability.getInstance();
+    }
+
+    @PerActivity
+    @Provides
+    GoogleApiClient provideGoogleApiClient() {
+        return new GoogleApiClient.Builder(context)
+                .addApi(LocationServices.API)
+                .build();
     }
 
 }
