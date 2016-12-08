@@ -41,7 +41,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<Weather> {
     }
 
     public static JobRequest buildJobRequest(SharedPreferences preferences) {
-        int period = preferences.getInt("UPDATE_PERIOD", 900000);
+        String periodString = preferences.getString("UPDATE_PERIOD", "900000");
+        int period = Integer.parseInt(periodString);
         return new JobRequest.Builder("WeatherDataUpdateJob")
                 .setPeriodic(period)
                 .setPersisted(true)
