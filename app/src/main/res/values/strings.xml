@@ -5,7 +5,7 @@
     <string name="use_current_location">Use Current Location</string>
     <string name="choose_location">Choose Location</string>
 
-    <string name="find_current_location_progress_dialog">Finding Location...</string>
+    <string name="find_current_location_progress_dialog">Finding Location&#8230;</string>
 
     // Menu
     <string name="settings">Settings</string>
@@ -14,26 +14,22 @@
     // Settings
     <string name="update_period_title">AutoUpdate Period</string>
     <string name="update_period_summary">Choose how frequently to update the weather data</string>
-    <string name="update_period_dialog_title">Update every...</string>
+    <string name="update_period_dialog_title">Update every&#8230;</string>
 
     <string-array name="time_unit_display">
-        <item>10 Minutes</item>
         <item>15 Minutes</item>
         <item>20 Minutes</item>
         <item>30 Minutes</item>
         <item>1 Hour</item>
         <item>2 Hours</item>
-        <item>4 Hours</item>
     </string-array>
 
-    <string-array name="time_unit_in_minutes">
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-        <item>30</item>
-        <item>60</item>
-        <item>120</item>
-        <item>240</item>
+    <string-array name="time_unit_in_milliseconds">
+        <item>900000</item>
+        <item>1200000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>7200000</item>
     </string-array>
 
 </resources>
