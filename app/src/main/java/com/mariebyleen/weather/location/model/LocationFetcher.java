@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.location.model.service;
+package com.mariebyleen.weather.location.model;
 
 import android.location.Location;
 

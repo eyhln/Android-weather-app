@@ -4,4 +4,6 @@ public interface LocationPresenterContract {
 
     void useCurrentLocation();
     void onStop();
+    void onLocationPermissionGranted();
+    void onLocationPermissionDenied();
 }

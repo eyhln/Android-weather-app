@@ -10,10 +10,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.location.model.WeatherLocation;
-import com.mariebyleen.weather.location.model.service.FusedLocation;
-import com.mariebyleen.weather.location.model.service.LocationFetcher;
-import com.mariebyleen.weather.location.model.service.NetworkLocation;
+import com.mariebyleen.weather.location.model.LocationFetcher;
+import com.mariebyleen.weather.location.model.UserLocation;
+import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
+import com.mariebyleen.weather.location.model.fetcher.NetworkLocation;
 import com.mariebyleen.weather.location.presenter.LocationPresenter;
 import com.mariebyleen.weather.location.presenter.LocationViewContract;
 import com.mariebyleen.weather.location.view.LocationPresenterContract;
@@ -41,15 +41,15 @@ public class LocationModule {
 
     @PerActivity
     @Provides
-    LocationPresenterContract provideLocationPresenterContract(WeatherLocation location) {
+    LocationPresenterContract provideLocationPresenterContract(UserLocation location) {
         return new LocationPresenter(view, location);
     }
 
     @PerActivity
     @Provides
-    WeatherLocation provideWeatherLocation(LocationFetcher locationFetcher,
-                                           SharedPreferences preferences) {
-        return new WeatherLocation(locationFetcher, preferences);
+    UserLocation provideWeatherLocation(LocationFetcher locationFetcher,
+                                        SharedPreferences preferences) {
+        return new UserLocation(locationFetcher, preferences);
     }
 
     @PerActivity
