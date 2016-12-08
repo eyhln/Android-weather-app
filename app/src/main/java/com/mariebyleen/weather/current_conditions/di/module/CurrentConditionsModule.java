@@ -25,7 +25,7 @@ public class CurrentConditionsModule {
 
     @PerActivity
     @Provides
-    WeatherMapper provideCurrentConditionsMapper() {
+    WeatherMapper provideWeatherMapper() {
         return new WeatherMapper();
     }
 }
