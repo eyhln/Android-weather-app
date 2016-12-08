@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.evernote.android.job.JobManager;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
 import com.mariebyleen.weather.current_conditions.view.CurrentConditionsFragment;
@@ -20,8 +18,6 @@ import dagger.Component;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    GoogleApiClient exposeGoogleApiClient();
-    GoogleApiAvailability exposeGoogleApiAvailability();
     Context exposeContext();
     SharedPreferences exposeSharedPreferences();
     Gson exposeGson();
