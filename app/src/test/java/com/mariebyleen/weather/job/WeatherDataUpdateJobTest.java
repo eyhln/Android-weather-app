@@ -57,9 +57,9 @@ public class WeatherDataUpdateJobTest {
     public void current_and_forecast_data_are_zipped() {
         setCoordinateValues();
         when(weatherApiService.getCurrentConditions(anyFloat(), anyFloat(), anyString()))
-                .thenReturn(getFakeCurrentConditionsObservable(100.0));
+                .thenReturn(getTestCurrentConditionsObservable(100.0));
         when(weatherApiService.getForecast(anyFloat(), anyFloat(), anyString()))
-                .thenReturn(getFakeForecastObservable("TEST"));
+                .thenReturn(getTestForecastObservable("TEST"));
         TestSubscriber<Weather> testSubscriber = new TestSubscriber<>();
 
         job.getWeatherObservable()
@@ -81,7 +81,7 @@ public class WeatherDataUpdateJobTest {
         }
 
         private Observable<CurrentConditionsResponse>
-                                        getFakeCurrentConditionsObservable(double temp) {
+                                        getTestCurrentConditionsObservable(double temp) {
             CurrentConditionsResponse currentConditions = new CurrentConditionsResponse();
             CurrentConditionsResponseMain main = new CurrentConditionsResponseMain();
             main.setTemp(temp);
@@ -91,7 +91,7 @@ public class WeatherDataUpdateJobTest {
             return Observable.from(cc);
         }
 
-        private Observable<ForecastResponse> getFakeForecastObservable(String country) {
+        private Observable<ForecastResponse> getTestForecastObservable(String country) {
             ForecastResponse forecast = new ForecastResponse();
             ForecastResponseCity city = new ForecastResponseCity();
             city.setCountry(country);
