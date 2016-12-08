@@ -7,8 +7,8 @@ import android.util.Log;
 
 import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
 import com.mariebyleen.weather.job.WeatherDataUpdateJob;
+import com.mariebyleen.weather.model.Weather;
 
 import javax.inject.Inject;
 
@@ -21,7 +21,7 @@ public class CurrentConditionsViewModel extends BaseObservable
     private Gson gson;
     private JobManager jobManager;
 
-    private CurrentConditions conditions;
+    private Weather weather;
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
@@ -38,9 +38,9 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     public void onViewResume() {
 
-        if (conditions == null) {
+        if (weather == null) {
             Log.d(TAG, "populating data from memory");
-            conditions = getSavedWeatherData();
+            weather = getSavedWeatherData();
         }
 
         if (jobManager.getAllJobRequestsForTag("WeatherDataUpdateJob").size() == 0)
@@ -49,7 +49,7 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     public void onViewPause() {
-        saveWeatherData(conditions);
+        saveWeatherData(weather);
     }
 
     public void onViewDestroy() {
@@ -59,30 +59,30 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         Log.d(TAG, "onSharedPreferenceChanged");
-        if (s.equals("CurrentConditions")) {
-            conditions = getSavedWeatherData();
+        if (s.equals("Weather")) {
+            weather = getSavedWeatherData();
             notifyChange();
         }
     }
 
-    private void saveWeatherData(CurrentConditions conditions) {
+    private void saveWeatherData(Weather weather) {
         SharedPreferences.Editor prefsEditor = preferences.edit();
-        String currentConditionsJson = gson.toJson(conditions);
-        prefsEditor.putString("CurrentConditions", currentConditionsJson);
+        String weatherJson = gson.toJson(weather);
+        prefsEditor.putString("Weather", weatherJson);
         prefsEditor.apply();
     }
 
-    private CurrentConditions getSavedWeatherData() {
-        String currentConditionsJson = preferences.getString("CurrentConditions", "");
-        if (currentConditionsJson.equals(""))
-            return new CurrentConditions();
-        return gson.fromJson(currentConditionsJson,
-                CurrentConditions.class);
+    private Weather getSavedWeatherData() {
+        String weatherJson = preferences.getString("CurrentConditions", "");
+        if (weatherJson.equals(""))
+            return new Weather();
+        return gson.fromJson(weatherJson,
+                Weather.class);
     }
 
     @Bindable
     public String getTemperature() {
-        double temperature = conditions.getTemperature();
+        double temperature = weather.getTemperature();
         Log.d(TAG, "getTemperature called: " + temperature);
         return String.valueOf(temperature);
     }

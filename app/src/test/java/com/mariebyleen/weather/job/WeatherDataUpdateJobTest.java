@@ -5,8 +5,12 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
+import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain;
+import com.mariebyleen.weather.forecast.model.ForecastResponse;
+import com.mariebyleen.weather.forecast.model.ForecastResponseCity;
 import com.mariebyleen.weather.mapper.WeatherMapper;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
+import com.mariebyleen.weather.model.Weather;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,7 +19,17 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import rx.Observable;
+import rx.observers.TestSubscriber;
+
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyFloat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class WeatherDataUpdateJobTest {
 
@@ -40,15 +54,63 @@ public class WeatherDataUpdateJobTest {
     }
 
     @Test
+    public void current_and_forecast_data_are_zipped() {
+        setCoordinateValues();
+        when(weatherApiService.getCurrentConditions(anyFloat(), anyFloat(), anyString()))
+                .thenReturn(getFakeCurrentConditionsObservable(100.0));
+        when(weatherApiService.getForecast(anyFloat(), anyFloat(), anyString()))
+                .thenReturn(getFakeForecastObservable("TEST"));
+        TestSubscriber<Weather> testSubscriber = new TestSubscriber<>();
+
+        job.getWeatherObservable()
+                .subscribe(testSubscriber);
+
+        List<Weather> weatherEvents = testSubscriber.getOnNextEvents();
+        Weather weather = weatherEvents.get(0);
+
+        testSubscriber.assertNoErrors();
+        assertNotNull(weather);
+        assertEquals(100.0, weather.getTemperature());
+        assertEquals("TEST", weather.getCountry());
+    }
+
+        private void setCoordinateValues() {
+            FakeSharedPreferences.Editor editor = preferences.edit();
+            editor.putFloat("lat", 0);
+            editor.putFloat("lon", 0);
+        }
+
+        private Observable<CurrentConditionsResponse>
+                                        getFakeCurrentConditionsObservable(double temp) {
+            CurrentConditionsResponse currentConditions = new CurrentConditionsResponse();
+            CurrentConditionsResponseMain main = new CurrentConditionsResponseMain();
+            main.setTemp(temp);
+            currentConditions.setMain(main);
+            List<CurrentConditionsResponse> cc = new ArrayList<>(1);
+            cc.add(currentConditions);
+            return Observable.from(cc);
+        }
+
+        private Observable<ForecastResponse> getFakeForecastObservable(String country) {
+            ForecastResponse forecast = new ForecastResponse();
+            ForecastResponseCity city = new ForecastResponseCity();
+            city.setCountry(country);
+            forecast.setCity(city);
+            List<ForecastResponse> f = new ArrayList<>(1);
+            f.add(forecast);
+            return Observable.from(f);
+        }
+
+    @Test
     public void when_data_received_data_is_saved() {
-        CurrentConditions saveConditions = new CurrentConditions();
-        saveConditions.setTemperature(100.0);
+        Weather saveWeather = new Weather();
+        saveWeather.setTemperature(100.0);
 
-        job.onNext(saveConditions);
+        job.onNext(saveWeather);
 
-        String conditionsJson = preferences.getString("CurrentConditions", "");
-        CurrentConditions retrieveConditions = gson.fromJson(conditionsJson, CurrentConditions.class);
-        assertEquals(saveConditions.getTemperature(), retrieveConditions.getTemperature());
+        String weatherJson = preferences.getString("Weather", "");
+        Weather retrieveWeather = gson.fromJson(weatherJson, Weather.class);
+        assertEquals(saveWeather.getTemperature(), retrieveWeather.getTemperature());
     }
 
 

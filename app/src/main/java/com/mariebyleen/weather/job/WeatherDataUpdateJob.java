@@ -8,17 +8,18 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.forecast.model.ForecastResponse;
 import com.mariebyleen.weather.mapper.WeatherMapper;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditions;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
+import com.mariebyleen.weather.model.Weather;
 
+import rx.Observable;
 import rx.Observer;
-import rx.functions.Func1;
+import rx.functions.Func2;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApiKey;
 
-public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditions> {
+public class WeatherDataUpdateJob extends Job implements Observer<Weather> {
 
     public final static String TAG = "WeatherDataUpdateJob";
 
@@ -49,19 +50,28 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
     @NonNull
     @Override
     protected Result onRunJob(Params params) {
+        getWeatherObservable()
+                .subscribe(this);
+        return jobSuccess ? Result.SUCCESS : Result.FAILURE;
+    }
+
+
+    Observable<Weather> getWeatherObservable() {
         float latitude = preferences.getFloat("lat", 0);
         float longitude = preferences.getFloat("lon", 0);
-        weatherApiService.getCurrentConditions(latitude, longitude, getApiKey())
-                .map(new Func1<CurrentConditionsResponse, CurrentConditions>() {
-                    @Override
-                    public CurrentConditions call(CurrentConditionsResponse currentConditionsResponse) {
-                        return mapper.mapCurrentConditions(currentConditionsResponse,
-                                new ForecastResponse());
-                    }
-                })
-                .subscribe(this);
+        Observable<CurrentConditionsResponse> conditions =
+                weatherApiService.getCurrentConditions(latitude, longitude, getApiKey());
+        Observable<ForecastResponse> forecast =
+                weatherApiService.getForecast(latitude, longitude, getApiKey());
 
-        return jobSuccess ? Result.SUCCESS : Result.FAILURE;
+        return conditions.zipWith(forecast, new
+                Func2<CurrentConditionsResponse, ForecastResponse, Weather>() {
+                    @Override
+                    public Weather call(CurrentConditionsResponse ccResponse,
+                                        ForecastResponse fResponse) {
+                        return mapper.map(ccResponse, fResponse);
+                    }
+                });
     }
 
     @Override
@@ -77,14 +87,14 @@ public class WeatherDataUpdateJob extends Job implements Observer<CurrentConditi
     }
 
     @Override
-    public void onNext(CurrentConditions currentConditions) {
-        saveData(currentConditions);
+    public void onNext(Weather weather) {
+        saveData(weather);
     }
 
-    private void saveData(CurrentConditions conditions) {
+    private void saveData(Weather weather) {
         SharedPreferences.Editor prefsEditor = preferences.edit();
-        String currentConditionsJson = gson.toJson(conditions);
-        prefsEditor.putString("CurrentConditions", currentConditionsJson);
+        String currentConditionsJson = gson.toJson(weather);
+        prefsEditor.putString("Weather", currentConditionsJson);
         prefsEditor.apply();
     }
 
