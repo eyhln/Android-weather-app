@@ -80,8 +80,10 @@ public class CurrentConditionsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_settings:
-                navigator.navigateToSettings(getContext());
+                navigator.navigateToPreferences(getContext());
                 return true;
+            case R.id.menu_item_location:
+                navigator.navigateToLocationEditor(getContext());
             default:
                 super.onOptionsItemSelected(item);
                 return true;

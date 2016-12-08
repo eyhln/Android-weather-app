@@ -9,6 +9,7 @@
 
     // Menu
     <string name="settings">Settings</string>
+    <string name="location">Location</string>
 
     // Settings
     <string name="update_period_title">AutoUpdate Period</string>
