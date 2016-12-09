@@ -1,0 +1,73 @@
+package com.mariebyleen.weather.weather_display.activity;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.base.BaseActivity;
+import com.mariebyleen.weather.navigation.Navigator;
+import com.mariebyleen.weather.weather_display.current_conditions.view.CurrentConditionsFragment;
+import com.mariebyleen.weather.weather_display.forecast.view.ForecastFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MainActivity extends BaseActivity {
+
+    @BindView(R.id.view_pager_weather_display)
+    ViewPager viewPager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        onCreateSetupViewPager();
+    }
+
+    private void onCreateSetupViewPager() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        viewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
+            @Override
+            public Fragment getItem(int position) {
+                if (position == 0)
+                    return new CurrentConditionsFragment();
+                if (position == 1)
+                    return new ForecastFragment();
+                return null;
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Navigator navigator = new Navigator();
+        switch (item.getItemId()) {
+            case R.id.menu_item_settings:
+                navigator.navigateToPreferences(this);
+                return true;
+            case R.id.menu_item_location:
+                navigator.navigateToLocationEditor(this);
+            default:
+                super.onOptionsItemSelected(item);
+                return true;
+        }
+    }
+}

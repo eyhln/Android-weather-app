@@ -1,22 +1,19 @@
-package com.mariebyleen.weather.current_conditions.view;
+package com.mariebyleen.weather.weather_display.current_conditions.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.current_conditions.di.component.DaggerCurrentConditionsComponent;
-import com.mariebyleen.weather.current_conditions.di.module.CurrentConditionsModule;
-import com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel;
 import com.mariebyleen.weather.databinding.FragmentCurrentConditionsBinding;
 import com.mariebyleen.weather.navigation.Navigator;
+import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
+import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 
 import javax.inject.Inject;
 
@@ -28,12 +25,6 @@ public class CurrentConditionsFragment extends Fragment {
     CurrentConditionsViewModel viewModel;
     @Inject
     Navigator navigator;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Nullable
     @Override
@@ -68,26 +59,6 @@ public class CurrentConditionsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         viewModel.onViewPause();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_main, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_settings:
-                navigator.navigateToPreferences(getContext());
-                return true;
-            case R.id.menu_item_location:
-                navigator.navigateToLocationEditor(getContext());
-            default:
-                super.onOptionsItemSelected(item);
-                return true;
-        }
     }
 
     @Override
