@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.forecast.model;
+package com.mariebyleen.weather.weather_display.forecast.model;
 
 public class ForecastResponseCityListWind {
     private double deg;

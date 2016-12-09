@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.current_conditions.view_model;
+package com.mariebyleen.weather.weather_display.current_conditions.view_model;
 
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;

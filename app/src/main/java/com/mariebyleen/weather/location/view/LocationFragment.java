@@ -77,15 +77,13 @@ public class LocationFragment extends Fragment implements LocationViewContract {
     }
 
     public void disableUseCurrentLocationOption() {
-        // TODO disable button
+        useCurrentLocation.setEnabled(false);
     }
 
     public void checkPermissions() {
-        // TODO is INTERNET a dangerous permission?
-            checkPermission(Manifest.permission.INTERNET, PERMISSIONS_REQUEST_INTERNET);
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
-                    PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION);
-        }
+        checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
+                PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION);
+    }
 
     private void checkPermission(String permission, int requestTag) {
         if (ContextCompat.checkSelfPermission(getContext(), permission)

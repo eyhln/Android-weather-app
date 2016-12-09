@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.current_conditions.model;
+package com.mariebyleen.weather.weather_display.current_conditions.model;
 
 public class CurrentConditionsResponseClouds {
     private int all;

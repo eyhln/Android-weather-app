@@ -1,9 +1,9 @@
-package com.mariebyleen.weather.current_conditions.di.component;
+package com.mariebyleen.weather.weather_display.di.component;
 
 import com.mariebyleen.weather.application.di.component.ApplicationComponent;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.current_conditions.di.module.CurrentConditionsModule;
-import com.mariebyleen.weather.current_conditions.view.CurrentConditionsFragment;
+import com.mariebyleen.weather.weather_display.current_conditions.view.CurrentConditionsFragment;
+import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 
 import dagger.Component;
 
@@ -12,5 +12,5 @@ import dagger.Component;
             dependencies = ApplicationComponent.class)
 public interface CurrentConditionsComponent {
 
-    void inject(CurrentConditionsFragment currentConditionsFragment);
+    void inject(CurrentConditionsFragment fragment);
 }
