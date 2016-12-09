@@ -1,10 +1,10 @@
-package com.mariebyleen.weather.current_conditions;
+package com.mariebyleen.weather.weather_display.current_conditions;
 
 
 import com.mariebyleen.weather.mapper.WeatherMapper;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponseMain;
-import com.mariebyleen.weather.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
+import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponseMain;
+import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;

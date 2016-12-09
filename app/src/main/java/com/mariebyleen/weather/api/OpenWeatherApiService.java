@@ -1,7 +1,7 @@
 package com.mariebyleen.weather.api;
 
-import com.mariebyleen.weather.current_conditions.model.CurrentConditionsResponse;
-import com.mariebyleen.weather.forecast.model.ForecastResponse;
+import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
+import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
