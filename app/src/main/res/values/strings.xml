@@ -11,6 +11,10 @@
     <string name="settings">Settings</string>
     <string name="location">Location</string>
 
+    // TabLayout Titles
+    <string name="current_conditions">Weather Now</string>
+    <string name="forecast">Forecast</string>
+
     // Settings
     <string name="update_period_title">AutoUpdate Period</string>
     <string name="update_period_summary">Choose how frequently to update the weather data</string>
