@@ -8,10 +8,10 @@ import android.util.Log;
 
 import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
+import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.job.WeatherDataUpdateJob;
 import com.mariebyleen.weather.model.WeatherData;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import javax.inject.Inject;
@@ -20,6 +20,7 @@ public class CurrentConditionsViewModel extends BaseObservable
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "CurrentConditionsVM";
+    private static final double KELVIN_TO_CELSIUS = 273.15;
 
     private SharedPreferences preferences;
     private Gson gson;
@@ -27,6 +28,9 @@ public class CurrentConditionsViewModel extends BaseObservable
     private Context context;
 
     private WeatherData weatherData;
+
+
+    private boolean celsius = false;
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
@@ -89,19 +93,30 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getTemperature() {
-        double temperature = weatherData.getTemperature();
-        long roundedTemperature = Math.round(temperature);
-        Log.d(TAG, "getTemperature called: " + temperature);
-        NumberFormat format = NumberFormat.getInstance();
-        if (format instanceof DecimalFormat) {
-            ((DecimalFormat) format).setDecimalSeparatorAlwaysShown(true);
-            format.setMinimumFractionDigits(1);
-        }
-        return String.valueOf(format.format(temperature));
+        double temp = weatherData.getTemperature();
+        if (celsius)
+            temp -= KELVIN_TO_CELSIUS;
+        else
+            temp = getTemperatureInFahrenheit(temp);
+        Log.d(TAG, "getTemperature called: " + temp);
+        return String.valueOf(NumberFormat.getInstance().format(Math.round(temp)));
+    }
+
+    private double getTemperatureInFahrenheit(double temperature) {
+        return 72;
     }
 
     @Bindable
     public String getDegreesIndicator() {
-        return null;
+
+        if (celsius)
+            return context.getString(R.string.degrees_indicator_Celsius);
+        return context.getString(R.string.degrees_indicator_Fahrenheit);
+    }
+
+    @Bindable
+    public String getHumidity() {
+        int humidity = weatherData.getHumidity();
+        return NumberFormat.getPercentInstance().format(humidity);
     }
 }

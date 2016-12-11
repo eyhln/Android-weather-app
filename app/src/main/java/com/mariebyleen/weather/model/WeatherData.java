@@ -3,6 +3,7 @@ package com.mariebyleen.weather.model;
 public class WeatherData {
 
     private double temperature;
+    private int humidity;
     private String country;
 
     public double getTemperature() {
@@ -19,5 +20,13 @@ public class WeatherData {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public int getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(int humidity) {
+        this.humidity = humidity;
     }
 }

@@ -15,6 +15,7 @@
     <string name="degrees">Degrees %s</string>
     <string name="degrees_indicator_Fahrenheit">F</string>
     <string name="degrees_indicator_Celsius">C</string>
+    <string name="humidity">Humidity: %s</string>
 
 
     // LOCATION
