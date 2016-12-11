@@ -46,6 +46,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
         return new JobRequest.Builder("WeatherDataUpdateJob")
                 .setPeriodic(period)
                 .setPersisted(true)
+                .setUpdateCurrent(true)
                 .build();
     }
 
