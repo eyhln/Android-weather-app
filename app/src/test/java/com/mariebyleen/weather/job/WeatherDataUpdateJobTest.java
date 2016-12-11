@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponseMain;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponseCity;
 import com.mariebyleen.weather.mapper.WeatherMapper;
-import com.mariebyleen.weather.model.Weather;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -60,18 +60,18 @@ public class WeatherDataUpdateJobTest {
                 .thenReturn(getTestCurrentConditionsObservable(100.0));
         when(weatherApiService.getForecast(anyFloat(), anyFloat(), anyString()))
                 .thenReturn(getTestForecastObservable("TEST"));
-        TestSubscriber<Weather> testSubscriber = new TestSubscriber<>();
+        TestSubscriber<WeatherData> testSubscriber = new TestSubscriber<>();
 
         job.getWeatherObservable()
                 .subscribe(testSubscriber);
 
-        List<Weather> weatherEvents = testSubscriber.getOnNextEvents();
-        Weather weather = weatherEvents.get(0);
+        List<WeatherData> weatherDataEvents = testSubscriber.getOnNextEvents();
+        WeatherData weatherData = weatherDataEvents.get(0);
 
         testSubscriber.assertNoErrors();
-        assertNotNull(weather);
-        assertEquals(100.0, weather.getTemperature());
-        assertEquals("TEST", weather.getCountry());
+        assertNotNull(weatherData);
+        assertEquals(100.0, weatherData.getTemperature());
+        assertEquals("TEST", weatherData.getCountry());
     }
 
         private void setCoordinateValues() {
@@ -103,14 +103,14 @@ public class WeatherDataUpdateJobTest {
 
     @Test
     public void when_data_received_data_is_saved() {
-        Weather saveWeather = new Weather();
-        saveWeather.setTemperature(100.0);
+        WeatherData saveWeatherData = new WeatherData();
+        saveWeatherData.setTemperature(100.0);
 
-        job.onNext(saveWeather);
+        job.onNext(saveWeatherData);
 
-        String weatherJson = preferences.getString("Weather", "");
-        Weather retrieveWeather = gson.fromJson(weatherJson, Weather.class);
-        assertEquals(saveWeather.getTemperature(), retrieveWeather.getTemperature());
+        String weatherJson = preferences.getString("WeatherData", "");
+        WeatherData retrieveWeatherData = gson.fromJson(weatherJson, WeatherData.class);
+        assertEquals(saveWeatherData.getTemperature(), retrieveWeatherData.getTemperature());
     }
 
 

@@ -1,6 +1,6 @@
 package com.mariebyleen.weather.model;
 
-public class Weather {
+public class WeatherData {
 
     private double temperature;
     private String country;
