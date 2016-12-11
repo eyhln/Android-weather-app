@@ -1,11 +1,7 @@
 <resources>
     <string name="app_name">Weather</string>
 
-    // Location screen
-    <string name="use_current_location">Use Current Location</string>
-    <string name="choose_location">Choose Location</string>
-
-    <string name="find_current_location_progress_dialog">Finding Location&#8230;</string>
+    // WEATHER DISPLAY
 
     // Menu
     <string name="settings">Settings</string>
@@ -15,7 +11,22 @@
     <string name="current_conditions">Weather Now</string>
     <string name="forecast">Forecast</string>
 
-    // Settings
+    // Current Conditions
+    <string name="degrees">Degrees %s</string>
+    <string name="degrees_indicator_Fahrenheit">F</string>
+    <string name="degrees_indicator_Celsius">C</string>
+
+
+    // LOCATION
+    // button text
+    <string name="use_current_location">Use Current Location</string>
+    // button text
+    <string name="choose_location">Choose Location</string>
+
+    <string name="find_current_location_progress_dialog">Finding Location&#8230;</string>
+
+
+    // SETTINGS
     <string name="update_period_title">AutoUpdate Period</string>
     <string name="update_period_summary">Choose how frequently to update the weather data</string>
     <string name="update_period_dialog_title">Update every&#8230;</string>

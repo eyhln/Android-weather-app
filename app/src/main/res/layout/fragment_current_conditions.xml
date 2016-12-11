@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+<layout>
     <data>
         <variable name="conditions"
           type="com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel"/>
     </data>
-    <LinearLayout
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                android:padding="16dp">
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
         <TextView
+            android:text="@{conditions.temperature}"
+            android:id="@+id/temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{conditions.temperature}"
-            tools:text="temp"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.15"
+            app:layout_constraintHorizontal_bias="0.2"/>
 
-    </LinearLayout>
+        <TextView
+            android:text="@{@string/degrees(conditions.degreesIndicator)}"
+            android:id="@+id/degrees_symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintLeft_toRightOf="@+id/temperature"
+            app:layout_constraintTop_toTopOf="@+id/temperature"
+            tools:text="o F"/>
+
+    </android.support.constraint.ConstraintLayout>
 </layout>

@@ -1,5 +1,6 @@
 package com.mariebyleen.weather.weather_display.current_conditions.view_model;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -9,6 +10,9 @@ import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.job.WeatherDataUpdateJob;
 import com.mariebyleen.weather.model.Weather;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import javax.inject.Inject;
 
@@ -20,16 +24,19 @@ public class CurrentConditionsViewModel extends BaseObservable
     private SharedPreferences preferences;
     private Gson gson;
     private JobManager jobManager;
+    private Context context;
 
     private Weather weather;
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
                                       Gson gson,
-                                      JobManager jobManager) {
+                                      JobManager jobManager,
+                                      Context context) {
         this.preferences = preferences;
         this.gson = gson;
         this.jobManager = jobManager;
+        this.context = context;
     }
 
     public void onViewCreate() {
@@ -83,7 +90,18 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Bindable
     public String getTemperature() {
         double temperature = weather.getTemperature();
+        long roundedTemperature = Math.round(temperature);
         Log.d(TAG, "getTemperature called: " + temperature);
-        return String.valueOf(temperature);
+        NumberFormat format = NumberFormat.getInstance();
+        if (format instanceof DecimalFormat) {
+            ((DecimalFormat) format).setDecimalSeparatorAlwaysShown(true);
+            format.setMinimumFractionDigits(1);
+        }
+        return String.valueOf(format.format(temperature));
+    }
+
+    @Bindable
+    public String getDegreesIndicator() {
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.mariebyleen.weather.weather_display.di.module;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.evernote.android.job.JobManager;
@@ -18,7 +19,8 @@ public class CurrentConditionsModule {
     @Provides
     CurrentConditionsViewModel provideCurrentConditionsViewModel(SharedPreferences preferences,
                                                                  Gson gson,
-                                                                 JobManager jobManager) {
-        return new CurrentConditionsViewModel(preferences, gson, jobManager);
+                                                                 JobManager jobManager,
+                                                                 Context context) {
+        return new CurrentConditionsViewModel(preferences, gson, jobManager, context);
     }
 }
