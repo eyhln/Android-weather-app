@@ -4,8 +4,8 @@ public class CurrentConditionsResponseMain {
 
     private double temp;
     private double temp_min;
-    private int humidity;
-    private int pressure;
+    private double humidity;
+    private double pressure;
     private double temp_max;
 
     public double getTemp() {
@@ -16,19 +16,19 @@ public class CurrentConditionsResponseMain {
         this.temp = temp;
     }
 
-    public int getHumidity() {
-        return this.humidity;
+    public double getHumidity() {
+        return humidity;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(double humidity) {
         this.humidity = humidity;
     }
 
-    public int getPressure() {
-        return this.pressure;
+    public double getPressure() {
+        return pressure;
     }
 
-    public void setPressure(int pressure) {
+    public void setPressure(double pressure) {
         this.pressure = pressure;
     }
 
