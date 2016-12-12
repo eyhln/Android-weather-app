@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableBoolean;
-import android.util.Log;
 
 import com.mariebyleen.weather.model.WeatherData;
 
@@ -28,11 +27,10 @@ public class CurrentConditionsViewModel extends BaseObservable
     private Context context;
 
     private WeatherData weatherData;
+    private Locale locale;
 
-    public final ObservableBoolean useCelsius =
+    public final ObservableBoolean useFahrenheit =
             new ObservableBoolean(localeUsesFahrenheit(Locale.getDefault()));
-
-    public Locale locale;
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
@@ -51,7 +49,6 @@ public class CurrentConditionsViewModel extends BaseObservable
     public void onViewResume() {
 
         if (weatherData == null) {
-            Log.d(TAG, "populating data from memory");
             weatherData = service.getSavedWeatherData();
         }
 
@@ -68,7 +65,6 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        Log.d(TAG, "onSharedPreferenceChanged");
         if (s.equals(service.weatherDataTag)) {
             weatherData = service.getSavedWeatherData();
             notifyChange();
@@ -90,16 +86,14 @@ public class CurrentConditionsViewModel extends BaseObservable
         String countryCode = locale.getCountry();
         String[] countriesThatUseFahrenheit = {"US", "BS", "BZ", "KY"};
         for (int i = 0; i < countriesThatUseFahrenheit.length; i++) {
-            if (countryCode.equals(countriesThatUseFahrenheit[i])) {
+            if (countryCode.equals(countriesThatUseFahrenheit[i]))
                 return true;
-            }
         }
         return false;
     }
 
     private double getTemperatureInFahrenheit(double temperature) {
-        return (temperature - 273.15)*1.8000 + 32.00;
-
+        return (temperature - KELVIN_TO_CELSIUS)*1.8000 + 32.00;
     }
 
     @Bindable
@@ -109,7 +103,13 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     @Bindable
-    public String getUpdated() {
+    public String getWindSpeed() {
+        double windspeed = weatherData.getWindSpeed();
+        return null;
+    }
+
+    @Bindable
+    public String getUpdateTime() {
         String timeUTC = String.valueOf(weatherData.getUpdateTime());
         DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
         utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -120,5 +120,9 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     public void setWeatherData(WeatherData weatherData) {
         this.weatherData = weatherData;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

@@ -17,6 +17,8 @@ public class WeatherMapper {
         weatherData.setUpdateTime(ccResponse.getDt());
         weatherData.setTemperature(ccResponse.getMain().getTemp());
         weatherData.setHumidity(ccResponse.getMain().getHumidity());
+        weatherData.setWindSpeed(ccResponse.getWind().getSpeed());
+        weatherData.setWindDirection(ccResponse.getWind().getDeg());
         weatherData.setCountry(fResponse.getCity().getCountry());
         return weatherData;
     }

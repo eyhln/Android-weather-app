@@ -5,6 +5,8 @@ public class WeatherData {
     private int updateTime;
     private double temperature;
     private double humidity;
+    private double windSpeed;
+    private double windDirection;
     private String country;
 
     public double getTemperature() {
@@ -29,6 +31,22 @@ public class WeatherData {
 
     public void setHumidity(double humidity) {
         this.humidity = humidity;
+    }
+
+    public double getWindSpeed() {
+        return windSpeed;
+    }
+
+    public void setWindSpeed(double windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public double getWindDirection() {
+        return windDirection;
+    }
+
+    public void setWindDirection(double windDirection) {
+        this.windDirection = windDirection;
     }
 
     public int getUpdateTime() {
