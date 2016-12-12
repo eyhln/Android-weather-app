@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="conditions"
           type="com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel"/>
     </data>
     <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="match_parent">
 
         <TextView
             android:text="@{conditions.temperature}"
@@ -26,17 +24,35 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.15"
-            app:layout_constraintHorizontal_bias="0.2"/>
+            app:layout_constraintVertical_bias="0.13"
+            app:layout_constraintHorizontal_bias="0.2"
+            tools:text="72"/>
 
         <TextView
-            android:text="@{@string/degrees(conditions.degreesIndicator)}"
+            android:text="@{@string/degrees(conditions.useCelsius ? @string/celsius : @string/fahrenheit)}"
             android:id="@+id/degrees_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintLeft_toRightOf="@+id/temperature"
-            app:layout_constraintTop_toTopOf="@+id/temperature"/>
+            app:layout_constraintTop_toTopOf="@+id/temperature"
+            tools:text="o F"/>
+
+        <TextView
+            android:text="@{@string/updated(conditions.updated)}"
+            android:id="@+id/updated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.1"
+            tools:text="8:30 pm"/>
 
         <TextView
             android:text="@{@string/humidity(conditions.humidity)}"
@@ -46,7 +62,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/temperature"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/temperature"
-            app:layout_constraintVertical_bias="0.2"/>
-
+            app:layout_constraintVertical_bias="0.19"
+            tools:text="Humidity: 45%"/>
     </android.support.constraint.ConstraintLayout>
 </layout>
