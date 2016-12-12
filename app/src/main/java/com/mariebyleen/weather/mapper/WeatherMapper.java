@@ -14,6 +14,7 @@ public class WeatherMapper {
     public WeatherData map(CurrentConditionsResponse ccResponse,
                            ForecastResponse fResponse) {
         WeatherData weatherData = new WeatherData();
+        weatherData.setUpdateTime(ccResponse.getDt());
         weatherData.setTemperature(ccResponse.getMain().getTemp());
         weatherData.setHumidity(ccResponse.getMain().getHumidity());
         weatherData.setCountry(fResponse.getCity().getCountry());

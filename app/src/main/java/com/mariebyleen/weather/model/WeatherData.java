@@ -2,8 +2,9 @@ package com.mariebyleen.weather.model;
 
 public class WeatherData {
 
+    private int updateTime;
     private double temperature;
-    private int humidity;
+    private double humidity;
     private String country;
 
     public double getTemperature() {
@@ -22,11 +23,19 @@ public class WeatherData {
         this.country = country;
     }
 
-    public int getHumidity() {
+    public double getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(double humidity) {
         this.humidity = humidity;
+    }
+
+    public int getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(int updateTime) {
+        this.updateTime = updateTime;
     }
 }
