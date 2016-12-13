@@ -11,7 +11,6 @@ import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
-import com.mariebyleen.weather.mapper.WeatherMapper;
 
 import rx.Observable;
 import rx.Observer;
@@ -24,18 +23,15 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     public final static String TAG = "WeatherDataUpdateJob";
 
     private OpenWeatherApiService weatherApiService;
-    private WeatherMapper mapper;
     private Gson gson;
     private SharedPreferences preferences;
 
     private boolean jobSuccess = false;
 
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
-                                WeatherMapper mapper,
                                 Gson gson,
                                 SharedPreferences preferences) {
         this.weatherApiService = weatherApiService;
-        this.mapper = mapper;
         this.gson = gson;
         this.preferences = preferences;
     }
@@ -60,8 +56,9 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
 
 
     protected Observable<WeatherData> getWeatherObservable() {
-        float latitude = preferences.getFloat("lat", 0);
-        float longitude = preferences.getFloat("lon", 0);
+        // TODO remove these default values
+        float latitude = preferences.getFloat("lat",  38.9716700f);
+        float longitude = preferences.getFloat("lon",  -95.2352500f);
         Observable<CurrentConditionsResponse> conditions =
                 weatherApiService.getCurrentConditions(latitude, longitude, getApiKey());
         Observable<ForecastResponse> forecast =
@@ -72,7 +69,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
                     @Override
                     public WeatherData call(CurrentConditionsResponse ccResponse,
                                             ForecastResponse fResponse) {
-                        return mapper.map(ccResponse, fResponse);
+                        return new WeatherData(ccResponse, fResponse);
                     }
                 });
     }
