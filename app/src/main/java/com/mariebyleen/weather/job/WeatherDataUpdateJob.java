@@ -11,6 +11,7 @@ import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
+import com.mariebyleen.weather.mapper.WeatherMapper;
 
 import rx.Observable;
 import rx.Observer;
@@ -23,15 +24,18 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     public final static String TAG = "WeatherDataUpdateJob";
 
     private OpenWeatherApiService weatherApiService;
+    private WeatherMapper mapper;
     private Gson gson;
     private SharedPreferences preferences;
 
     private boolean jobSuccess = false;
 
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
+                                WeatherMapper mapper,
                                 Gson gson,
                                 SharedPreferences preferences) {
         this.weatherApiService = weatherApiService;
+        this.mapper = mapper;
         this.gson = gson;
         this.preferences = preferences;
     }
@@ -69,7 +73,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
                     @Override
                     public WeatherData call(CurrentConditionsResponse ccResponse,
                                             ForecastResponse fResponse) {
-                        return new WeatherData(ccResponse, fResponse);
+                        return mapper.map(ccResponse, fResponse);
                     }
                 });
     }

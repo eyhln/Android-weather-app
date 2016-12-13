@@ -1,24 +1,68 @@
 package com.mariebyleen.weather.model;
 
-import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
-import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
-
 public class WeatherData {
 
-    private CurrentConditionsResponse currentConditions;
-    private ForecastResponse forecast;
+    private int updateTime;
+    private double temperature;
+    private double humidity;
+    private double windSpeed;
+    private double windDirection;
+    private String cityName;
+    private String country;
 
-    public WeatherData(CurrentConditionsResponse currentConditionsResponse,
-                       ForecastResponse forecastResponse) {
-        this.currentConditions = currentConditionsResponse;
-        this.forecast = forecastResponse;
+    public double getTemperature() {
+        return temperature;
     }
 
-    public CurrentConditionsResponse getCurrentConditions() {
-        return currentConditions;
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
     }
 
-    public ForecastResponse getForecast() {
-        return forecast;
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
+    public double getWindSpeed() {
+        return windSpeed;
+    }
+
+    public void setWindSpeed(double windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public double getWindDirection() {
+        return windDirection;
+    }
+
+    public void setWindDirection(double windDirection) {
+        this.windDirection = windDirection;
+    }
+
+    public int getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(int updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }
