@@ -11,6 +11,7 @@ import com.mariebyleen.weather.model.WeatherData;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -98,7 +99,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getHumidity() {
-        double humidity = weatherData.getHumidity();
+        double humidity = Math.round(weatherData.getHumidity()) / 100.0;
         return NumberFormat.getPercentInstance().format(humidity);
     }
 
@@ -110,16 +111,24 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getUpdateTime() {
-        String timeUTC = String.valueOf(weatherData.getUpdateTime());
-        DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-        utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        //Date date = utcFormat.parse("");
-        utcFormat.setTimeZone(TimeZone.getDefault());
-        return String.valueOf(timeUTC);
+        DateFormat format = new SimpleDateFormat("H:mm a", locale);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date updateTime = new Date(weatherData.getUpdateTime());
+
+        long updateTimeUnix = weatherData.getUpdateTime();
+        int offset = TimeZone.getDefault().getOffset(updateTimeUnix);
+        updateTimeUnix += offset;
+        Date updateTimeHuman = new Date(updateTimeUnix);
+
+        return format.format(updateTimeHuman);
     }
 
     public void setWeatherData(WeatherData weatherData) {
         this.weatherData = weatherData;
+    }
+
+    public WeatherData getWeatherData() {
+        return weatherData;
     }
 
     public void setLocale(Locale locale) {

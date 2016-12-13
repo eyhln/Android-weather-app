@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoRule;
 import java.util.Locale;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.fail;
 
 public class DataFormattingTest {
 
@@ -88,12 +89,12 @@ public class DataFormattingTest {
 
     @Test
     public void formatHumidity_asPercentRounded() {
-       testFormatHumidity(0.54444, "54%");
+       testFormatHumidity(54.0, "54%");
     }
 
     @Test
     public void formatHumidity_asPercentZero() {
-        testFormatHumidity(0, "0%");
+        testFormatHumidity(0.0, "0%");
     }
 
     private void testFormatHumidity(double humidity, String expected) {
@@ -103,6 +104,13 @@ public class DataFormattingTest {
         String actual = viewModel.getHumidity();
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void updateTime_asWallClockTime() {
+        testLocale = new Locale("", "GB");
+        data.setUpdateTime(1);
+        fail("implement");
     }
 
 
