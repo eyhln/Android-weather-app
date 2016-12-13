@@ -2,11 +2,13 @@ package com.mariebyleen.weather.model;
 
 public class WeatherData {
 
-    private int updateTime;
+    private long updateTime;
     private double temperature;
     private double humidity;
     private double windSpeed;
     private double windDirection;
+    private String iconIdentifier;
+    private String description;
     private String cityName;
     private String country;
 
@@ -50,11 +52,11 @@ public class WeatherData {
         this.windDirection = windDirection;
     }
 
-    public int getUpdateTime() {
+    public long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(int updateTime) {
+    public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -64,5 +66,21 @@ public class WeatherData {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public String getIconIdentifier() {
+        return iconIdentifier;
+    }
+
+    public void setIconIdentifier(String iconIdentifier) {
+        this.iconIdentifier = iconIdentifier;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

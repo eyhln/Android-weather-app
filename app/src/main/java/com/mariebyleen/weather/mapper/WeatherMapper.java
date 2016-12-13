@@ -22,6 +22,8 @@ public class WeatherMapper {
         Log.d("mapper", "humidity: " + ccResponse.getMain().getHumidity());
         weatherData.setWindSpeed(ccResponse.getWind().getSpeed());
         weatherData.setWindDirection(ccResponse.getWind().getDeg());
+        weatherData.setIconIdentifier(ccResponse.getWeather()[0].getIcon());
+        weatherData.setDescription(ccResponse.getWeather()[0].getDescription());
         weatherData.setCityName(ccResponse.getName());
         weatherData.setCountry(fResponse.getCity().getCountry());
         return weatherData;
