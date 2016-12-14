@@ -6,7 +6,7 @@
         android:entries="@array/time_unit_display"
         android:entryValues="@array/time_unit_in_milliseconds"
         android:key="UPDATE_PERIOD"
-        android:summary="@string/update_period_summary"
+        android:summary="@string/update_period_summary_default"
         android:title="@string/update_period_title"
         android:defaultValue="900000"/>
 

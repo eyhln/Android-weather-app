@@ -35,7 +35,8 @@
 
     // Update data
     <string name="update_period_title">AutoUpdate Period</string>
-    <string name="update_period_summary">Choose how frequently to refresh the weather data</string>
+    <string name="update_period_summary_default">Choose how frequently to refresh the weather data</string>
+    <string name="update_period_summary_specific">Update every %s</string>
     <string name="update_period_dialog_title">Update every&#8230;</string>
 
     <string-array name="time_unit_display">
