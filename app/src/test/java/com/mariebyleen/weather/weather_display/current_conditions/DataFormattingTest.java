@@ -10,7 +10,6 @@ import com.mariebyleen.weather.weather_display.current_conditions.view_model.Cur
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.WeatherDataService;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,9 +17,9 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
 
 public class DataFormattingTest {
 
@@ -112,10 +111,20 @@ public class DataFormattingTest {
         assertEquals(expected, actual);
     }
 
-    @Test @Ignore
-    public void updateTime_asWallClockTime() {
-        testLocale = new Locale("", "GB");
-        data.setUpdateTime(1);
-        fail("implement");
+    @Test
+    public void formatTime_asWallClockTime() {
+        TimeZone originalTimeZone = TimeZone.getDefault();
+        TimeZone cst = TimeZone.getTimeZone("CST");
+        TimeZone.setDefault(cst);
+        viewModel.setLocale(Locale.US);
+
+        data.setUpdateTime(1481729714);
+        viewModel.setWeatherData(data);
+
+        String actual = viewModel.getUpdateTime();
+
+        assertEquals("9:35 AM", actual);
+
+        TimeZone.setDefault(originalTimeZone);
     }
 }

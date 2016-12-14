@@ -12,7 +12,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -135,15 +134,8 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Bindable
     public String getUpdateTime() {
         DateFormat format = new SimpleDateFormat("H:mm a", locale);
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
-        Date updateTime = new Date(weatherData.getUpdateTime());
-
-        long updateTimeUnix = weatherData.getUpdateTime();
-        int offset = TimeZone.getDefault().getOffset(updateTimeUnix);
-        updateTimeUnix += offset;
-        Date updateTimeHuman = new Date(updateTimeUnix);
-
-        return format.format(updateTimeHuman);
+        Date updateTime = new Date(weatherData.getUpdateTime()*1000);
+        return format.format(updateTime);
     }
 
     public void setWeatherData(WeatherData weatherData) {
