@@ -118,5 +118,26 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintVertical_bias="0.25"/>
 
+        <TextView
+            android:text="@{@string/sunrise(conditions.sunriseTime)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sunrise"
+            app:layout_constraintBaseline_toBaselineOf="@+id/humidity"
+            android:layout_marginStart="64dp"
+            app:layout_constraintLeft_toRightOf="@+id/humidity"
+            tools:text="Sunrise: 7:34 AM"
+            android:textAppearance="@style/TextAppearance.AppCompat"/>
+
+        <TextView
+            android:text="@{@string/sunset(conditions.sunsetTime)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sunset"
+            app:layout_constraintBaseline_toBaselineOf="@+id/wind"
+            app:layout_constraintLeft_toLeftOf="@+id/sunrise"
+            tools:text="Sunset: 5:56 PM"
+            android:textAppearance="@style/TextAppearance.AppCompat"/>
+
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -3,6 +3,8 @@ package com.mariebyleen.weather.model;
 public class WeatherData {
 
     private long updateTime;
+    private long sunriseTime;
+    private long sunsetTime;
     private double temperature;
     private double humidity;
     private double windSpeed;
@@ -12,20 +14,36 @@ public class WeatherData {
     private String cityName;
     private String country;
 
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public long getSunriseTime() {
+        return sunriseTime;
+    }
+
+    public void setSunriseTime(long sunriseTime) {
+        this.sunriseTime = sunriseTime;
+    }
+
+    public long getSunsetTime() {
+        return sunsetTime;
+    }
+
+    public void setSunsetTime(long sunsetTime) {
+        this.sunsetTime = sunsetTime;
+    }
+
     public double getTemperature() {
         return temperature;
     }
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public double getHumidity() {
@@ -52,22 +70,6 @@ public class WeatherData {
         this.windDirection = windDirection;
     }
 
-    public long getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(long updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
     public String getIconIdentifier() {
         return iconIdentifier;
     }
@@ -82,5 +84,21 @@ public class WeatherData {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

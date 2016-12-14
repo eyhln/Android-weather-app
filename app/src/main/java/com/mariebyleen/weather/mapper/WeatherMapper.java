@@ -17,9 +17,10 @@ public class WeatherMapper {
                            ForecastResponse fResponse) {
         WeatherData weatherData = new WeatherData();
         weatherData.setUpdateTime(ccResponse.getDt());
+        weatherData.setSunriseTime(ccResponse.getSys().getSunrise());
+        weatherData.setSunsetTime(ccResponse.getSys().getSunset());
         weatherData.setTemperature(ccResponse.getMain().getTemp());
         weatherData.setHumidity(ccResponse.getMain().getHumidity());
-        Log.d("mapper", "humidity: " + ccResponse.getMain().getHumidity());
         weatherData.setWindSpeed(ccResponse.getWind().getSpeed());
         weatherData.setWindDirection(ccResponse.getWind().getDeg());
         weatherData.setIconIdentifier(ccResponse.getWeather()[0].getIcon());
