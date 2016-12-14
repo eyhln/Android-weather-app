@@ -1,10 +1,8 @@
 package com.mariebyleen.weather.weather_display.current_conditions.view_model;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.databinding.ObservableBoolean;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.model.WeatherData;
@@ -29,23 +27,19 @@ public class CurrentConditionsViewModel extends BaseObservable
     private SharedPreferences preferences;
     private Gson gson;
     private WeatherDataService service;
-    private Context context;
 
     private WeatherData weatherData;
     private Locale locale;
 
-    public final ObservableBoolean useFahrenheit =
-            new ObservableBoolean(localeUsesFahrenheit(Locale.getDefault()));
+    private boolean useFahrenheitState;
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
                                       Gson gson,
-                                      WeatherDataService service,
-                                      Context context) {
+                                      WeatherDataService service) {
         this.preferences = preferences;
         this.gson = gson;
         this.service = service;
-        this.context = context;
         locale = Locale.getDefault();
     }
 
@@ -57,6 +51,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
         if (weatherData == null) {
             weatherData = getSavedWeatherData();
+            useFahrenheitState = unitsPrefSetToFahrenheit();
         }
 
         service.manageUpdateJobs();
@@ -77,9 +72,9 @@ public class CurrentConditionsViewModel extends BaseObservable
             notifyChange();
         }
         if (s.equals(unitsOfMeasurementTag)) {
-
+            useFahrenheitState = unitsPrefSetToFahrenheit();
+            notifyChange();
         }
-
     }
 
     public WeatherData getSavedWeatherData() {
@@ -97,10 +92,6 @@ public class CurrentConditionsViewModel extends BaseObservable
         prefsEditor.apply();
     }
 
-    public String getUnitsOfMeasurementPreferenceCode() {
-        return preferences.getString(unitsOfMeasurementTag, "");
-    }
-
     @Bindable
     public String getTemperature() {
         double temp = weatherData.getTemperature();
@@ -113,23 +104,20 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     private boolean unitsPrefSetToFahrenheit() {
-        if ((getUnitsOfMeasurementPreferenceCode()).equals("1"))
-            return true;
-        return false;
+        return ((getUnitsOfMeasurementPreferenceCode()).equals("1"));
     }
 
-    private boolean localeUsesFahrenheit(Locale locale) {
-        String countryCode = locale.getCountry();
-        String[] countriesThatUseFahrenheit = {"US", "BS", "BZ", "KY"};
-        for (int i = 0; i < countriesThatUseFahrenheit.length; i++) {
-            if (countryCode.equals(countriesThatUseFahrenheit[i]))
-                return true;
-        }
-        return false;
+    private String getUnitsOfMeasurementPreferenceCode() {
+        return preferences.getString(unitsOfMeasurementTag, "");
     }
 
     private double getTemperatureInFahrenheit(double temperature) {
         return (temperature - KELVIN_TO_CELSIUS)*1.8000 + 32.00;
+    }
+
+    @Bindable
+    public boolean getUseFahrenheit() {
+        return useFahrenheitState;
     }
 
     @Bindable

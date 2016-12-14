@@ -1,7 +1,6 @@
 package com.mariebyleen.weather.weather_display.current_conditions;
 
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
@@ -30,14 +29,11 @@ public class DataFormattingTest {
 
     @Mock
     WeatherDataService weatherDataService;
-    @Mock
-    Context context;
 
     private WeatherData data;
     private Locale testLocale;
     private SharedPreferences preferences;
     private Gson gson;
-    private WeatherDataService service;
     private CurrentConditionsViewModel viewModel;
 
     private final double WARM_DAY_KELVIN = 300.0;
@@ -48,7 +44,7 @@ public class DataFormattingTest {
     public void init() {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
-        viewModel = new CurrentConditionsViewModel(preferences, gson, service, context);
+        viewModel = new CurrentConditionsViewModel(preferences, gson, weatherDataService);
         data = new WeatherData();
     }
 
@@ -60,23 +56,41 @@ public class DataFormattingTest {
 
     @Test
     public void TemperatureFormat_inCelsius() {
-        preferences.edit().putString("UNITS", "0").apply();
-        testTemperatureFormat("DE", WARM_DAY_CELSIUS);
+        testTemperatureFormat("0", WARM_DAY_CELSIUS);
     }
 
     @Test
     public void TemperatureFormat_inFahrenheit() {
-        preferences.edit().putString("UNITS", "1").apply();
-        testTemperatureFormat("US", WARM_DAY_FAHRENHEIT);
+        testTemperatureFormat("1", WARM_DAY_FAHRENHEIT);
     }
 
-    private void testTemperatureFormat(String countryCode, String expected) {
+    private void testTemperatureFormat(String unitsCode, String expected) {
+        preferences.edit().putString("UNITS", unitsCode).apply();
         data.setTemperature(WARM_DAY_KELVIN);
         viewModel.setWeatherData(data);
 
         String temp = viewModel.getTemperature();
 
         assertEquals(expected, temp);
+    }
+
+    @Test
+    public void UnitsIndicator_inCelsius() {
+        testUnitsIndicatorFormat("0", false);
+    }
+
+    @Test
+    public void UnitsIndicator_inFahrenheit() {
+        testUnitsIndicatorFormat("1", true);
+    }
+
+    private void testUnitsIndicatorFormat(String unitsCode, boolean useFahrenheit) {
+        preferences.edit().putString("UNITS", unitsCode).apply();
+        viewModel.onViewResume();
+
+        boolean actual = viewModel.getUseFahrenheit();
+
+        assertEquals(useFahrenheit, actual);
     }
 
     @Test
