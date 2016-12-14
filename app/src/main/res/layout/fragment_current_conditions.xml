@@ -16,17 +16,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            tools:text="72"
             app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.2"
-            app:layout_constraintHorizontal_bias="0.19"
-            tools:text="72"/>
+            android:layout_marginBottom="16dp"
+            app:layout_constraintVertical_bias="0.25"
+            app:layout_constraintHorizontal_bias="0.15"
+            android:textSize="56sp"/>
 
         <TextView
             android:text=
@@ -37,46 +36,87 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintLeft_toRightOf="@+id/temperature"
             app:layout_constraintTop_toTopOf="@+id/temperature"
-            tools:text="o F"/>
+            tools:text="o F"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:text="@{@string/updated(conditions.updateTime)}"
             android:id="@+id/updated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:text="Last updated: 8:30 pm"
+            android:textAppearance="@style/TextAppearance.AppCompat"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="24dp"
-            android:layout_marginStart="16dp"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:text="@{conditions.weatherData.cityName}"
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            app:layout_constraintTop_toBottomOf="@+id/updated"
+            tools:text="Lawrence"
+            app:layout_constraintLeft_toLeftOf="@+id/updated"
+            app:layout_constraintRight_toRightOf="@+id/updated"/>
+
+        <TextView
+            android:text="@{conditions.weatherData.description}"
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintLeft_toLeftOf="@+id/temperature"
+            app:layout_constraintTop_toBottomOf="@+id/temperature"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.1"
-            tools:text="8:30 pm"
-            android:textAppearance="@style/TextAppearance.AppCompat.Button"/>
+            app:layout_constraintVertical_bias="0.25"
+            tools:text="Scattered clouds"
+            android:textAppearance="@style/TextAppearance.AppCompat"/>
 
         <TextView
             android:text="@{@string/humidity(conditions.humidity)}"
             android:id="@+id/humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toTopOf="@+id/temperature"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            tools:text="Humidity: 45%"/>
+            tools:text="Humidity: 45%"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            app:layout_constraintLeft_toLeftOf="@+id/description"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/description"/>
 
         <TextView
-            android:text="@{string/wind_speed(conditions.windSpeed)}"
-            android:id="@+id/wind_speed"
+            android:text="@{@string/wind_speed(conditions.windSpeed)}"
+            android:id="@+id/wind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/humidity"
+            tools:text="Wind: 12 mph NNE"
             app:layout_constraintLeft_toLeftOf="@+id/humidity"
-            tools:text="Wind Speed: 12 mph"/>
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/humidity"
+            android:textAppearance="@style/TextAppearance.AppCompat"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/snow"
+            android:id="@+id/imageView4"
+            android:layout_marginStart="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.85"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintVertical_bias="0.25"/>
+
     </android.support.constraint.ConstraintLayout>
 </layout>
