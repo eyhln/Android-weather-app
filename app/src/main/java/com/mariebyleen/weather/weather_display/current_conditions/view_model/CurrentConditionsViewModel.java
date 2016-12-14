@@ -6,6 +6,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableBoolean;
 
+import com.google.gson.Gson;
 import com.mariebyleen.weather.model.WeatherData;
 
 import java.text.DateFormat;
@@ -22,8 +23,11 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private static final String TAG = "CurrentConditionsVM";
     private static final double KELVIN_TO_CELSIUS = 273.15;
+    private final static String weatherDataTag = "WeatherData";
+    private final static String unitsOfMeasurementTag = "UNITS";
 
     private SharedPreferences preferences;
+    private Gson gson;
     private WeatherDataService service;
     private Context context;
 
@@ -35,9 +39,11 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
+                                      Gson gson,
                                       WeatherDataService service,
                                       Context context) {
         this.preferences = preferences;
+        this.gson = gson;
         this.service = service;
         this.context = context;
         locale = Locale.getDefault();
@@ -50,14 +56,14 @@ public class CurrentConditionsViewModel extends BaseObservable
     public void onViewResume() {
 
         if (weatherData == null) {
-            weatherData = service.getSavedWeatherData();
+            weatherData = getSavedWeatherData();
         }
 
         service.manageUpdateJobs();
     }
 
     public void onViewPause() {
-        service.saveWeatherData(weatherData);
+        saveWeatherData(weatherData);
     }
 
     public void onViewDestroy() {
@@ -66,21 +72,50 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals(service.weatherDataTag)) {
-            weatherData = service.getSavedWeatherData();
+        if (s.equals(weatherDataTag)) {
+            weatherData = getSavedWeatherData();
             notifyChange();
         }
+        if (s.equals(unitsOfMeasurementTag)) {
+
+        }
+
+    }
+
+    public WeatherData getSavedWeatherData() {
+        String weatherJson = preferences.getString(weatherDataTag, "");
+        if (weatherJson.equals(""))
+            return new WeatherData();
+        return gson.fromJson(weatherJson,
+                WeatherData.class);
+    }
+
+    public void saveWeatherData(WeatherData weatherData) {
+        SharedPreferences.Editor prefsEditor = preferences.edit();
+        String weatherJson = gson.toJson(weatherData);
+        prefsEditor.putString(weatherDataTag, weatherJson);
+        prefsEditor.apply();
+    }
+
+    public String getUnitsOfMeasurementPreferenceCode() {
+        return preferences.getString(unitsOfMeasurementTag, "");
     }
 
     @Bindable
     public String getTemperature() {
         double temp = weatherData.getTemperature();
         double convertedTemp;
-        if (localeUsesFahrenheit(locale))
+        if (unitsPrefSetToFahrenheit())
             convertedTemp = getTemperatureInFahrenheit(temp);
         else
             convertedTemp = temp - KELVIN_TO_CELSIUS;
         return String.valueOf(NumberFormat.getInstance().format(Math.round(convertedTemp)));
+    }
+
+    private boolean unitsPrefSetToFahrenheit() {
+        if ((getUnitsOfMeasurementPreferenceCode()).equals("1"))
+            return true;
+        return false;
     }
 
     private boolean localeUsesFahrenheit(Locale locale) {

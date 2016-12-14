@@ -15,7 +15,9 @@ public class PreferencesFragment extends PreferenceFragment
 
     SharedPreferences sharedPreferences;
     @BindArray(R.array.units_of_measurement)
-    String[] measurementSystem;
+    String[] measurementSystems;
+    @BindArray(R.array.units_of_measurement_code)
+    String[] measurementSystemCodes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class PreferencesFragment extends PreferenceFragment
     }
 
     private String getUnitsFromCode(String unitsCode) {
-        return measurementSystem[Integer.parseInt(unitsCode)];
+        return measurementSystems[Integer.parseInt(unitsCode)];
     }
 
     @Override

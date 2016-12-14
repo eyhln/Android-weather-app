@@ -20,15 +20,15 @@ public class CurrentConditionsModule {
     @Provides
     CurrentConditionsViewModel provideCurrentConditionsViewModel(SharedPreferences preferences,
                                                                  WeatherDataService service,
+                                                                 Gson gson,
                                                                  Context context) {
-        return new CurrentConditionsViewModel(preferences, service, context);
+        return new CurrentConditionsViewModel(preferences, gson, service, context);
     }
 
     @PerActivity
     @Provides
     WeatherDataService provideWeatherDataService(JobManager jobManager,
-                                                 SharedPreferences preferences,
-                                                 Gson gson) {
-        return new WeatherDataService(jobManager, preferences, gson);
+                                                 SharedPreferences preferences) {
+        return new WeatherDataService(jobManager, preferences);
     }
 }

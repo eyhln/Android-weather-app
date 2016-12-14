@@ -4,11 +4,14 @@ package com.mariebyleen.weather.weather_display.current_conditions;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.WeatherDataService;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -24,16 +27,17 @@ public class DataFormattingTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
-    
+
     @Mock
-    SharedPreferences preferences;
-    @Mock
-    WeatherDataService service;
+    WeatherDataService weatherDataService;
     @Mock
     Context context;
 
     private WeatherData data;
     private Locale testLocale;
+    private SharedPreferences preferences;
+    private Gson gson;
+    private WeatherDataService service;
     private CurrentConditionsViewModel viewModel;
 
     private final double WARM_DAY_KELVIN = 300.0;
@@ -42,43 +46,31 @@ public class DataFormattingTest {
 
     @Before
     public void init() {
-        viewModel = new CurrentConditionsViewModel(preferences, service, context);
+        preferences = new FakeSharedPreferences();
+        gson = new Gson();
+        viewModel = new CurrentConditionsViewModel(preferences, gson, service, context);
         data = new WeatherData();
     }
 
     @Test
-    public void EmptyStringLocaleTemperatureFormat_inCelsius() {
+    public void EmptyStringPreferenceTemperatureFormat_inCelsius() {
+        preferences.edit().putString("UNITS", "0").apply();
         testTemperatureFormat("", WARM_DAY_CELSIUS);
     }
 
     @Test
-    public void GermanyTemperatureFormat_inCelsius() {
+    public void TemperatureFormat_inCelsius() {
+        preferences.edit().putString("UNITS", "0").apply();
         testTemperatureFormat("DE", WARM_DAY_CELSIUS);
     }
 
     @Test
-    public void USTemperatureFormat_inFahrenheit() {
+    public void TemperatureFormat_inFahrenheit() {
+        preferences.edit().putString("UNITS", "1").apply();
         testTemperatureFormat("US", WARM_DAY_FAHRENHEIT);
     }
 
-    @Test
-    public void BahamasTemperatureFormat_inFahrenheit() {
-        testTemperatureFormat("BS", WARM_DAY_FAHRENHEIT);
-    }
-
-    @Test
-    public void CaymanIslandsTemperatureFormat_inFahrenheit() {
-        testTemperatureFormat("KY", WARM_DAY_FAHRENHEIT);
-    }
-
-    @Test
-    public void BelizeTemperatureFormat_inFahrenheit() {
-        testTemperatureFormat("BZ", WARM_DAY_FAHRENHEIT);
-    }
-
     private void testTemperatureFormat(String countryCode, String expected) {
-        testLocale = new Locale("", countryCode);
-        viewModel.setLocale(testLocale);
         data.setTemperature(WARM_DAY_KELVIN);
         viewModel.setWeatherData(data);
 
@@ -106,13 +98,10 @@ public class DataFormattingTest {
         assertEquals(expected, actual);
     }
 
-    @Test
+    @Test @Ignore
     public void updateTime_asWallClockTime() {
         testLocale = new Locale("", "GB");
         data.setUpdateTime(1);
         fail("implement");
     }
-
-
-
 }
