@@ -32,6 +32,8 @@
 
 
     // SETTINGS
+
+    // Update data
     <string name="update_period_title">AutoUpdate Period</string>
     <string name="update_period_summary">Choose how frequently to refresh the weather data</string>
     <string name="update_period_dialog_title">Update every&#8230;</string>
@@ -50,6 +52,22 @@
         <item>1800000</item>
         <item>3600000</item>
         <item>7200000</item>
+    </string-array>
+
+    // Celsius vs. Fahrenheit
+    <string name="units_title">Units of Measurement</string>
+    <string name="units_default_summary">Use metric or imperial units</string>
+    <string name="celsius_long">Celsius</string>
+    <string name="fahrenheit_long">Fahrenheit</string>
+
+    <string-array name="units_of_measurement">
+        <item>Metric - Celsius</item>
+        <item>Imperial - Fahrenheit</item>
+    </string-array>
+
+    <string-array name="units_of_measurement_code">
+        <item>0</item>
+        <item>1</item>
     </string-array>
 
 </resources>
