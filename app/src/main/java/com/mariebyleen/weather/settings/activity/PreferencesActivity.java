@@ -1,11 +1,11 @@
-package com.mariebyleen.weather.preferences.activity;
+package com.mariebyleen.weather.settings.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.mariebyleen.weather.preferences.view.PreferencesFragment;
+import com.mariebyleen.weather.settings.view.PreferencesFragment;
 
 public class PreferencesActivity extends AppCompatActivity {
 

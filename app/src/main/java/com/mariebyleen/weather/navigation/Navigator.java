@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.mariebyleen.weather.location.activity.LocationActivity;
-import com.mariebyleen.weather.preferences.activity.PreferencesActivity;
+import com.mariebyleen.weather.settings.activity.PreferencesActivity;
 
 import javax.inject.Inject;
 
