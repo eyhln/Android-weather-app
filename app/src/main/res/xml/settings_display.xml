@@ -2,13 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ListPreference
+        android:title="@string/update_period_title"
+        android:summary="@string/update_period_summary_default"
         android:dialogTitle="@string/update_period_dialog_title"
         android:entries="@array/time_unit_display"
         android:entryValues="@array/time_unit_in_milliseconds"
         android:key="UPDATE_PERIOD"
-        android:summary="@string/update_period_summary_default"
-        android:title="@string/update_period_title"
-        android:defaultValue="900000"/>
+        android:defaultValue="1800000"/>
 
     <ListPreference
         android:title="@string/units_title"
