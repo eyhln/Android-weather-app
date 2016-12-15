@@ -1,7 +1,6 @@
 package com.mariebyleen.weather.mapper;
 
-import android.util.Log;
-
+import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
@@ -23,10 +22,47 @@ public class WeatherMapper {
         weatherData.setHumidity(ccResponse.getMain().getHumidity());
         weatherData.setWindSpeed(ccResponse.getWind().getSpeed());
         weatherData.setWindDirection(ccResponse.getWind().getDeg());
-        weatherData.setIconIdentifier(ccResponse.getWeather()[0].getIcon());
+        weatherData.setIconResourceId(mapIcon(ccResponse.getWeather()[0].getIcon()));
         weatherData.setDescription(ccResponse.getWeather()[0].getDescription());
         weatherData.setCityName(ccResponse.getName());
         weatherData.setCountry(fResponse.getCity().getCountry());
         return weatherData;
+    }
+
+    private int mapIcon(String iconCode) {
+        switch (iconCode) {
+            case "01d":
+                return R.drawable.clear_sky_sun;
+            case "01n":
+                return R.drawable.clear_sky_moon;
+            case "02d":
+                return R.drawable.few_clouds_sun;
+            case "02n":
+                return R.drawable.few_clouds_moon;
+            case "03d":
+            case "03n":
+                return R.drawable.scattered_clouds;
+            case "04d":
+            case "04n":
+                return R.drawable.broken_clouds;
+            case "09d":
+            case "09n":
+                return R.drawable.shower_rain;
+            case "10d":
+                return R.drawable.rain_sun;
+            case "10n":
+                return R.drawable.rain_moon;
+            case "11d":
+            case "11n":
+                return R.drawable.thunderstorm;
+            case "13d":
+            case "13n":
+                return R.drawable.snow;
+            case "50d":
+            case "50n":
+                return R.drawable.mist;
+            default:
+                return 0;
+        }
     }
 }

@@ -147,9 +147,17 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     private String formatTimeFromEpoch(long unixTime) {
-        DateFormat format = new SimpleDateFormat("H:mm a", locale);
+        DateFormat format = new SimpleDateFormat("h:mm a", locale);
         Date updateTime = new Date(unixTime*1000);
         return format.format(updateTime);
+    }
+
+    @Bindable
+    public boolean getIsDay() {
+        long sunrise = weatherData.getSunriseTime();
+        long sunset = weatherData.getSunsetTime();
+        long updateTime = weatherData.getUpdateTime();
+        return (sunrise < updateTime && updateTime < sunset);
     }
 
     public void setWeatherData(WeatherData weatherData) {

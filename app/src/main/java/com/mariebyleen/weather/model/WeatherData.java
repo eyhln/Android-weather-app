@@ -9,7 +9,7 @@ public class WeatherData {
     private double humidity;
     private double windSpeed;
     private double windDirection;
-    private String iconIdentifier;
+    private int iconResourceId;
     private String description;
     private String cityName;
     private String country;
@@ -70,14 +70,6 @@ public class WeatherData {
         this.windDirection = windDirection;
     }
 
-    public String getIconIdentifier() {
-        return iconIdentifier;
-    }
-
-    public void setIconIdentifier(String iconIdentifier) {
-        this.iconIdentifier = iconIdentifier;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -100,5 +92,13 @@ public class WeatherData {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public int getIconResourceId() {
+        return iconResourceId;
+    }
+
+    public void setIconResourceId(int iconResourceId) {
+        this.iconResourceId = iconResourceId;
     }
 }
