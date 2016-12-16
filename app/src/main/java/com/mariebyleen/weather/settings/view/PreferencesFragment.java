@@ -57,6 +57,7 @@ public class PreferencesFragment extends PreferenceFragment
         }
 
         private String getStoredValue(Preference preference) {
+            // TODO set default value of units based on primary Locale
             String key = preference.getKey();
             return preference.getSharedPreferences().getString(key, null);
         }

@@ -14,6 +14,7 @@
         android:title="@string/units_title"
         android:entries="@array/units_of_measurement"
         android:entryValues="@array/units_of_measurement_code"
-        android:key="UNITS"/>
+        android:key="UNITS"
+        android:defaultValue="0"/>
 
 </PreferenceScreen>
