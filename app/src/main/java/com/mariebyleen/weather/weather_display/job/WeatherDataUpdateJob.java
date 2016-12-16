@@ -45,7 +45,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
         this.resources = resources;
     }
 
-    public static JobRequest buildJobRequest(SharedPreferences preferences, Resources resources) {
+    public static JobRequest buildAutoUpdateJobRequest(SharedPreferences preferences, Resources resources) {
         String periodString = preferences.getString(
                 resources.getString(R.string.preference_update_period_key), "900000");
         int period = Integer.parseInt(periodString);
@@ -53,6 +53,12 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
                 .setPeriodic(period)
                 .setPersisted(true)
                 .setUpdateCurrent(true)
+                .build();
+    }
+
+    public static JobRequest buildOneOffUpdateJobRequest() {
+        return new JobRequest.Builder(TAG)
+                .setExecutionWindow(1, 10)
                 .build();
     }
 
@@ -72,7 +78,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
         Observable<CurrentConditionsResponse> conditions =
                 weatherApiService.getCurrentConditions(latitude, longitude, getApiKey());
         Observable<ForecastResponse> forecast =
-                weatherApiService.getForecast(latitude, longitude, getApiKey());
+                weatherApiService.getForecast(latitude, longitude, 16, getApiKey());
 
         return conditions.zipWith(forecast, new
                 Func2<CurrentConditionsResponse, ForecastResponse, WeatherData>() {
@@ -102,6 +108,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     }
 
     private void saveData(WeatherData weatherData) {
+        System.out.println(weatherData.getForecasts()[0].getMaxTemp());
         SharedPreferences.Editor prefsEditor = preferences.edit();
         String currentConditionsJson = gson.toJson(weatherData);
         prefsEditor.putString(resources.getString(R.string.preference_weather_data_key),

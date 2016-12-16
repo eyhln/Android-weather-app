@@ -27,9 +27,13 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
 
     public void onFirstRunScheduleDefaultJobs() {
         if (isFirstRun()) {
-            scheduleUpdateJobs();
+            scheduleAutoUpdateJobs();
             setFirstRunFalse();
         }
+    }
+
+    public void scheduleOneOffUpdate() {
+        jobManager.schedule(WeatherDataUpdateJob.buildOneOffUpdateJobRequest());
     }
 
     private boolean isFirstRun() {
@@ -44,11 +48,11 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (s.equals(resources.getString(R.string.preference_update_period_key))) {
-            scheduleUpdateJobs();
+            scheduleAutoUpdateJobs();
         }
     }
 
-    private void scheduleUpdateJobs() {
-        jobManager.schedule(WeatherDataUpdateJob.buildJobRequest(preferences, resources));
+    private void scheduleAutoUpdateJobs() {
+        jobManager.schedule(WeatherDataUpdateJob.buildAutoUpdateJobRequest(preferences, resources));
     }
 }

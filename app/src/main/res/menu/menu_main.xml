@@ -3,13 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_item_update"
+        android:icon="@drawable/ic_update_white_24dp"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_item_update"/>
+    <item
         android:id="@+id/menu_item_location"
         android:icon="@drawable/ic_edit_location_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="@string/location"/>
+        android:title="@string/menu_item_location"/>
     <item
         android:id="@+id/menu_item_settings"
         android:icon="@drawable/ic_settings_white_24dp"
         app:showAsAction="ifRoom"
-        android:title="@string/settings"/>
+        android:title="@string/menu_item_settings"/>
 </menu>

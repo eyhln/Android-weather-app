@@ -94,6 +94,8 @@ public class MainActivity extends BaseActivity {
                 return true;
             case R.id.menu_item_location:
                 navigator.navigateToLocationEditor(this);
+            case R.id.menu_item_update:
+                weatherDataService.scheduleOneOffUpdate();
             default:
                 super.onOptionsItemSelected(item);
                 return true;
