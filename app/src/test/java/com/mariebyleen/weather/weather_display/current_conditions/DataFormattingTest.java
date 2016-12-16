@@ -2,6 +2,7 @@ package com.mariebyleen.weather.weather_display.current_conditions;
 
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
@@ -28,6 +29,8 @@ public class DataFormattingTest {
 
     @Mock
     WeatherDataService weatherDataService;
+    @Mock
+    Resources resources;
 
     private WeatherData data;
     private Locale testLocale;
@@ -43,7 +46,7 @@ public class DataFormattingTest {
     public void init() {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
-        viewModel = new CurrentConditionsViewModel(preferences, gson, weatherDataService);
+        viewModel = new CurrentConditionsViewModel(preferences, gson, resources, weatherDataService);
         data = new WeatherData();
     }
 

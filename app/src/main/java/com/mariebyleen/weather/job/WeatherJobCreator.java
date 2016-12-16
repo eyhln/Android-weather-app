@@ -1,6 +1,7 @@
 package com.mariebyleen.weather.job;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
@@ -22,6 +23,8 @@ public class WeatherJobCreator implements JobCreator {
     Gson gson;
     @Inject
     SharedPreferences preferences;
+    @Inject
+    Resources resources;
 
     public WeatherJobCreator() {
         getApplicationComponent().inject(this);
@@ -30,7 +33,7 @@ public class WeatherJobCreator implements JobCreator {
     @Override
     public Job create(String tag) {
         if (tag.equals(WeatherDataUpdateJob.TAG))
-            return new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences);
+            return new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences, resources);
         throw new IllegalArgumentException("Invalid job tag");
     }
 }

@@ -1,10 +1,12 @@
 package com.mariebyleen.weather.weather_display.current_conditions.view_model;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import com.google.gson.Gson;
+import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.model.WeatherData;
 
 import java.text.DateFormat;
@@ -20,11 +22,12 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private static final String TAG = "CurrentConditionsVM";
     private static final double KELVIN_TO_CELSIUS = 273.15;
-    private final static String weatherDataTag = "WeatherData";
-    private final static String unitsOfMeasurementTag = "UNITS";
+    private String weatherDataTag;
+    private String unitsOfMeasurementTag;
 
     private SharedPreferences preferences;
     private Gson gson;
+    private Resources resources;
     private WeatherDataService service;
 
     private WeatherData weatherData;
@@ -35,9 +38,11 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
                                       Gson gson,
+                                      Resources resources,
                                       WeatherDataService service) {
         this.preferences = preferences;
         this.gson = gson;
+        this.resources = resources;
         this.service = service;
         locale = Locale.getDefault();
     }
@@ -47,6 +52,7 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     public void onViewResume() {
+        referenceKeys();
 
         if (weatherData == null) {
             weatherData = getSavedWeatherData();
@@ -54,6 +60,11 @@ public class CurrentConditionsViewModel extends BaseObservable
         }
 
         service.manageUpdateJobs();
+    }
+
+    private void referenceKeys() {
+        weatherDataTag = resources.getString(R.string.preference_weather_data_key);
+        unitsOfMeasurementTag = resources.getString(R.string.preference_units_of_measurement_key);
     }
 
     public void onViewDestroy() {

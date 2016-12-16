@@ -1,17 +1,19 @@
 package com.mariebyleen.weather.job;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 import com.google.gson.Gson;
+import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.mapper.WeatherMapper;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
-import com.mariebyleen.weather.mapper.WeatherMapper;
 
 import rx.Observable;
 import rx.Observer;
@@ -27,23 +29,27 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     private WeatherMapper mapper;
     private Gson gson;
     private SharedPreferences preferences;
+    private Resources resources;
 
     private boolean jobSuccess = false;
 
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
                                 WeatherMapper mapper,
                                 Gson gson,
-                                SharedPreferences preferences) {
+                                SharedPreferences preferences,
+                                Resources resources) {
         this.weatherApiService = weatherApiService;
         this.mapper = mapper;
         this.gson = gson;
         this.preferences = preferences;
+        this.resources = resources;
     }
 
-    public static JobRequest buildJobRequest(SharedPreferences preferences) {
-        String periodString = preferences.getString("UPDATE_PERIOD", "900000");
+    public static JobRequest buildJobRequest(SharedPreferences preferences, Resources resources) {
+        String periodString = preferences.getString(
+                resources.getString(R.string.preference_update_period_key), "900000");
         int period = Integer.parseInt(periodString);
-        return new JobRequest.Builder("WeatherDataUpdateJob")
+        return new JobRequest.Builder(TAG)
                 .setPeriodic(period)
                 .setPersisted(true)
                 .setUpdateCurrent(true)
@@ -98,7 +104,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     private void saveData(WeatherData weatherData) {
         SharedPreferences.Editor prefsEditor = preferences.edit();
         String currentConditionsJson = gson.toJson(weatherData);
-        prefsEditor.putString("WeatherData", currentConditionsJson);
+        prefsEditor.putString(resources.getString(R.string.preference_weather_data_key),
+                currentConditionsJson);
         prefsEditor.apply();
     }
 

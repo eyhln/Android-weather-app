@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Weather</string>
 
     // WEATHER DISPLAY
@@ -21,6 +21,10 @@
     <string name="sunrise">Sunrise: %s</string>
     <string name="sunset">Sunset: %s</string>
 
+    <string name="preference_weather_data_key">
+        <xliff:g id="preference_key">WeatherData</xliff:g>
+    </string>
+
 
     // LOCATION
     // button text
@@ -38,6 +42,10 @@
     <string name="update_period_summary_default">Choose how frequently to refresh the weather data</string>
     <string name="update_period_summary_specific">Refresh weather data every %s</string>
     <string name="update_period_dialog_title">Refresh every&#8230;</string>
+
+    <string name="preference_update_period_key">
+        <xliff:g id="preference_key">UPDATE_PERIOD</xliff:g>
+    </string>
 
     <string-array name="time_unit_display">
         <item>15 Minutes</item>
@@ -60,6 +68,10 @@
     <string name="units_default_summary">Use metric or imperial units</string>
     <string name="celsius_long">Celsius</string>
     <string name="fahrenheit_long">Fahrenheit</string>
+
+    <string name="preference_units_of_measurement_key">
+        <xliff:g id="preference_key">UNITS</xliff:g>
+    </string>
 
     <string-array name="units_of_measurement">
         <item>Metric - Celsius</item>

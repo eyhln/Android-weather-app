@@ -1,6 +1,7 @@
 package com.mariebyleen.weather.job;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
@@ -38,6 +39,8 @@ public class WeatherDataUpdateJobTest {
 
     @Mock
     OpenWeatherApiService weatherApiService;
+    @Mock
+    Resources resources;
 
     private SharedPreferences preferences;
     private Gson gson;
@@ -50,7 +53,7 @@ public class WeatherDataUpdateJobTest {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
         mapper = new WeatherMapper();
-        job = new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences);
+        job = new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences, resources);
     }
 
     @Test

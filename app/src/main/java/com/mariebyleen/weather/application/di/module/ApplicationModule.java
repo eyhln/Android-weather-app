@@ -3,6 +3,7 @@ package com.mariebyleen.weather.application.di.module;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 import com.evernote.android.job.JobCreator;
@@ -53,6 +54,12 @@ public class ApplicationModule {
     @Provides
     Context provideContext() {
         return context;
+    }
+
+    @Singleton
+    @Provides
+    Resources provideResources(Context context) {
+        return context.getResources();
     }
 
     @Singleton
