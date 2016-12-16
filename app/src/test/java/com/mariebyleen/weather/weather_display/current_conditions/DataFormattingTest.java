@@ -9,7 +9,6 @@ import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
-import com.mariebyleen.weather.weather_display.current_conditions.view_model.WeatherDataService;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,8 +29,6 @@ public class DataFormattingTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
-    WeatherDataService weatherDataService;
-    @Mock
     Resources resources;
 
     private WeatherData data;
@@ -48,7 +45,7 @@ public class DataFormattingTest {
     public void init() {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
-        viewModel = new CurrentConditionsViewModel(preferences, gson, resources, weatherDataService);
+        viewModel = new CurrentConditionsViewModel(preferences, gson, resources);
         data = new WeatherData();
     }
 

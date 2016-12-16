@@ -141,8 +141,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/guideline3"
             android:orientation="vertical"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="480dp"
             app:layout_constraintGuide_percent="0.5"/>
 
     </android.support.constraint.ConstraintLayout>

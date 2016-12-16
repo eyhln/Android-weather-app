@@ -28,7 +28,6 @@ public class CurrentConditionsViewModel extends BaseObservable
     private SharedPreferences preferences;
     private Gson gson;
     private Resources resources;
-    private WeatherDataService service;
 
     private WeatherData weatherData;
     private Locale locale;
@@ -38,12 +37,10 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
                                       Gson gson,
-                                      Resources resources,
-                                      WeatherDataService service) {
+                                      Resources resources) {
         this.preferences = preferences;
         this.gson = gson;
         this.resources = resources;
-        this.service = service;
         locale = Locale.getDefault();
     }
 
@@ -58,8 +55,6 @@ public class CurrentConditionsViewModel extends BaseObservable
             weatherData = getSavedWeatherData();
             useFahrenheitState = unitsPrefSetToFahrenheit();
         }
-
-        service.manageUpdateJobs();
     }
 
     private void referenceKeys() {

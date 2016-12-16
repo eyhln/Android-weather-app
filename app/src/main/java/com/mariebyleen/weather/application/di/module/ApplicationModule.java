@@ -10,8 +10,9 @@ import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.job.WeatherJobCreator;
+import com.mariebyleen.weather.weather_display.job.WeatherJobCreator;
 import com.mariebyleen.weather.navigation.Navigator;
+import com.mariebyleen.weather.weather_display.job.WeatherDataService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +36,14 @@ public class ApplicationModule {
         this.context = context;
         this.baseUrl = baseUrl;
         this.application = application;
+    }
+
+    @Singleton
+    @Provides
+    WeatherDataService provideWeatherDataService(JobManager jobManager,
+                                                 SharedPreferences preferences,
+                                                 Resources resources) {
+        return new WeatherDataService(jobManager, preferences, resources);
     }
 
     @Singleton

@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.current_conditions.view_model;
+package com.mariebyleen.weather.weather_display.job;
 
 
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.content.res.Resources;
 
 import com.evernote.android.job.JobManager;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.job.WeatherDataUpdateJob;
 
 import javax.inject.Inject;
 
@@ -16,6 +15,8 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
     private SharedPreferences preferences;
     private Resources resources;
 
+    private String firstRunKey;
+
     @Inject
     public WeatherDataService(JobManager jobManager, SharedPreferences preferences,
                               Resources resources) {
@@ -24,14 +25,30 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
         this.resources = resources;
     }
 
-    public void manageUpdateJobs() {
-        if (jobManager.getAllJobRequestsForTag(WeatherDataUpdateJob.TAG).size() == 0)
-            jobManager.schedule(WeatherDataUpdateJob.buildJobRequest(preferences, resources));
+    public void onFirstRunScheduleDefaultJobs() {
+        if (isFirstRun()) {
+            scheduleUpdateJobs();
+            setFirstRunFalse();
+        }
+    }
+
+    private boolean isFirstRun() {
+        firstRunKey = resources.getString(R.string.preference_first_run_key);
+        return preferences.getBoolean(firstRunKey, true);
+    }
+
+    private void setFirstRunFalse() {
+        preferences.edit().putBoolean(firstRunKey, false).apply();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (s.equals(resources.getString(R.string.preference_update_period_key))) {
+            scheduleUpdateJobs();
         }
+    }
+
+    private void scheduleUpdateJobs() {
+        jobManager.schedule(WeatherDataUpdateJob.buildJobRequest(preferences, resources));
     }
 }

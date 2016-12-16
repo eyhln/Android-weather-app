@@ -2,6 +2,7 @@ package com.mariebyleen.weather.weather_display.di.component;
 
 import com.mariebyleen.weather.application.di.component.ApplicationComponent;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
+import com.mariebyleen.weather.weather_display.activity.MainActivity;
 import com.mariebyleen.weather.weather_display.current_conditions.view.CurrentConditionsFragment;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 
@@ -13,4 +14,5 @@ import dagger.Component;
 public interface CurrentConditionsComponent {
 
     void inject(CurrentConditionsFragment fragment);
+    void inject(MainActivity activity);
 }

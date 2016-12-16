@@ -14,10 +14,15 @@ import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.weather_display.current_conditions.view.CurrentConditionsFragment;
 import com.mariebyleen.weather.weather_display.forecast.view.ForecastFragment;
+import com.mariebyleen.weather.weather_display.job.WeatherDataService;
+
+import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
 public class MainActivity extends BaseActivity {
 
@@ -31,12 +36,17 @@ public class MainActivity extends BaseActivity {
     @BindString(R.string.forecast)
     String forecast;
 
+    @Inject
+    WeatherDataService weatherDataService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         onCreateSetupViewPager();
+        getApplicationComponent().inject(this);
+        weatherDataService.onFirstRunScheduleDefaultJobs();
     }
 
     private void onCreateSetupViewPager() {
