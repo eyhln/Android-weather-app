@@ -81,15 +81,12 @@ public class LocationFragment extends Fragment implements LocationViewContract {
     }
 
     public void checkPermissions() {
-        checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION,
-                PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION);
-    }
-
-    private void checkPermission(String permission, int requestTag) {
-        if (ContextCompat.checkSelfPermission(getContext(), permission)
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{permission}, requestTag);
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION);
         }
     }
 
