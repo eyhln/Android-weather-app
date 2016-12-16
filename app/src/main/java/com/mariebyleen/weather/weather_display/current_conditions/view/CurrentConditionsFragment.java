@@ -56,12 +56,6 @@ public class CurrentConditionsFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        viewModel.onViewPause();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         viewModel.onViewDestroy();

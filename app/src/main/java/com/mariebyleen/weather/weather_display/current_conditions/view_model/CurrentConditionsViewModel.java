@@ -56,10 +56,6 @@ public class CurrentConditionsViewModel extends BaseObservable
         service.manageUpdateJobs();
     }
 
-    public void onViewPause() {
-        saveWeatherData(weatherData);
-    }
-
     public void onViewDestroy() {
         preferences.unregisterOnSharedPreferenceChangeListener(this);
     }
@@ -76,19 +72,12 @@ public class CurrentConditionsViewModel extends BaseObservable
         }
     }
 
-    public WeatherData getSavedWeatherData() {
+    private WeatherData getSavedWeatherData() {
         String weatherJson = preferences.getString(weatherDataTag, "");
         if (weatherJson.equals(""))
             return new WeatherData();
         return gson.fromJson(weatherJson,
                 WeatherData.class);
-    }
-
-    public void saveWeatherData(WeatherData weatherData) {
-        SharedPreferences.Editor prefsEditor = preferences.edit();
-        String weatherJson = gson.toJson(weatherData);
-        prefsEditor.putString(weatherDataTag, weatherJson);
-        prefsEditor.apply();
     }
 
     @Bindable
