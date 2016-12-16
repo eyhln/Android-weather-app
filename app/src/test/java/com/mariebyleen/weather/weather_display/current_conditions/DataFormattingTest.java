@@ -6,6 +6,7 @@ import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
+import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.WeatherDataService;
@@ -21,6 +22,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class DataFormattingTest {
 
@@ -67,7 +69,7 @@ public class DataFormattingTest {
     }
 
     private void testTemperatureFormat(String unitsCode, String expected) {
-        preferences.edit().putString("UNITS", unitsCode).apply();
+        setUpUnitsPreference(unitsCode);
         data.setTemperature(WARM_DAY_KELVIN);
         viewModel.setWeatherData(data);
 
@@ -75,6 +77,7 @@ public class DataFormattingTest {
 
         assertEquals(expected, temp);
     }
+
 
     @Test
     public void UnitsIndicator_inCelsius() {
@@ -87,12 +90,18 @@ public class DataFormattingTest {
     }
 
     private void testUnitsIndicatorFormat(String unitsCode, boolean useFahrenheit) {
-        preferences.edit().putString("UNITS", unitsCode).apply();
-        viewModel.onViewResume();
+        setUpUnitsPreference(unitsCode);
 
         boolean actual = viewModel.getUseFahrenheit();
 
         assertEquals(useFahrenheit, actual);
+    }
+
+    private void setUpUnitsPreference(String unitsCode) {
+        when(resources.getString(R.string.preference_units_of_measurement_key))
+                .thenReturn("UNITS");
+        preferences.edit().putString("UNITS", unitsCode).apply();
+        viewModel.onViewResume();
     }
 
     @Test
