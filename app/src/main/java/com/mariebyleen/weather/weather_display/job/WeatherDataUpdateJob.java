@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.job;
+package com.mariebyleen.weather.weather_display.job;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
