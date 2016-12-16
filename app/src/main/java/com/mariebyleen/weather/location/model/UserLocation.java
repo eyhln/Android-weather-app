@@ -25,9 +25,8 @@ public class UserLocation {
     }
 
     public void updateLocationData() {
-        Location location = locationFetcher.getLocation();
+        this.location = locationFetcher.getLocation();
         saveLocationCoordinates(location);
-        this.location = location;
     }
 
     private void saveLocationCoordinates(Location location) {
