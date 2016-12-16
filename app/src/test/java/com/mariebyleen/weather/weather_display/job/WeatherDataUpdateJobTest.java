@@ -29,6 +29,7 @@ import rx.observers.TestSubscriber;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyFloat;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -61,7 +62,7 @@ public class WeatherDataUpdateJobTest {
         setCoordinateValues();
         when(weatherApiService.getCurrentConditions(anyFloat(), anyFloat(), anyString()))
                 .thenReturn(getTestCurrentConditionsObservable(100.0));
-        when(weatherApiService.getForecast(anyFloat(), anyFloat(), anyString()))
+        when(weatherApiService.getForecast(anyFloat(), anyFloat(), anyInt(), anyString()))
                 .thenReturn(getTestForecastObservable("TEST"));
         TestSubscriber<WeatherData> testSubscriber = new TestSubscriber<>();
 
