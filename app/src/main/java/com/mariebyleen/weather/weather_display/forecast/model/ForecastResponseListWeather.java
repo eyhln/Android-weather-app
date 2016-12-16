@@ -1,6 +1,6 @@
 package com.mariebyleen.weather.weather_display.forecast.model;
 
-public class ForecastResponseCityListWeather {
+public class ForecastResponseListWeather {
     private String icon;
     private String description;
     private String main;

@@ -1,9 +1,13 @@
 package com.mariebyleen.weather.mapper;
 
 import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.model.DailyForecast;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
+
+import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,6 +30,14 @@ public class WeatherMapper {
         weatherData.setDescription(ccResponse.getWeather()[0].getDescription());
         weatherData.setCityName(ccResponse.getName());
         weatherData.setCountry(fResponse.getCity().getCountry());
+
+        DailyForecast[] forecasts = new DailyForecast[fResponse.getList().length];
+        for (int i = 0; i < fResponse.getList().length; i++) {
+            DailyForecast forecast = new DailyForecast();
+            forecast.setMaxTemp(fResponse.getList()[i].getTemp().getMax());
+            forecasts[i] = forecast;
+        }
+        weatherData.setForecasts(forecasts);
         return weatherData;
     }
 

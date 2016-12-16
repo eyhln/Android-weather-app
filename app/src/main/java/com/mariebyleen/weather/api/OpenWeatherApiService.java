@@ -14,8 +14,9 @@ public interface OpenWeatherApiService {
                                                                @Query("lon") float lon,
                                                                @Query("appid") String apiKey);
 
-    @GET("forecast")
+    @GET("forecast/daily")
     Observable<ForecastResponse> getForecast(@Query("lat") float lat,
                                              @Query("lon") float lon,
+                                             @Query("cnt") int count,
                                              @Query("appid") String apiKey);
 }

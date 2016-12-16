@@ -14,6 +14,8 @@ public class WeatherData {
     private String cityName;
     private String country;
 
+    private DailyForecast[] forecasts;
+
     public long getUpdateTime() {
         return updateTime;
     }
@@ -100,5 +102,13 @@ public class WeatherData {
 
     public void setIconResourceId(int iconResourceId) {
         this.iconResourceId = iconResourceId;
+    }
+
+    public DailyForecast[] getForecasts() {
+        return forecasts;
+    }
+
+    public void setForecasts(DailyForecast[] forecasts) {
+        this.forecasts = forecasts;
     }
 }
