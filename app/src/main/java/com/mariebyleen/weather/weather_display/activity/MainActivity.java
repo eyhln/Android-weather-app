@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         onCreateSetupViewPager();
         getApplicationComponent().inject(this);
-        weatherDataService.onFirstRunScheduleDefaultJobs();
+        weatherDataService.manageJobRequests();
     }
 
     private void onCreateSetupViewPager() {

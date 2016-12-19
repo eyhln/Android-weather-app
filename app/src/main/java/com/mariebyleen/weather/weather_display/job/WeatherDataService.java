@@ -25,24 +25,14 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
         this.resources = resources;
     }
 
-    public void onFirstRunScheduleDefaultJobs() {
-        if (isFirstRun()) {
+    public void manageJobRequests() {
+        if (jobManager.getAllJobRequests().size() == 0) {
             scheduleAutoUpdateJobs();
-            setFirstRunFalse();
         }
     }
 
     public void scheduleOneOffUpdate() {
         jobManager.schedule(WeatherDataUpdateJob.buildOneOffUpdateJobRequest());
-    }
-
-    private boolean isFirstRun() {
-        firstRunKey = resources.getString(R.string.preference_first_run_key);
-        return preferences.getBoolean(firstRunKey, true);
-    }
-
-    private void setFirstRunFalse() {
-        preferences.edit().putBoolean(firstRunKey, false).apply();
     }
 
     @Override
