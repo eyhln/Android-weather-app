@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.model;
+package com.mariebyleen.weather.weather_display.model;
 
 public class WeatherData {
 
