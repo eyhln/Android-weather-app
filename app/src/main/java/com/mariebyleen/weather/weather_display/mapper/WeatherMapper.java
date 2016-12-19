@@ -8,8 +8,6 @@ import com.mariebyleen.weather.weather_display.model.WeatherData;
 
 import javax.inject.Inject;
 
-import static com.mariebyleen.weather.R.string.forecast;
-
 public class WeatherMapper {
 
     @Inject
@@ -41,9 +39,6 @@ public class WeatherMapper {
         int numDailyForecasts = fResponse.getList().length;
 
         DailyForecast[] forecasts = new DailyForecast[numDailyForecasts];
-        double[] forecastMaxTemps = new double[numDailyForecasts];
-        double[] forecastMinTemps = new double[numDailyForecasts];
-        int[] forecastIconResourceIds = new int[numDailyForecasts];
 
         for (int i = 0; i < fResponse.getList().length; i++) {
             DailyForecast forecast = new DailyForecast();
