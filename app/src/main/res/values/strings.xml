@@ -26,6 +26,8 @@
     <string name="wind_speed">Wind Speed: %s</string>
     <string name="sunrise">Sunrise: %s</string>
     <string name="sunset">Sunset: %s</string>
+    <string name="min_temp">LOW</string>
+    <string name="max_temp">HIGH</string>
 
     <string name="preference_weather_data_key">
         <xliff:g id="preference_key">WeatherData</xliff:g>

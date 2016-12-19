@@ -7,7 +7,7 @@ import android.databinding.Bindable;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.model.WeatherData;
+import com.mariebyleen.weather.weather_display.model.WeatherData;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -88,7 +88,20 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getTemperature() {
-        double temp = weatherData.getTemperature();
+        return convertTemp(weatherData.getTemperature());
+    }
+
+    @Bindable
+    public String getMinTemp() {
+        return convertTemp(weatherData.getForecastMinTemps()[0]);
+    }
+
+    @Bindable
+    public String getMaxTemp() {
+        return convertTemp(weatherData.getForecastMaxTemps()[0]);
+    }
+
+    private String convertTemp(double temp) {
         double convertedTemp;
         if (unitsPrefSetToFahrenheit())
             convertedTemp = getTemperatureInFahrenheit(temp);
