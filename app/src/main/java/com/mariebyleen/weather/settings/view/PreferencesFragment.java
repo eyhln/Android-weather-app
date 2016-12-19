@@ -42,7 +42,6 @@ public class PreferencesFragment extends PreferenceFragment
     }
 
         private void updateUnitsOfMeasurementPreferenceSummary() {
-            // TODO find a way to make one location for the key values
             unitsOfMeasurement = findPreference("UNITS");
             String unitsCode = getStoredValue(unitsOfMeasurement);
             updateSummary(unitsOfMeasurement, getUnitsOfMeasurementDisplayValue(unitsCode));
