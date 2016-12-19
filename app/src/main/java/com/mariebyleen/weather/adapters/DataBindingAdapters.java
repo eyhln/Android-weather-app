@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.current_conditions.view_model;
+package com.mariebyleen.weather.adapters;
 
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
