@@ -1,11 +1,14 @@
 package com.mariebyleen.weather.weather_display.mapper;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
+import com.mariebyleen.weather.weather_display.model.DailyForecast;
+import com.mariebyleen.weather.weather_display.model.WeatherData;
 
 import javax.inject.Inject;
+
+import static com.mariebyleen.weather.R.string.forecast;
 
 public class WeatherMapper {
 
@@ -37,18 +40,19 @@ public class WeatherMapper {
     private void mapForecastData(WeatherData weatherData, ForecastResponse fResponse) {
         int numDailyForecasts = fResponse.getList().length;
 
+        DailyForecast[] forecasts = new DailyForecast[numDailyForecasts];
         double[] forecastMaxTemps = new double[numDailyForecasts];
         double[] forecastMinTemps = new double[numDailyForecasts];
         int[] forecastIconResourceIds = new int[numDailyForecasts];
 
         for (int i = 0; i < fResponse.getList().length; i++) {
-            forecastMaxTemps[i] = fResponse.getList()[i].getTemp().getMax();
-            forecastMinTemps[i] = fResponse.getList()[i].getTemp().getMin();
-            forecastIconResourceIds[i] = mapIcon(fResponse.getList()[i].getWeather()[0].getIcon());
+            DailyForecast forecast = new DailyForecast();
+            forecast.setMinTemp(fResponse.getList()[i].getTemp().getMin());
+            forecast.setMaxTemp(fResponse.getList()[i].getTemp().getMax());
+            forecast.setIconResourcesId(mapIcon(fResponse.getList()[i].getWeather()[0].getIcon()));
+            forecasts[i] = forecast;
         }
-        weatherData.setForecastMaxTemps(forecastMaxTemps);
-        weatherData.setForecastMinTemps(forecastMinTemps);
-        weatherData.setForecastIconResourceIds(forecastIconResourceIds);
+        weatherData.setForecasts(forecasts);
     }
 
     private int mapIcon(String iconCode) {

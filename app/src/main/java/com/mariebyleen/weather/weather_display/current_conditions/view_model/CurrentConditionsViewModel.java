@@ -93,12 +93,12 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getMinTemp() {
-        return convertTemp(weatherData.getForecastMinTemps()[0]);
+        return convertTemp(weatherData.getForecasts()[0].getMinTemp());
     }
 
     @Bindable
     public String getMaxTemp() {
-        return convertTemp(weatherData.getForecastMaxTemps()[0]);
+        return convertTemp(weatherData.getForecasts()[0].getMaxTemp());
     }
 
     private String convertTemp(double temp) {
