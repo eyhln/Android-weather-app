@@ -3,18 +3,23 @@ package com.mariebyleen.weather.model;
 public class WeatherData {
 
     private long updateTime;
-    private long sunriseTime;
-    private long sunsetTime;
+
     private double temperature;
     private double humidity;
     private double windSpeed;
     private double windDirection;
+    private long sunriseTime;
+    private long sunsetTime;
+
     private int iconResourceId;
+
     private String description;
     private String cityName;
     private String country;
 
-    private DailyForecast[] forecasts;
+    private double[] forecastMaxTemps;
+    private double[] forecastMinTemps;
+    private int[] forecastIconResourceIds;
 
     public long getUpdateTime() {
         return updateTime;
@@ -104,11 +109,27 @@ public class WeatherData {
         this.iconResourceId = iconResourceId;
     }
 
-    public DailyForecast[] getForecasts() {
-        return forecasts;
+    public double[] getForecastMaxTemps() {
+        return forecastMaxTemps;
     }
 
-    public void setForecasts(DailyForecast[] forecasts) {
-        this.forecasts = forecasts;
+    public void setForecastMaxTemps(double[] forecastMaxTemps) {
+        this.forecastMaxTemps = forecastMaxTemps;
+    }
+
+    public double[] getForecastMinTemps() {
+        return forecastMinTemps;
+    }
+
+    public void setForecastMinTemps(double[] forecastMinTemps) {
+        this.forecastMinTemps = forecastMinTemps;
+    }
+
+    public int[] getForecastIconResourceIds() {
+        return forecastIconResourceIds;
+    }
+
+    public void setForecastIconResourceIds(int[] forecastIconResourceIds) {
+        this.forecastIconResourceIds = forecastIconResourceIds;
     }
 }

@@ -1,13 +1,9 @@
 package com.mariebyleen.weather.mapper;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.model.DailyForecast;
 import com.mariebyleen.weather.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
-
-import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -19,6 +15,13 @@ public class WeatherMapper {
     public WeatherData map(CurrentConditionsResponse ccResponse,
                            ForecastResponse fResponse) {
         WeatherData weatherData = new WeatherData();
+        mapCurrentConditionsData(weatherData, ccResponse);
+        mapForecastData(weatherData, fResponse);
+        return weatherData;
+    }
+
+    private void mapCurrentConditionsData(WeatherData weatherData,
+                                          CurrentConditionsResponse ccResponse) {
         weatherData.setUpdateTime(ccResponse.getDt());
         weatherData.setSunriseTime(ccResponse.getSys().getSunrise());
         weatherData.setSunsetTime(ccResponse.getSys().getSunset());
@@ -29,16 +32,23 @@ public class WeatherMapper {
         weatherData.setIconResourceId(mapIcon(ccResponse.getWeather()[0].getIcon()));
         weatherData.setDescription(ccResponse.getWeather()[0].getDescription());
         weatherData.setCityName(ccResponse.getName());
-        weatherData.setCountry(fResponse.getCity().getCountry());
+    }
 
-        DailyForecast[] forecasts = new DailyForecast[fResponse.getList().length];
+    private void mapForecastData(WeatherData weatherData, ForecastResponse fResponse) {
+        int numDailyForecasts = fResponse.getList().length;
+
+        double[] forecastMaxTemps = new double[numDailyForecasts];
+        double[] forecastMinTemps = new double[numDailyForecasts];
+        int[] forecastIconResourceIds = new int[numDailyForecasts];
+
         for (int i = 0; i < fResponse.getList().length; i++) {
-            DailyForecast forecast = new DailyForecast();
-            forecast.setMaxTemp(fResponse.getList()[i].getTemp().getMax());
-            forecasts[i] = forecast;
+            forecastMaxTemps[i] = fResponse.getList()[i].getTemp().getMax();
+            forecastMinTemps[i] = fResponse.getList()[i].getTemp().getMin();
+            forecastIconResourceIds[i] = mapIcon(fResponse.getList()[i].getWeather()[0].getIcon());
         }
-        weatherData.setForecasts(forecasts);
-        return weatherData;
+        weatherData.setForecastMaxTemps(forecastMaxTemps);
+        weatherData.setForecastMinTemps(forecastMinTemps);
+        weatherData.setForecastIconResourceIds(forecastIconResourceIds);
     }
 
     private int mapIcon(String iconCode) {
