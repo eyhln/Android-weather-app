@@ -108,8 +108,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     }
 
     private void saveData(WeatherData weatherData) {
-        System.out.println(weatherData.getForecasts()[0].getMaxTemp());
         SharedPreferences.Editor prefsEditor = preferences.edit();
+        weatherData.setUpdateTime(System.currentTimeMillis() / 1000);
         String currentConditionsJson = gson.toJson(weatherData);
         prefsEditor.putString(resources.getString(R.string.preference_weather_data_key),
                 currentConditionsJson);
