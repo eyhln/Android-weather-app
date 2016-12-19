@@ -1,13 +1,11 @@
 package com.mariebyleen.weather.weather_display.current_conditions.view_model;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.google.gson.Gson;
-import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.weather_display.model.WeatherData;
+import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -22,12 +20,9 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private static final String TAG = "CurrentConditionsVM";
     private static final double KELVIN_TO_CELSIUS = 273.15;
-    private String weatherDataTag;
-    private String unitsOfMeasurementTag;
 
     private SharedPreferences preferences;
-    private Gson gson;
-    private Resources resources;
+    private SavedDataRetriever savedData;
 
     private WeatherData weatherData;
     private Locale locale;
@@ -36,11 +31,9 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
-                                      Gson gson,
-                                      Resources resources) {
+                                      SavedDataRetriever savedData) {
         this.preferences = preferences;
-        this.gson = gson;
-        this.resources = resources;
+        this.savedData = savedData;
         locale = Locale.getDefault();
     }
 
@@ -49,17 +42,10 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     public void onViewResume() {
-        referenceKeys();
-
         if (weatherData == null) {
-            weatherData = getSavedWeatherData();
-            useFahrenheitState = unitsPrefSetToFahrenheit();
+            weatherData = savedData.getSavedWeatherData();
+            useFahrenheitState = savedData.unitsPrefSetToFahrenheit();
         }
-    }
-
-    private void referenceKeys() {
-        weatherDataTag = resources.getString(R.string.preference_weather_data_key);
-        unitsOfMeasurementTag = resources.getString(R.string.preference_units_of_measurement_key);
     }
 
     public void onViewDestroy() {
@@ -68,22 +54,14 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals(weatherDataTag)) {
-            weatherData = getSavedWeatherData();
+        if (s.equals(savedData.weatherDataTag)) {
+            weatherData = savedData.getSavedWeatherData();
             notifyChange();
         }
-        if (s.equals(unitsOfMeasurementTag)) {
-            useFahrenheitState = unitsPrefSetToFahrenheit();
+        if (s.equals(savedData.unitsOfMeasurementTag)) {
+            useFahrenheitState = savedData.unitsPrefSetToFahrenheit();
             notifyChange();
         }
-    }
-
-    private WeatherData getSavedWeatherData() {
-        String weatherJson = preferences.getString(weatherDataTag, "");
-        if (weatherJson.equals(""))
-            return new WeatherData();
-        return gson.fromJson(weatherJson,
-                WeatherData.class);
     }
 
     @Bindable
@@ -103,19 +81,11 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private String convertTemp(double temp) {
         double convertedTemp;
-        if (unitsPrefSetToFahrenheit())
+        if (savedData.unitsPrefSetToFahrenheit())
             convertedTemp = getTemperatureInFahrenheit(temp);
         else
             convertedTemp = temp - KELVIN_TO_CELSIUS;
         return String.valueOf(NumberFormat.getInstance().format(Math.round(convertedTemp)));
-    }
-
-    private boolean unitsPrefSetToFahrenheit() {
-        return ((getUnitsOfMeasurementPreferenceCode()).equals("1"));
-    }
-
-    private String getUnitsOfMeasurementPreferenceCode() {
-        return preferences.getString(unitsOfMeasurementTag, "");
     }
 
     private double getTemperatureInFahrenheit(double temperature) {

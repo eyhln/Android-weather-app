@@ -9,6 +9,7 @@ import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.weather_display.model.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,9 +33,9 @@ public class DataFormattingTest {
     Resources resources;
 
     private WeatherData data;
-    private Locale testLocale;
     private SharedPreferences preferences;
     private Gson gson;
+    private SavedDataRetriever savedDataRetriever;
     private CurrentConditionsViewModel viewModel;
 
     private final double WARM_DAY_KELVIN = 300.0;
@@ -45,7 +46,8 @@ public class DataFormattingTest {
     public void init() {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
-        viewModel = new CurrentConditionsViewModel(preferences, gson, resources);
+        savedDataRetriever = new SavedDataRetriever(preferences, gson, resources);
+        viewModel = new CurrentConditionsViewModel(preferences, savedDataRetriever);
         data = new WeatherData();
     }
 
