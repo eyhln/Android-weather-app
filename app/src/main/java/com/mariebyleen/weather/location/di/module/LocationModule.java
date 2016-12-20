@@ -11,7 +11,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
 import com.mariebyleen.weather.location.model.LocationFetcher;
-import com.mariebyleen.weather.location.model.UserLocation;
+import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
 import com.mariebyleen.weather.location.model.fetcher.NetworkLocation;
 import com.mariebyleen.weather.location.presenter.LocationPresenter;
@@ -41,15 +41,15 @@ public class LocationModule {
 
     @PerActivity
     @Provides
-    LocationPresenterContract provideLocationPresenterContract(UserLocation location) {
+    LocationPresenterContract provideLocationPresenterContract(WeatherLocation location) {
         return new LocationPresenter(view, location);
     }
 
     @PerActivity
     @Provides
-    UserLocation provideWeatherLocation(LocationFetcher locationFetcher,
-                                        SharedPreferences preferences) {
-        return new UserLocation(locationFetcher, preferences);
+    WeatherLocation provideWeatherLocation(LocationFetcher locationFetcher,
+                                           SharedPreferences preferences) {
+        return new WeatherLocation(locationFetcher, preferences);
     }
 
     @PerActivity

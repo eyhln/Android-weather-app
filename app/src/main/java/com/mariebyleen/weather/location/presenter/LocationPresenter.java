@@ -1,7 +1,7 @@
 package com.mariebyleen.weather.location.presenter;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.location.model.UserLocation;
+import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.view.LocationPresenterContract;
 
 import javax.inject.Inject;
@@ -16,11 +16,11 @@ public class LocationPresenter
     @BindString(R.string.find_current_location_progress_dialog) String dialogText;
 
     private LocationViewContract view;
-    private UserLocation location;
+    private WeatherLocation location;
 
     @Inject
     public LocationPresenter(LocationViewContract view,
-                             UserLocation location) {
+                             WeatherLocation location) {
         this.view = view;
         this.location = location;
     }

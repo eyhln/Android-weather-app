@@ -6,7 +6,7 @@ import android.location.Location;
 
 import javax.inject.Inject;
 
-public class UserLocation {
+public class WeatherLocation {
 
     private LocationFetcher locationFetcher;
     private SharedPreferences preferences;
@@ -14,8 +14,8 @@ public class UserLocation {
     private Location location;
 
     @Inject
-    public UserLocation(LocationFetcher locationFetcher,
-                        SharedPreferences preferences) {
+    public WeatherLocation(LocationFetcher locationFetcher,
+                           SharedPreferences preferences) {
         this.locationFetcher = locationFetcher;
         this.preferences = preferences;
     }
