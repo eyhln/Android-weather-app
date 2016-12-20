@@ -70,18 +70,6 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     @Bindable
-    public String getMinTemp() {
-        return formatter.convertTemp(weatherData.getForecasts()[0].getMinTemp(),
-                savedData.unitsPrefSetToFahrenheit());
-    }
-
-    @Bindable
-    public String getMaxTemp() {
-        return formatter.convertTemp(weatherData.getForecasts()[0].getMaxTemp(),
-                savedData.unitsPrefSetToFahrenheit());
-    }
-
-    @Bindable
     public boolean getUseFahrenheit() {
         return useFahrenheitState;
     }
