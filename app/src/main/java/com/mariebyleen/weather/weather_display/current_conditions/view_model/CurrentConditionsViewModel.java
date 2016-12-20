@@ -5,36 +5,30 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import com.mariebyleen.weather.weather_display.model.use.WeatherData;
+import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
-
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 public class CurrentConditionsViewModel extends BaseObservable
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "CurrentConditionsVM";
-    private static final double KELVIN_TO_CELSIUS = 273.15;
-
     private SharedPreferences preferences;
     private SavedDataRetriever savedData;
+    private DisplayDataFormatter formatter;
 
     private WeatherData weatherData;
-    private Locale locale;
+
 
     private boolean useFahrenheitState;
 
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
-                                      SavedDataRetriever savedData) {
+                                      SavedDataRetriever savedData,
+                                      DisplayDataFormatter formatter) {
         this.preferences = preferences;
         this.savedData = savedData;
-        locale = Locale.getDefault();
+        this.formatter = formatter;
     }
 
     public void onViewCreate() {
@@ -66,30 +60,20 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getTemperature() {
-        return convertTemp(weatherData.getTemperature());
+        return formatter.convertTemp(weatherData.getTemperature(),
+                savedData.unitsPrefSetToFahrenheit());
     }
 
     @Bindable
     public String getMinTemp() {
-        return convertTemp(weatherData.getForecasts()[0].getMinTemp());
+        return formatter.convertTemp(weatherData.getForecasts()[0].getMinTemp(),
+                savedData.unitsPrefSetToFahrenheit());
     }
 
     @Bindable
     public String getMaxTemp() {
-        return convertTemp(weatherData.getForecasts()[0].getMaxTemp());
-    }
-
-    private String convertTemp(double temp) {
-        double convertedTemp;
-        if (savedData.unitsPrefSetToFahrenheit())
-            convertedTemp = getTemperatureInFahrenheit(temp);
-        else
-            convertedTemp = temp - KELVIN_TO_CELSIUS;
-        return String.valueOf(NumberFormat.getInstance().format(Math.round(convertedTemp)));
-    }
-
-    private double getTemperatureInFahrenheit(double temperature) {
-        return (temperature - KELVIN_TO_CELSIUS)*1.8000 + 32.00;
+        return formatter.convertTemp(weatherData.getForecasts()[0].getMaxTemp(),
+                savedData.unitsPrefSetToFahrenheit());
     }
 
     @Bindable
@@ -99,8 +83,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getHumidity() {
-        double humidity = Math.round(weatherData.getHumidity()) / 100.0;
-        return NumberFormat.getPercentInstance().format(humidity);
+        return formatter.formatHumidity(weatherData.getHumidity());
     }
 
     @Bindable
@@ -111,23 +94,17 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getUpdateTime() {
-        return formatTimeFromEpoch(weatherData.getUpdateTime());
+        return formatter.formatTimeFromEpoch(weatherData.getUpdateTime());
     }
 
     @Bindable
     public String getSunriseTime() {
-        return formatTimeFromEpoch(weatherData.getSunriseTime());
+        return formatter.formatTimeFromEpoch(weatherData.getSunriseTime());
     }
 
     @Bindable
     public String getSunsetTime() {
-        return formatTimeFromEpoch(weatherData.getSunsetTime());
-    }
-
-    private String formatTimeFromEpoch(long unixTime) {
-        DateFormat format = new SimpleDateFormat("h:mm a", locale);
-        Date updateTime = new Date(unixTime*1000);
-        return format.format(updateTime);
+        return formatter.formatTimeFromEpoch(weatherData.getSunsetTime());
     }
 
     @Bindable
@@ -144,9 +121,5 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     public WeatherData getWeatherData() {
         return weatherData;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
     }
 }

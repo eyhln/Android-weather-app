@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
 import com.mariebyleen.weather.weather_display.forecast.view.ForecastRecyclerAdapter;
+import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 import dagger.Module;
@@ -19,8 +20,9 @@ public class CurrentConditionsModule {
     @PerActivity
     @Provides
     CurrentConditionsViewModel provideCurrentConditionsViewModel(SharedPreferences preferences,
-                                                                 SavedDataRetriever savedData) {
-        return new CurrentConditionsViewModel(preferences, savedData);
+                                                                 SavedDataRetriever savedData,
+                                                                 DisplayDataFormatter formatter) {
+        return new CurrentConditionsViewModel(preferences, savedData, formatter);
     }
 
     @PerActivity
@@ -36,5 +38,11 @@ public class CurrentConditionsModule {
                                                  Gson gson,
                                                  Resources resources) {
         return new SavedDataRetriever(preferences, gson, resources);
+    }
+
+    @PerActivity
+    @Provides
+    DisplayDataFormatter provideDisplayDataFormatter() {
+        return new DisplayDataFormatter();
     }
 }

@@ -9,6 +9,7 @@ import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.weather_display.model.use.WeatherData;
 import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 import org.junit.Before;
@@ -36,6 +37,7 @@ public class DataFormattingTest {
     private SharedPreferences preferences;
     private Gson gson;
     private SavedDataRetriever savedDataRetriever;
+    private DisplayDataFormatter formatter;
     private CurrentConditionsViewModel viewModel;
 
     private final double WARM_DAY_KELVIN = 300.0;
@@ -47,7 +49,8 @@ public class DataFormattingTest {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
         savedDataRetriever = new SavedDataRetriever(preferences, gson, resources);
-        viewModel = new CurrentConditionsViewModel(preferences, savedDataRetriever);
+        formatter = new DisplayDataFormatter();
+        viewModel = new CurrentConditionsViewModel(preferences, savedDataRetriever, formatter);
         data = new WeatherData();
     }
 
@@ -127,7 +130,7 @@ public class DataFormattingTest {
         TimeZone originalTimeZone = TimeZone.getDefault();
         TimeZone cst = TimeZone.getTimeZone("CST");
         TimeZone.setDefault(cst);
-        viewModel.setLocale(Locale.US);
+        formatter.setLocale(Locale.US);
 
         data.setUpdateTime(1481729714);
         viewModel.setWeatherData(data);
