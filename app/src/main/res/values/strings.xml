@@ -14,27 +14,29 @@
     <string name="menu_item_update">Update</string>
 
     // TabLayout Titles
-    <string name="current_conditions">Today</string>
+    <string name="current_conditions">Current Conditions</string>
     <string name="forecast">Forecast</string>
 
     // Current Conditions
     <string name="updated">Last update: %s</string>
-    <string name="degrees">&#xB0; %s</string>
-    <string name="fahrenheit">F</string>
-    <string name="celsius">C</string>
     <string name="humidity">Humidity: %s</string>
     <string name="wind_speed">Wind Speed: %s</string>
     <string name="sunrise">Sunrise: %s</string>
     <string name="sunset">Sunset: %s</string>
+
+    // Forecast
+    <string name="tomorrow">Tomorrow</string>
     <string name="min_temp">LOW</string>
     <string name="max_temp">HIGH</string>
+
+    // Weather Display Shared
+    <string name="degrees">&#xB0; %s</string>
+    <string name="fahrenheit">F</string>
+    <string name="celsius">C</string>
 
     <string name="preference_weather_data_key">
         <xliff:g id="preference_key">WeatherData</xliff:g>
     </string>
-
-    // Forecast
-    <string name="tomorrow">Tomorrow</string>
 
 
     // LOCATION
