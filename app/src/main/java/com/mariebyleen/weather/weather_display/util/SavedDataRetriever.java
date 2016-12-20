@@ -19,21 +19,24 @@ public class SavedDataRetriever {
     private SharedPreferences preferences;
     private Gson gson;
     private Resources resources;
+    private DisplayDataFormatter formatter;
 
     @Inject
     public SavedDataRetriever(SharedPreferences preferences,
                               Gson gson,
-                              Resources resources) {
+                              Resources resources,
+                              DisplayDataFormatter formatter) {
         this.preferences = preferences;
         this.gson = gson;
         this.resources = resources;
+        this.formatter = formatter;
     }
 
     public ForecastViewModel[] getForecasts() {
         DailyForecast[] forecasts = getSavedWeatherData().getForecasts();
         ForecastViewModel[] forecastViewModels = new ForecastViewModel[forecasts.length];
         for (int i = 0; i < forecasts.length; i++) {
-            forecastViewModels[i] = new ForecastViewModel(forecasts[i]);
+            forecastViewModels[i] = new ForecastViewModel(forecasts[i], formatter);
         }
         return forecastViewModels;
     }

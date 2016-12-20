@@ -36,8 +36,9 @@ public class CurrentConditionsModule {
     @Provides
     SavedDataRetriever provideSavedDataRetriever(SharedPreferences preferences,
                                                  Gson gson,
-                                                 Resources resources) {
-        return new SavedDataRetriever(preferences, gson, resources);
+                                                 Resources resources,
+                                                 DisplayDataFormatter formatter) {
+        return new SavedDataRetriever(preferences, gson, resources, formatter);
     }
 
     @PerActivity
