@@ -33,6 +33,9 @@
         <xliff:g id="preference_key">WeatherData</xliff:g>
     </string>
 
+    // Forecast
+    <string name="tomorrow">Tomorrow</string>
+
 
     // LOCATION
     // button text
