@@ -21,6 +21,8 @@ public class SavedDataRetriever {
     private Resources resources;
     private DisplayDataFormatter formatter;
 
+    private boolean unitsPrefSetToFahrenheit;
+
     @Inject
     public SavedDataRetriever(SharedPreferences preferences,
                               Gson gson,
@@ -36,7 +38,7 @@ public class SavedDataRetriever {
         DailyForecast[] forecasts = getSavedWeatherData().getForecasts();
         ForecastViewModel[] forecastViewModels = new ForecastViewModel[forecasts.length];
         for (int i = 0; i < forecasts.length; i++) {
-            forecastViewModels[i] = new ForecastViewModel(forecasts[i], formatter);
+            forecastViewModels[i] = new ForecastViewModel(forecasts[i], formatter, this);
         }
         return forecastViewModels;
     }

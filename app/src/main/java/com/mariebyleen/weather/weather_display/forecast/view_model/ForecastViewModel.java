@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 
 import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
+import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,14 +16,20 @@ public class ForecastViewModel extends BaseObservable {
 
     private DailyForecast forecast;
     private DisplayDataFormatter formatter;
+    private SavedDataRetriever savedData;
+
+    private boolean useFahrenheitState;
 
     Locale locale;
 
     public ForecastViewModel(DailyForecast forecast,
-                             DisplayDataFormatter formatter) {
+                             DisplayDataFormatter formatter,
+                             SavedDataRetriever savedData) {
         this.forecast = forecast;
         this.formatter = formatter;
+        this.savedData = savedData;
         locale = Locale.getDefault();
+        useFahrenheitState = savedData.unitsPrefSetToFahrenheit();
     }
 
     @Bindable
@@ -36,6 +43,21 @@ public class ForecastViewModel extends BaseObservable {
     @Bindable
     public String getDescription() {
         return formatter.formatDescription(forecast.getDescription());
+    }
+
+    @Bindable
+    public String getMinTemp() {
+        return formatter.convertTemp(forecast.getMinTemp(), useFahrenheitState);
+    }
+
+    @Bindable
+    public String getMaxTemp() {
+        return formatter.convertTemp(forecast.getMaxTemp(), useFahrenheitState);
+    }
+
+    @Bindable
+    public boolean getUseFahrenheit() {
+        return useFahrenheitState;
     }
 
     public DailyForecast getForecast() {
