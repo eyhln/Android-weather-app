@@ -8,10 +8,17 @@ import com.mariebyleen.weather.weather_display.model.use.WeatherData;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
+import java.text.NumberFormat;
+
 import javax.inject.Inject;
 
 public class CurrentConditionsViewModel extends BaseObservable
         implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private final double M_SEC_TO_MI_HR = 2.237;
+    private final double M_SEC_TO_KM_HR = 3.600;
+    private final String[] directions = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S",
+            "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
 
     private SharedPreferences preferences;
     private SavedDataRetriever savedData;
@@ -81,8 +88,23 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getWindSpeed() {
-        double windspeed = weatherData.getWindSpeed();
-        return null;
+        double windSpeedMetersPerSecond = weatherData.getWindSpeed();
+        if (useFahrenheitState)
+            return formatWindSpeed(windSpeedMetersPerSecond, M_SEC_TO_MI_HR);
+        else
+            return formatWindSpeed(windSpeedMetersPerSecond, M_SEC_TO_KM_HR);
+    }
+
+    private String formatWindSpeed(double windSpeed, double conversionFactor) {
+        double convertedSpeed = Math.round(windSpeed * conversionFactor);
+        return String.valueOf(NumberFormat.getInstance().format(Math.round(convertedSpeed))) + " ";
+    }
+
+    @Bindable
+    public String getWindDirection() {
+        double degrees = weatherData.getWindDirection();
+        int i = (int)Math.round((degrees + 11.25) /22.5);
+        return " " + directions[i % 16];
     }
 
     @Bindable

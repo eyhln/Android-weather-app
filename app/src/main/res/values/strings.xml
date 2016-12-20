@@ -20,7 +20,9 @@
     // Current Conditions
     <string name="updated">Last update: %s</string>
     <string name="humidity">Humidity: %s</string>
-    <string name="wind_speed">Wind Speed: %s</string>
+    <string name="wind_speed">Wind: %s</string>
+    <string name="miles_per_hour">mph</string>
+    <string name="kilometers_per_hour">kph</string>
     <string name="sunrise">Sunrise: %s</string>
     <string name="sunset">Sunset: %s</string>
 

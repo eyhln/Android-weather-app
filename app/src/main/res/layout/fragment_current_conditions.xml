@@ -104,7 +104,7 @@
             android:layout_marginEnd="40dp"/>
 
         <TextView
-            android:text="@{@string/wind_speed(conditions.windSpeed)}"
+            android:text="@{@string/wind_speed(conditions.windSpeed) + (conditions.useFahrenheit ? @string/miles_per_hour : @string/kilometers_per_hour) + conditions.windDirection}"
             android:id="@+id/wind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
