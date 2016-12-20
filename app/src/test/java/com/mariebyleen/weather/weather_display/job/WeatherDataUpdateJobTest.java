@@ -6,12 +6,12 @@ import android.content.res.Resources;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.weather_display.model.use.WeatherData;
+import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponseMain;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponseCity;
-import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
+import com.mariebyleen.weather.weather_display.model.use.WeatherData;
 
 import org.junit.Before;
 import org.junit.Rule;

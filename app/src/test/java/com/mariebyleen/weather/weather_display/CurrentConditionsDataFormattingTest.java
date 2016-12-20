@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.current_conditions;
+package com.mariebyleen.weather.weather_display;
 
 
 import android.content.SharedPreferences;
@@ -25,7 +25,7 @@ import java.util.TimeZone;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class DataFormattingTest {
+public class CurrentConditionsDataFormattingTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -48,7 +48,7 @@ public class DataFormattingTest {
     public void init() {
         preferences = new FakeSharedPreferences();
         gson = new Gson();
-        savedDataRetriever = new SavedDataRetriever(preferences, gson, resources);
+        savedDataRetriever = new SavedDataRetriever(preferences, gson, resources, formatter);
         formatter = new DisplayDataFormatter();
         viewModel = new CurrentConditionsViewModel(preferences, savedDataRetriever, formatter);
         data = new WeatherData();
