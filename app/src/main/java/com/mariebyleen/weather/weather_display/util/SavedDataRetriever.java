@@ -5,6 +5,8 @@ import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.weather_display.forecast.view_model.ForecastViewModel;
+import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
 import com.mariebyleen.weather.weather_display.model.use.WeatherData;
 
 import javax.inject.Inject;
@@ -25,6 +27,15 @@ public class SavedDataRetriever {
         this.preferences = preferences;
         this.gson = gson;
         this.resources = resources;
+    }
+
+    public ForecastViewModel[] getForecasts() {
+        DailyForecast[] forecasts = getSavedWeatherData().getForecasts();
+        ForecastViewModel[] forecastViewModels = new ForecastViewModel[forecasts.length];
+        for (int i = 0; i < forecasts.length; i++) {
+            forecastViewModels[i] = new ForecastViewModel(forecasts[i]);
+        }
+        return forecastViewModels;
     }
 
     public WeatherData getSavedWeatherData() {

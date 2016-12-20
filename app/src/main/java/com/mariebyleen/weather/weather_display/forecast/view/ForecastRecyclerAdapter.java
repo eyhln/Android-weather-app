@@ -8,10 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.databinding.library.baseAdapters.BR;
+import com.mariebyleen.weather.BR;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
+import com.mariebyleen.weather.weather_display.forecast.view_model.ForecastViewModel;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
+
 
 public class ForecastRecyclerAdapter
         extends RecyclerView.Adapter<ForecastRecyclerAdapter.ForecastHolder>
@@ -20,7 +21,7 @@ public class ForecastRecyclerAdapter
     private SharedPreferences preferences;
     private SavedDataRetriever savedData;
 
-    private DailyForecast[] forecasts;
+    private ForecastViewModel[] forecasts;
 
     public ForecastRecyclerAdapter(SharedPreferences preferences,
                                    SavedDataRetriever savedData) {
@@ -37,7 +38,7 @@ public class ForecastRecyclerAdapter
 
     private void getData() {
         if (forecasts == null)
-            forecasts = savedData.getSavedWeatherData().getForecasts();
+            forecasts = savedData.getForecasts();
     }
 
     @Override
@@ -61,8 +62,8 @@ public class ForecastRecyclerAdapter
 
     @Override
     public void onBindViewHolder(ForecastHolder holder, int position) {
-        final DailyForecast forecast = forecasts[position];
-        holder.getBinding().setVariable(BR.forecast, forecast);
+        final ForecastViewModel viewModel = forecasts[position];
+        holder.getBinding().setVariable(BR.forecast, viewModel);
         holder.getBinding().executePendingBindings();
     }
 

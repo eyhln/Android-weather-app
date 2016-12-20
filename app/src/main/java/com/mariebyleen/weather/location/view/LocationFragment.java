@@ -28,7 +28,6 @@ import static com.mariebyleen.weather.application.WeatherApplication.getApplicat
 
 public class LocationFragment extends Fragment implements LocationViewContract {
 
-    private final static int PERMISSIONS_REQUEST_INTERNET = 0;
     private final static int PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION = 1;
 
     private ProgressDialog dialog;

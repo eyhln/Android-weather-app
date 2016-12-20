@@ -4,8 +4,8 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.mariebyleen.weather.weather_display.model.use.DailyForecast" />
-        <variable name="forecast" type="DailyForecast" />
+        <import type="com.mariebyleen.weather.weather_display.forecast.view_model.ForecastViewModel" />
+        <variable name="forecast" type="ForecastViewModel" />
     </data>
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_margin="16dp"
-            app:srcCompat="@{forecast.iconResourcesId}"/>
+            app:srcCompat="@{forecast.forecast.iconResourcesId}"/>
 
     </LinearLayout>
 

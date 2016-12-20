@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
-import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
 
 import javax.inject.Inject;
 
@@ -43,9 +42,6 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public void onResume() {
-        DailyForecast[] forecasts = new DailyForecast[1];
-        DailyForecast forecast = new DailyForecast();
-        forecast.setMinTemp(100.0);
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view_forecast);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
