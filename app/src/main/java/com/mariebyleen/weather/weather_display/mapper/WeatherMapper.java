@@ -1,10 +1,10 @@
 package com.mariebyleen.weather.weather_display.mapper;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.current_conditions.model.CurrentConditionsResponse;
-import com.mariebyleen.weather.weather_display.forecast.model.ForecastResponse;
-import com.mariebyleen.weather.weather_display.model.DailyForecast;
-import com.mariebyleen.weather.weather_display.model.WeatherData;
+import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
+import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
+import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
+import com.mariebyleen.weather.weather_display.model.use.WeatherData;
 
 import javax.inject.Inject;
 

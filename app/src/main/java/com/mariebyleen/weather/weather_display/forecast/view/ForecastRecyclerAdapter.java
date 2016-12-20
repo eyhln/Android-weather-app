@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.model.DailyForecast;
+import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 public class ForecastRecyclerAdapter
@@ -30,13 +30,20 @@ public class ForecastRecyclerAdapter
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
+        preferences.registerOnSharedPreferenceChangeListener(this);
         getData();
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
     private void getData() {
         if (forecasts == null)
             forecasts = savedData.getSavedWeatherData().getForecasts();
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     @Override

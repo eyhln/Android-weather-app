@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
-import com.mariebyleen.weather.weather_display.model.DailyForecast;
+import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
 
 import javax.inject.Inject;
 
