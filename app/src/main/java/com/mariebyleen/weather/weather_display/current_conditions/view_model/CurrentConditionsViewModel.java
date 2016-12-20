@@ -59,6 +59,11 @@ public class CurrentConditionsViewModel extends BaseObservable
     }
 
     @Bindable
+    public String getDescription() {
+        return formatter.formatDescription(weatherData.getDescription());
+    }
+
+    @Bindable
     public String getTemperature() {
         return formatter.convertTemp(weatherData.getTemperature(),
                 savedData.unitsPrefSetToFahrenheit());

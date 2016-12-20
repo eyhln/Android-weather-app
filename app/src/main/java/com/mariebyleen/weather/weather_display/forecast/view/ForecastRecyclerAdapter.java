@@ -63,7 +63,7 @@ public class ForecastRecyclerAdapter
     @Override
     public void onBindViewHolder(ForecastHolder holder, int position) {
         final ForecastViewModel viewModel = forecasts[position];
-        holder.getBinding().setVariable(BR.forecast, viewModel);
+        holder.getBinding().setVariable(BR.viewModel, viewModel);
         holder.getBinding().executePendingBindings();
     }
 

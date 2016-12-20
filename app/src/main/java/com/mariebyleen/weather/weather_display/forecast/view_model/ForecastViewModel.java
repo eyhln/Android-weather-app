@@ -33,6 +33,11 @@ public class ForecastViewModel extends BaseObservable {
         return format.format(updateTime);
     }
 
+    @Bindable
+    public String getDescription() {
+        return formatter.formatDescription(forecast.getDescription());
+    }
+
     public DailyForecast getForecast() {
         return forecast;
     }

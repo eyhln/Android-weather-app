@@ -20,10 +20,16 @@ public class ForecastDataFormattingTest {
 
     @Before
     public void init() {
-        forecast = new DailyForecast();
-        forecast.setTime(1482253308);
+        forecast = setUpFakeForecast();
         formatter = new DisplayDataFormatter();
         viewModel = new ForecastViewModel(forecast, formatter);
+    }
+
+    private DailyForecast setUpFakeForecast() {
+        DailyForecast forecast = new DailyForecast();
+        forecast.setTime(1482253308);
+        forecast.setDescription("few clouds");
+        return forecast;
     }
 
     @Test
@@ -35,8 +41,14 @@ public class ForecastDataFormattingTest {
 
         String actual = viewModel.getDateDisplayTitle();
 
-        assertEquals("Tuesday December 20", actual);
+        assertEquals("Tuesday, Dec 20", actual);
 
         TimeZone.setDefault(originalTimeZone);
+    }
+
+    @Test
+    public void formatDescription_withInitialCapital() {
+        String actual = viewModel.getDescription();
+        assertEquals("Few clouds", actual);
     }
 }

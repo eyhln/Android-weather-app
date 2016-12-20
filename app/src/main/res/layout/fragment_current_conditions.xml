@@ -78,7 +78,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/temperature"/>
 
         <TextView
-            android:text="@{conditions.weatherData.description}"
+            android:text="@{conditions.description}"
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -43,6 +43,12 @@ public class DisplayDataFormatter {
         return NumberFormat.getPercentInstance().format(roundHumidity);
     }
 
+    public String formatDescription(String description) {
+        String firstLetter = description.substring(0,1);
+        String remainder = description.substring(1, description.length());
+        return firstLetter.toUpperCase() + remainder;
+    }
+
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
