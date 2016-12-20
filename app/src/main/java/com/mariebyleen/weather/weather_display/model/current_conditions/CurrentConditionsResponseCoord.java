@@ -1,6 +1,6 @@
-package com.mariebyleen.weather.weather_display.forecast.model;
+package com.mariebyleen.weather.weather_display.model.current_conditions;
 
-public class ForecastResponseCityCoord {
+public class CurrentConditionsResponseCoord {
     private double lon;
     private double lat;
 
@@ -8,7 +8,7 @@ public class ForecastResponseCityCoord {
         return this.lon;
     }
 
-    public void setLon(double lon) {
+    public void setLon(int lon) {
         this.lon = lon;
     }
 
@@ -16,7 +16,7 @@ public class ForecastResponseCityCoord {
         return this.lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(int lat) {
         this.lat = lat;
     }
 }

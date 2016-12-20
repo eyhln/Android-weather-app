@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.current_conditions.model;
+package com.mariebyleen.weather.weather_display.model.current_conditions;
 
 public class CurrentConditionsResponseWind {
     private double deg;

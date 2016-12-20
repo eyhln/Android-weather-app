@@ -1,6 +1,6 @@
-package com.mariebyleen.weather.weather_display.current_conditions.model;
+package com.mariebyleen.weather.weather_display.model.forecast;
 
-public class CurrentConditionsResponseWeather {
+public class ForecastResponseListWeather {
     private String icon;
     private String description;
     private String main;

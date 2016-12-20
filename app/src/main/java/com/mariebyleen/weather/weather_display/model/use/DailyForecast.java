@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.model;
+package com.mariebyleen.weather.weather_display.model.use;
 
 public class DailyForecast {
 

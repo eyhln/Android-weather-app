@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.forecast.model;
+package com.mariebyleen.weather.weather_display.model.forecast;
 
 public class ForecastResponseCity {
     private String country;

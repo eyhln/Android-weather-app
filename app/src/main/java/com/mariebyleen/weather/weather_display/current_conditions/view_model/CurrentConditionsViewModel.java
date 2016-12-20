@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.mariebyleen.weather.weather_display.model.WeatherData;
+import com.mariebyleen.weather.weather_display.model.use.WeatherData;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 import java.text.DateFormat;
