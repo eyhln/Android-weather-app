@@ -63,11 +63,11 @@
     </string>
 
     <string-array name="time_unit_display">
-        <item>15 Minutes</item>
-        <item>20 Minutes</item>
-        <item>30 Minutes</item>
-        <item>1 Hour</item>
-        <item>2 Hours</item>
+        <item>15 minutes</item>
+        <item>20 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
     </string-array>
 
     <string-array name="time_unit_in_milliseconds">
