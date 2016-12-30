@@ -101,9 +101,6 @@
     // Wind Speed Metric Units
     <string name="speed_units_title">Wind Speed Units</string>
     <string name="speed_units_default_summary">Select how to display wind speed</string>
-    <string name="mps_long">Meters per second</string>
-    <string name="kph_long">Kilometers per hour</string>
-    <string name="mph_long">Miles per hour</string>
 
     <string name="preference_speed_units_key">
         <xliff:g id="preference_key">SPEED_UNITS</xliff:g>
@@ -119,6 +116,12 @@
         <item>ms</item>
         <item>kph</item>
         <item>mph</item>
+    </string-array>
+
+    <string-array name="speed_units_of_measurement_summary_display">
+        <item>Meters per second</item>
+        <item>Kilometers per hour</item>
+        <item>Miles per hour</item>
     </string-array>
 
 </resources>

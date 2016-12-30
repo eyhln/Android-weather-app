@@ -21,7 +21,7 @@ public class PreferencesFragment extends PreferenceFragment
     String[] temperatureMeasurementStoredValues;
 
     private Preference speedUnitsOfMeasurement;
-    @BindArray(R.array.speed_units_of_measurement)
+    @BindArray(R.array.speed_units_of_measurement_summary_display)
     String[] speedMeasurementDisplayValues;
     @BindArray(R.array.speed_units_of_measurement_code)
     String[] speedMeasurementStoredValues;
@@ -49,6 +49,10 @@ public class PreferencesFragment extends PreferenceFragment
         dataRefreshPeriod = findPreference("UPDATE_PERIOD");
         temperatureUnitsOfMeasurement = findPreference("UNITS");
         speedUnitsOfMeasurement = findPreference("SPEED_UNITS");
+    }
+
+    private void disableSpeedUnitsPreference() {
+        if (getStoredValue(temperatureUnitsOfMeasurement).equals("")){}
     }
 
     private void updatePreferenceSummariesWithCurrentValues() {
@@ -86,16 +90,8 @@ public class PreferencesFragment extends PreferenceFragment
             }
 
             private String getSpeedMeasurementDisplayValue(String storedValue) {
-                switch (storedValue) {
-                    case "ms":
-                        return getString(R.string.mps_long);
-                    case "kph":
-                        return getString(R.string.kph_long);
-                    case "mph":
-                        return getString(R.string.mph_long);
-                    default:
-                        return null;
-                }
+                return getDisplayValue(storedValue, speedMeasurementStoredValues,
+                        speedMeasurementDisplayValues);
             }
 
             private String getDataRefreshPeriodDisplayValue(String storedValue) {
