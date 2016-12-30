@@ -14,10 +14,19 @@ import butterknife.ButterKnife;
 public class PreferencesFragment extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener{
 
+    private Preference temperatureUnitsOfMeasurement;
     @BindArray(R.array.units_of_measurement)
     String[] temperatureMeasurementDisplayValues;
     @BindArray(R.array.units_of_measurement_code)
     String[] temperatureMeasurementStoredValues;
+
+    private Preference speedUnitsOfMeasurement;
+    @BindArray(R.array.speed_units_of_measurement)
+    String[] speedMeasurementDisplayValues;
+    @BindArray(R.array.speed_units_of_measurement_code)
+    String[] speedMeasurementStoredValues;
+
+    private Preference dataRefreshPeriod;
     @BindArray(R.array.time_unit_display)
     String[] dataRefreshPeriodDisplayValues;
     @BindArray(R.array.time_unit_in_milliseconds)
@@ -25,8 +34,6 @@ public class PreferencesFragment extends PreferenceFragment
     @BindString(R.string.update_period_summary_specific)
     String updatePeriodSummary;
 
-    private Preference temperatureUnitsOfMeasurement;
-    private Preference dataRefreshPeriod;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class PreferencesFragment extends PreferenceFragment
 
     private void updatePreferenceSummariesWithCurrentValues() {
         updateTemperatureMeasurementPreferenceSummary();
+        updateSpeedMeasurementPreferenceSummary();
         updateDataRefreshPeriodPreferenceSummary();
     }
 
@@ -46,6 +54,13 @@ public class PreferencesFragment extends PreferenceFragment
             String unitsCode = getStoredValue(temperatureUnitsOfMeasurement);
             updateSummary(temperatureUnitsOfMeasurement, getTemperatureMeasurementDisplayValue(unitsCode));
             temperatureUnitsOfMeasurement.setOnPreferenceChangeListener(this);
+        }
+
+        private void updateSpeedMeasurementPreferenceSummary() {
+            speedUnitsOfMeasurement = findPreference("SPEED_UNITS");
+            String unitsCode = getStoredValue(speedUnitsOfMeasurement);
+            updateSummary(speedUnitsOfMeasurement, getSpeedMeasurementDisplayValue(unitsCode));
+            speedUnitsOfMeasurement.setOnPreferenceChangeListener(this);
         }
 
         private void updateDataRefreshPeriodPreferenceSummary() {
@@ -66,6 +81,19 @@ public class PreferencesFragment extends PreferenceFragment
                     temperatureMeasurementDisplayValues);
         }
 
+        private String getSpeedMeasurementDisplayValue(String storedValue) {
+            switch (storedValue) {
+                case "ms":
+                    return getString(R.string.mps_long);
+                case "kph":
+                    return getString(R.string.kph_long);
+                case "mph":
+                    return getString(R.string.mph_long);
+                default:
+                    return null;
+            }
+        }
+
         private String getDataRefreshPeriodDisplayValue(String storedValue) {
             String displayValue = getDisplayValue(storedValue, dataRefreshPeriodStoredValues,
                     dataRefreshPeriodDisplayValues);
@@ -84,21 +112,23 @@ public class PreferencesFragment extends PreferenceFragment
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {
-        if (preference.equals(temperatureUnitsOfMeasurement)) {
-            updateSummary(preference, getTemperatureMeasurementDisplayValue(o.toString()));
-        }
-        if (preference.equals(dataRefreshPeriod)) {
+        if (preference.equals(dataRefreshPeriod))
             updateSummary(preference, getDataRefreshPeriodDisplayValue(o.toString()));
-        }
+        if (preference.equals(temperatureUnitsOfMeasurement))
+            updateSummary(preference, getTemperatureMeasurementDisplayValue(o.toString()));
+        if (preference.equals(speedUnitsOfMeasurement))
+            updateSummary(preference, getSpeedMeasurementDisplayValue(o.toString()));
         return true;
     }
 
     private void updateSummary(Preference preference, String value) {
         if (value == null || value.length() == 0) {
-            if (preference.equals(temperatureUnitsOfMeasurement))
-                preference.setSummary(R.string.units_default_summary);
             if (preference.equals(dataRefreshPeriod))
                 preference.setSummary(R.string.update_period_summary_default);
+            if (preference.equals(temperatureUnitsOfMeasurement))
+                preference.setSummary(R.string.units_default_summary);
+            if (preference.equals(speedUnitsOfMeasurement))
+                preference.setSummary(R.string.speed_units_default_summary);
         }
         else
             preference.setSummary(value);
