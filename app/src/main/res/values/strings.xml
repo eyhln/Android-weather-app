@@ -78,8 +78,8 @@
         <item>7200000</item>
     </string-array>
 
-    // Celsius vs. Fahrenheit
-    <string name="units_title">Units of Measurement</string>
+    // Temperature Units: Celsius vs. Fahrenheit
+    <string name="units_title">Units of Measurement - Temperature</string>
     <string name="units_default_summary">Use metric or imperial units</string>
     <string name="celsius_long">Celsius</string>
     <string name="fahrenheit_long">Fahrenheit</string>
@@ -89,13 +89,36 @@
     </string>
 
     <string-array name="units_of_measurement">
-        <item>Metric - Celsius</item>
-        <item>Imperial - Fahrenheit</item>
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
     </string-array>
 
     <string-array name="units_of_measurement_code">
         <item>0</item>
         <item>1</item>
+    </string-array>
+
+    // Wind Speed Metric Units
+    <string name="speed_units_title">Units of Measurement - Wind Speed</string>
+    <string name="speed_units_default_summary">Select how to display wind speed</string>
+    <string name="mps_long">meters per second</string>
+    <string name="kph_long">kilometers per hour</string>
+    <string name="mph_long">miles per hour</string>
+
+    <string name="preference_speed_units_key">
+        <xliff:g id="preference_key">SPEED_UNITS</xliff:g>
+    </string>
+
+    <string-array name="speed_units_of_measurement">
+        <item>m/s</item>
+        <item>kph</item>
+        <item>mph</item>
+    </string-array>
+
+    <string-array name="speed_units_of_measurement_code">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
     </string-array>
 
 </resources>
