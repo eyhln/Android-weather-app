@@ -34,40 +34,33 @@ public class PreferencesFragment extends PreferenceFragment
     @BindString(R.string.update_period_summary_specific)
     String updatePeriodSummary;
 
+    Preference[] preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this, getActivity());
         addPreferencesFromResource(R.xml.settings_display);
+        referencePreferences();
         updatePreferenceSummariesWithCurrentValues();
     }
 
-    private void updatePreferenceSummariesWithCurrentValues() {
-        updateTemperatureMeasurementPreferenceSummary();
-        updateSpeedMeasurementPreferenceSummary();
-        updateDataRefreshPeriodPreferenceSummary();
+    private void referencePreferences() {
+        dataRefreshPeriod = findPreference("UPDATE_PERIOD");
+        temperatureUnitsOfMeasurement = findPreference("UNITS");
+        speedUnitsOfMeasurement = findPreference("SPEED_UNITS");
     }
 
-        private void updateTemperatureMeasurementPreferenceSummary() {
-            temperatureUnitsOfMeasurement = findPreference("UNITS");
-            String unitsCode = getStoredValue(temperatureUnitsOfMeasurement);
-            updateSummary(temperatureUnitsOfMeasurement, getTemperatureMeasurementDisplayValue(unitsCode));
-            temperatureUnitsOfMeasurement.setOnPreferenceChangeListener(this);
-        }
+    private void updatePreferenceSummariesWithCurrentValues() {
+        updatePreferenceSummary(dataRefreshPeriod);
+        updatePreferenceSummary(temperatureUnitsOfMeasurement);
+        updatePreferenceSummary(speedUnitsOfMeasurement);
+    }
 
-        private void updateSpeedMeasurementPreferenceSummary() {
-            speedUnitsOfMeasurement = findPreference("SPEED_UNITS");
-            String unitsCode = getStoredValue(speedUnitsOfMeasurement);
-            updateSummary(speedUnitsOfMeasurement, getSpeedMeasurementDisplayValue(unitsCode));
-            speedUnitsOfMeasurement.setOnPreferenceChangeListener(this);
-        }
-
-        private void updateDataRefreshPeriodPreferenceSummary() {
-            dataRefreshPeriod = findPreference("UPDATE_PERIOD");
-            String updateTimeMs = getStoredValue(dataRefreshPeriod);
-            updateSummary(dataRefreshPeriod, getDataRefreshPeriodDisplayValue(updateTimeMs));
-            dataRefreshPeriod.setOnPreferenceChangeListener(this);
+        private void updatePreferenceSummary(Preference preference) {
+            String code = getStoredValue(preference);
+            updateSummary(preference, getDisplayValue(preference, code));
+            preference.setOnPreferenceChangeListener(this);
         }
 
         private String getStoredValue(Preference preference) {
@@ -76,29 +69,40 @@ public class PreferencesFragment extends PreferenceFragment
             return preference.getSharedPreferences().getString(key, null);
         }
 
-        private String getTemperatureMeasurementDisplayValue(String storedValue) {
-            return getDisplayValue(storedValue, temperatureMeasurementStoredValues,
-                    temperatureMeasurementDisplayValues);
+        @Nullable
+        private String getDisplayValue(Preference preference, String storedValue) {
+            if (preference.equals(dataRefreshPeriod))
+                return getDataRefreshPeriodDisplayValue(storedValue);
+            if (preference.equals(temperatureUnitsOfMeasurement))
+                return getTemperatureMeasurementDisplayValue(storedValue);
+            if (preference.equals(speedUnitsOfMeasurement))
+                return getSpeedMeasurementDisplayValue(storedValue);
+            return null;
         }
 
-        private String getSpeedMeasurementDisplayValue(String storedValue) {
-            switch (storedValue) {
-                case "ms":
-                    return getString(R.string.mps_long);
-                case "kph":
-                    return getString(R.string.kph_long);
-                case "mph":
-                    return getString(R.string.mph_long);
-                default:
-                    return null;
+            private String getTemperatureMeasurementDisplayValue(String storedValue) {
+                return getDisplayValue(storedValue, temperatureMeasurementStoredValues,
+                        temperatureMeasurementDisplayValues);
             }
-        }
 
-        private String getDataRefreshPeriodDisplayValue(String storedValue) {
-            String displayValue = getDisplayValue(storedValue, dataRefreshPeriodStoredValues,
-                    dataRefreshPeriodDisplayValues);
-            return String.format(updatePeriodSummary, displayValue);
-        }
+            private String getSpeedMeasurementDisplayValue(String storedValue) {
+                switch (storedValue) {
+                    case "ms":
+                        return getString(R.string.mps_long);
+                    case "kph":
+                        return getString(R.string.kph_long);
+                    case "mph":
+                        return getString(R.string.mph_long);
+                    default:
+                        return null;
+                }
+            }
+
+            private String getDataRefreshPeriodDisplayValue(String storedValue) {
+                String displayValue = getDisplayValue(storedValue, dataRefreshPeriodStoredValues,
+                        dataRefreshPeriodDisplayValues);
+                return String.format(updatePeriodSummary, displayValue);
+            }
 
         @Nullable
         private String getDisplayValue(String storedValue, String[] storedValues,
