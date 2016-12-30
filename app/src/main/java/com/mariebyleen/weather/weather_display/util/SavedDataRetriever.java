@@ -54,7 +54,7 @@ public class SavedDataRetriever {
     }
 
     public boolean unitsPrefSetToFahrenheit() {
-        return ((getUnitsOfMeasurementPreferenceCode()).equals("1"));
+        return ((getUnitsOfMeasurementPreferenceCode()).equals("Fahrenheit"));
     }
 
     private String getUnitsOfMeasurementPreferenceCode() {
