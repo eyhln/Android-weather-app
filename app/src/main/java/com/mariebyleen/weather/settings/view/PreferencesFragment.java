@@ -15,9 +15,9 @@ public class PreferencesFragment extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener{
 
     @BindArray(R.array.units_of_measurement)
-    String[] unitsOfMeasurementDisplayValues;
+    String[] temperatureMeasurementDisplayValues;
     @BindArray(R.array.units_of_measurement_code)
-    String[] unitsOfMeasurementStoredValues;
+    String[] temperatureMeasurementStoredValues;
     @BindArray(R.array.time_unit_display)
     String[] dataRefreshPeriodDisplayValues;
     @BindArray(R.array.time_unit_in_milliseconds)
@@ -25,7 +25,7 @@ public class PreferencesFragment extends PreferenceFragment
     @BindString(R.string.update_period_summary_specific)
     String updatePeriodSummary;
 
-    private Preference unitsOfMeasurement;
+    private Preference temperatureUnitsOfMeasurement;
     private Preference dataRefreshPeriod;
 
     @Override
@@ -37,15 +37,15 @@ public class PreferencesFragment extends PreferenceFragment
     }
 
     private void updatePreferenceSummariesWithCurrentValues() {
-        updateUnitsOfMeasurementPreferenceSummary();
+        updateTemperatureMeasurementPreferenceSummary();
         updateDataRefreshPeriodPreferenceSummary();
     }
 
-        private void updateUnitsOfMeasurementPreferenceSummary() {
-            unitsOfMeasurement = findPreference("UNITS");
-            String unitsCode = getStoredValue(unitsOfMeasurement);
-            updateSummary(unitsOfMeasurement, getUnitsOfMeasurementDisplayValue(unitsCode));
-            unitsOfMeasurement.setOnPreferenceChangeListener(this);
+        private void updateTemperatureMeasurementPreferenceSummary() {
+            temperatureUnitsOfMeasurement = findPreference("UNITS");
+            String unitsCode = getStoredValue(temperatureUnitsOfMeasurement);
+            updateSummary(temperatureUnitsOfMeasurement, getTemperatureMeasurementDisplayValue(unitsCode));
+            temperatureUnitsOfMeasurement.setOnPreferenceChangeListener(this);
         }
 
         private void updateDataRefreshPeriodPreferenceSummary() {
@@ -61,9 +61,9 @@ public class PreferencesFragment extends PreferenceFragment
             return preference.getSharedPreferences().getString(key, null);
         }
 
-        private String getUnitsOfMeasurementDisplayValue(String storedValue) {
-            return getDisplayValue(storedValue, unitsOfMeasurementStoredValues,
-                    unitsOfMeasurementDisplayValues);
+        private String getTemperatureMeasurementDisplayValue(String storedValue) {
+            return getDisplayValue(storedValue, temperatureMeasurementStoredValues,
+                    temperatureMeasurementDisplayValues);
         }
 
         private String getDataRefreshPeriodDisplayValue(String storedValue) {
@@ -84,8 +84,8 @@ public class PreferencesFragment extends PreferenceFragment
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {
-        if (preference.equals(unitsOfMeasurement)) {
-            updateSummary(preference, getUnitsOfMeasurementDisplayValue(o.toString()));
+        if (preference.equals(temperatureUnitsOfMeasurement)) {
+            updateSummary(preference, getTemperatureMeasurementDisplayValue(o.toString()));
         }
         if (preference.equals(dataRefreshPeriod)) {
             updateSummary(preference, getDataRefreshPeriodDisplayValue(o.toString()));
@@ -95,7 +95,7 @@ public class PreferencesFragment extends PreferenceFragment
 
     private void updateSummary(Preference preference, String value) {
         if (value == null || value.length() == 0) {
-            if (preference.equals(unitsOfMeasurement))
+            if (preference.equals(temperatureUnitsOfMeasurement))
                 preference.setSummary(R.string.units_default_summary);
             if (preference.equals(dataRefreshPeriod))
                 preference.setSummary(R.string.update_period_summary_default);
