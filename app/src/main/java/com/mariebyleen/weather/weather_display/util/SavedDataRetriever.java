@@ -14,7 +14,8 @@ import javax.inject.Inject;
 public class SavedDataRetriever {
 
     public String weatherDataTag;
-    public String unitsOfMeasurementTag;
+    public String temperatureUnitsPrefTag;
+    public String speedUnitsPrefTag;
 
     private SharedPreferences preferences;
     private Gson gson;
@@ -36,11 +37,14 @@ public class SavedDataRetriever {
 
     public ForecastViewModel[] getForecasts() {
         DailyForecast[] forecasts = getSavedWeatherData().getForecasts();
-        ForecastViewModel[] forecastViewModels = new ForecastViewModel[forecasts.length];
-        for (int i = 0; i < forecasts.length; i++) {
-            forecastViewModels[i] = new ForecastViewModel(forecasts[i], formatter, this);
+        if (forecasts != null) {
+            ForecastViewModel[] forecastViewModels = new ForecastViewModel[forecasts.length];
+            for (int i = 0; i < forecasts.length; i++) {
+                forecastViewModels[i] = new ForecastViewModel(forecasts[i], formatter, this);
+            }
+            return forecastViewModels;
         }
-        return forecastViewModels;
+        return new ForecastViewModel[0];
     }
 
     public WeatherData getSavedWeatherData() {
@@ -58,9 +62,18 @@ public class SavedDataRetriever {
     }
 
     private String getUnitsOfMeasurementPreferenceCode() {
-        if (unitsOfMeasurementTag == null)
-            unitsOfMeasurementTag =
+        if (temperatureUnitsPrefTag == null)
+            temperatureUnitsPrefTag =
                     resources.getString(R.string.preference_units_of_measurement_key);
-        return preferences.getString(unitsOfMeasurementTag, "");
+        return preferences.getString(temperatureUnitsPrefTag, "");
+    }
+
+    public String getWindSpeedUnitsPreference() {
+        if (speedUnitsPrefTag == null)
+            speedUnitsPrefTag = resources.getString(R.string.preference_speed_units_key);
+        String speedUnits = preferences.getString(speedUnitsPrefTag, null);
+        if (speedUnits != null)
+            return speedUnits;
+        else return "";
     }
 }

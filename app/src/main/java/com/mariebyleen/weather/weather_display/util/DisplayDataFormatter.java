@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 public class DisplayDataFormatter {
 
-    private static final double KELVIN_TO_CELSIUS = 273.15;
+    private final double KELVIN_TO_CELSIUS = 273.15;
 
     private Locale locale;
 
@@ -44,9 +44,12 @@ public class DisplayDataFormatter {
     }
 
     public String formatDescription(String description) {
+        if (description != null) {
         String firstLetter = description.substring(0,1);
         String remainder = description.substring(1, description.length());
         return firstLetter.toUpperCase() + remainder;
+        }
+        return "";
     }
 
     public void setLocale(Locale locale) {

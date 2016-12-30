@@ -125,8 +125,10 @@ public class PreferencesFragment extends PreferenceFragment
         private String getDisplayValue(String storedValue, String[] storedValues,
                                        String[] displayValues) {
             for (int i = 0; i < storedValues.length; i++) {
-                if (storedValue.equals(storedValues[i]))
-                    return displayValues[i];
+                if (storedValue != null) {
+                    if (storedValue.equals(storedValues[i]))
+                        return displayValues[i];
+                }
             }
             return null;
         }
