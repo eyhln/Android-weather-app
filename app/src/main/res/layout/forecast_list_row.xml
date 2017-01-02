@@ -5,7 +5,7 @@
 
     <data>
         <variable name="viewModel"
-                  type="com.mariebyleen.weather.weather_display.forecast.view_model.ForecastViewModel"/>
+                  type="com.mariebyleen.weather.weather_display.view.ForecastViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

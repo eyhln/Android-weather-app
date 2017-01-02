@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,10 +13,10 @@ import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityMainBinding;
 import com.mariebyleen.weather.navigation.Navigator;
-import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 import com.mariebyleen.weather.weather_display.job.WeatherDataService;
+import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 
 import javax.inject.Inject;
 
@@ -37,7 +38,13 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         onCreateResolveDaggerDependency();
         onCreateSetupDataBinding();
+        onCreateSetupToolbar();
         weatherDataService.manageJobRequests();
+    }
+
+    private void onCreateSetupToolbar() {
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     private void onCreateResolveDaggerDependency() {
