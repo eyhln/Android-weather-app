@@ -1,82 +1,49 @@
 package com.mariebyleen.weather.weather_display.activity;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.base.BaseActivity;
+import com.mariebyleen.weather.databinding.ActivityMainBinding;
 import com.mariebyleen.weather.navigation.Navigator;
-import com.mariebyleen.weather.weather_display.current_conditions.view.CurrentConditionsFragment;
-import com.mariebyleen.weather.weather_display.forecast.view.ForecastFragment;
+import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
+import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 import com.mariebyleen.weather.weather_display.job.WeatherDataService;
 
 import javax.inject.Inject;
-
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
 public class MainActivity extends BaseActivity {
 
-    @BindView(R.id.view_pager_weather_display)
-    ViewPager viewPager;
-    @BindView(R.id.tab_layout_weather_display)
-    TabLayout tabLayout;
-
-    @BindString(R.string.current_conditions)
-    String currentConditions;
-    @BindString(R.string.forecast)
-    String forecast;
-
     @Inject
     WeatherDataService weatherDataService;
+    @Inject
+    CurrentConditionsViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        onCreateSetupViewPager();
-        getApplicationComponent().inject(this);
+        onCreateResolveDaggerDependency();
+        onCreateSetupDataBinding();
         weatherDataService.manageJobRequests();
     }
 
-    private void onCreateSetupViewPager() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+    private void onCreateSetupDataBinding() {
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setConditions(viewModel);
+        viewModel.onViewCreate();
+    }
 
-        viewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
-            @Override
-            public Fragment getItem(int position) {
-                if (position == 0)
-                    return new CurrentConditionsFragment();
-                if (position == 1)
-                    return new ForecastFragment();
-                return null;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                if (position == 0)
-                    return currentConditions;
-                if (position == 1)
-                    return forecast;
-                return super.getPageTitle(position);
-            }
-
-            @Override
-            public int getCount() {
-                return 2;
-            }
-        });
-        tabLayout.setupWithViewPager(viewPager);
+    private void onCreateResolveDaggerDependency() {
+        DaggerCurrentConditionsComponent.builder()
+                .applicationComponent(getApplicationComponent())
+                .currentConditionsModule(new CurrentConditionsModule())
+                .build().inject(this);
     }
 
     @Override
@@ -100,5 +67,17 @@ public class MainActivity extends BaseActivity {
                 super.onOptionsItemSelected(item);
                 return true;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.onViewResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.onViewDestroy();
     }
 }

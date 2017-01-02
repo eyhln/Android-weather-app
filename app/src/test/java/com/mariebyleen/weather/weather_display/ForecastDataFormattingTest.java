@@ -3,6 +3,7 @@ package com.mariebyleen.weather.weather_display;
 import com.mariebyleen.weather.weather_display.forecast.view_model.ForecastViewModel;
 import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
+import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,13 +17,15 @@ public class ForecastDataFormattingTest {
 
     private DailyForecast forecast;
     private DisplayDataFormatter formatter;
+    private SavedDataRetriever savedData;
     private ForecastViewModel viewModel;
 
     @Before
     public void init() {
         forecast = setUpFakeForecast();
         formatter = new DisplayDataFormatter();
-        viewModel = new ForecastViewModel(forecast, formatter);
+        savedData = new SavedDataRetriever(null, null, null, null);
+        viewModel = new ForecastViewModel(forecast, formatter, savedData);
     }
 
     private DailyForecast setUpFakeForecast() {

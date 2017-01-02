@@ -17,6 +17,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private final double M_SEC_TO_MI_HR = 2.237;
     private final double M_SEC_TO_KM_HR = 3.600;
+    private final double M_SEC_TO_M_SEC = 1;
     private final String[] directions = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S",
             "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
 
@@ -55,14 +56,11 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals(savedData.weatherDataTag)) {
+        if (s.equals(savedData.weatherDataTag))
             weatherData = savedData.getSavedWeatherData();
-            notifyChange();
-        }
-        if (s.equals(savedData.unitsOfMeasurementTag)) {
+        if (s.equals(savedData.temperatureUnitsPrefTag))
             useFahrenheitState = savedData.unitsPrefSetToFahrenheit();
-            notifyChange();
-        }
+        notifyChange();
     }
 
     @Bindable
@@ -89,26 +87,37 @@ public class CurrentConditionsViewModel extends BaseObservable
     @Bindable
     public String getWindSpeed() {
         double windSpeedMetersPerSecond = weatherData.getWindSpeed();
-        if (useFahrenheitState)
-            return formatWindSpeed(windSpeedMetersPerSecond, M_SEC_TO_MI_HR);
+        String speedUnitsPref = savedData.getWindSpeedUnitsPreference();
+        double conversionFactor;
+        if (speedUnitsPref.equals("kph"))
+            conversionFactor = M_SEC_TO_KM_HR;
+        else if (speedUnitsPref.equals("mph"))
+            conversionFactor = M_SEC_TO_MI_HR;
         else
-            return formatWindSpeed(windSpeedMetersPerSecond, M_SEC_TO_KM_HR);
+            conversionFactor = M_SEC_TO_M_SEC;
+        return formatWindSpeed(windSpeedMetersPerSecond, conversionFactor);
     }
 
     private String formatWindSpeed(double windSpeed, double conversionFactor) {
         double convertedSpeed = Math.round(windSpeed * conversionFactor);
-        return String.valueOf(NumberFormat.getInstance().format(Math.round(convertedSpeed))) + " ";
+        return String.valueOf(NumberFormat.getInstance().format(Math.round(convertedSpeed)));
+    }
+
+    @Bindable
+    public String getWindSpeedUnits() {
+        return savedData.getWindSpeedUnitsPreference();
     }
 
     @Bindable
     public String getWindDirection() {
         double degrees = weatherData.getWindDirection();
         int i = (int)Math.round((degrees + 11.25) /22.5);
-        return " " + directions[i % 16];
+        return directions[i % 16];
     }
 
     @Bindable
     public String getUpdateTime() {
+        //return (String)DateUtils.getRelativeTimeSpanString(weatherData.getUpdateTime() * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         return formatter.formatTimeFromEpoch(weatherData.getUpdateTime());
     }
 

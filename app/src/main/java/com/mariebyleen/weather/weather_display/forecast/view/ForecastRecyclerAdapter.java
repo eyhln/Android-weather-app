@@ -49,7 +49,7 @@ public class ForecastRecyclerAdapter
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
+        notifyDataSetChanged();
     }
 
     @Override
