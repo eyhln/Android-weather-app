@@ -27,6 +27,7 @@
     <string name="sunset">Sunset: %s</string>
 
     // Forecast
+    <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="min_temp">LOW</string>
     <string name="max_temp">HIGH</string>

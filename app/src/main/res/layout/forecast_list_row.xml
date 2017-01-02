@@ -12,12 +12,15 @@
                   android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                    android:layout_margin="8dp">
+                    android:layout_marginTop="8dp"
+                  android:layout_marginStart="8dp"
+                  android:layout_marginEnd="8dp"
+        android:background="@{viewModel.isOdd ? @color/darkgrey : @color/lightgrey}">
 
         <ImageView
             android:id="@+id/forecast_weather_icon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="16dp"
             app:srcCompat="@{viewModel.forecast.iconResourcesId}"
             app:layout_constraintTop_toBottomOf="@+id/textView8"

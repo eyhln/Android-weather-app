@@ -3,7 +3,12 @@
     <color name="colorPrimary">#03a9f4</color>
     <color name="colorPrimaryDark">#0288d1</color>
     <color name="colorAccent">#FF9E80</color>
+
     <color name="day_sky_blue">#81d4fa</color>
     <color name="night_sky_blue">#01579b</color>
+
+    <color name="darkgrey">#cfd8dc</color>
+    <color name="lightgrey">#eceff1</color>
+
     <color name="text_color_primary">#000000</color>
 </resources>

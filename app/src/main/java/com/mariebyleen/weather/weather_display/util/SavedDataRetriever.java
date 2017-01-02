@@ -40,7 +40,7 @@ public class SavedDataRetriever {
         if (forecasts != null) {
             ForecastViewModel[] forecastViewModels = new ForecastViewModel[forecasts.length];
             for (int i = 0; i < forecasts.length; i++) {
-                forecastViewModels[i] = new ForecastViewModel(forecasts[i], formatter, this);
+                forecastViewModels[i] = new ForecastViewModel(forecasts[i], formatter, this, i);
             }
             return forecastViewModels;
         }
@@ -75,5 +75,13 @@ public class SavedDataRetriever {
         if (speedUnits != null)
             return speedUnits;
         else return "";
+    }
+
+    public String getTodayString() {
+        return resources.getString(R.string.today);
+    }
+
+    public String getTomorrowString() {
+        return resources.getString(R.string.tomorrow);
     }
 }
