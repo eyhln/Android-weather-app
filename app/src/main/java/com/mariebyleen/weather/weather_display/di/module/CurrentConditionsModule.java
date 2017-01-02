@@ -5,8 +5,8 @@ import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
-import com.mariebyleen.weather.weather_display.forecast.view.ForecastRecyclerAdapter;
+import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.activity.ForecastRecyclerAdapter;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 

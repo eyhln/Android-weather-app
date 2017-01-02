@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable name="conditions"
-          type="com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel"/>
+          type="com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel"/>
     </data>
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -159,7 +159,26 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5"
             tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="300dp"/>
+            tools:layout_editor_absoluteX="192dp"/>
+
+        <RelativeLayout android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        tools:layout_editor_absoluteY="8dp"
+                        tools:layout_editor_absoluteX="8dp">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_forecast"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </RelativeLayout>
 
     </android.support.constraint.ConstraintLayout>
 </layout>
+
+
+

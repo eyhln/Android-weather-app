@@ -3,8 +3,8 @@ package com.mariebyleen.weather.weather_display.mapper;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
-import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
-import com.mariebyleen.weather.weather_display.model.use.WeatherData;
+import com.mariebyleen.weather.weather_display.model.mapped.DailyForecast;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import javax.inject.Inject;
 

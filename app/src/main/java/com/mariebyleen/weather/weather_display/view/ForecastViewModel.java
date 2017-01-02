@@ -1,9 +1,9 @@
-package com.mariebyleen.weather.weather_display.forecast.view_model;
+package com.mariebyleen.weather.weather_display.view;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
+import com.mariebyleen.weather.weather_display.model.mapped.DailyForecast;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 

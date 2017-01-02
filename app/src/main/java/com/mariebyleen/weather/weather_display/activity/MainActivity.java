@@ -2,6 +2,9 @@ package com.mariebyleen.weather.weather_display.activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -9,7 +12,7 @@ import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityMainBinding;
 import com.mariebyleen.weather.navigation.Navigator;
-import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 import com.mariebyleen.weather.weather_display.job.WeatherDataService;
@@ -24,6 +27,10 @@ public class MainActivity extends BaseActivity {
     WeatherDataService weatherDataService;
     @Inject
     CurrentConditionsViewModel viewModel;
+    @Inject
+    Navigator navigator;
+    @Inject
+    ForecastRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +40,17 @@ public class MainActivity extends BaseActivity {
         weatherDataService.manageJobRequests();
     }
 
-    private void onCreateSetupDataBinding() {
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.setConditions(viewModel);
-        viewModel.onViewCreate();
-    }
-
     private void onCreateResolveDaggerDependency() {
         DaggerCurrentConditionsComponent.builder()
                 .applicationComponent(getApplicationComponent())
                 .currentConditionsModule(new CurrentConditionsModule())
                 .build().inject(this);
+    }
+
+    private void onCreateSetupDataBinding() {
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setConditions(viewModel);
+        viewModel.onViewCreate();
     }
 
     @Override
@@ -53,8 +60,22 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public void onResume() {
+        onResumeSetupRecyclerView();
+        super.onResume();
+        viewModel.onViewResume();
+    }
+
+    private void onResumeSetupRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_forecast);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Navigator navigator = new Navigator();
         switch (item.getItemId()) {
             case R.id.menu_item_settings:
                 navigator.navigateToPreferences(this);
@@ -67,12 +88,6 @@ public class MainActivity extends BaseActivity {
                 super.onOptionsItemSelected(item);
                 return true;
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.onViewResume();
     }
 
     @Override

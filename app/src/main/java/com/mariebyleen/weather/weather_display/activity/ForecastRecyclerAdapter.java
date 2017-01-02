@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.forecast.view;
+package com.mariebyleen.weather.weather_display.activity;
 
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.mariebyleen.weather.BR;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.forecast.view_model.ForecastViewModel;
+import com.mariebyleen.weather.weather_display.view.ForecastViewModel;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 

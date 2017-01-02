@@ -1,10 +1,10 @@
-package com.mariebyleen.weather.weather_display.current_conditions.view_model;
+package com.mariebyleen.weather.weather_display.view;
 
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.mariebyleen.weather.weather_display.model.use.WeatherData;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 

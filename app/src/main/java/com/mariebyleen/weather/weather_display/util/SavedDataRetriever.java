@@ -5,9 +5,9 @@ import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.forecast.view_model.ForecastViewModel;
-import com.mariebyleen.weather.weather_display.model.use.DailyForecast;
-import com.mariebyleen.weather.weather_display.model.use.WeatherData;
+import com.mariebyleen.weather.weather_display.view.ForecastViewModel;
+import com.mariebyleen.weather.weather_display.model.mapped.DailyForecast;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import javax.inject.Inject;
 

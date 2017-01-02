@@ -7,8 +7,8 @@ import android.content.res.Resources;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.model.use.WeatherData;
-import com.mariebyleen.weather.weather_display.current_conditions.view_model.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
+import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 

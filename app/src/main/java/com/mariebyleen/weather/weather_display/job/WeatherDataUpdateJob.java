@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
-import com.mariebyleen.weather.weather_display.model.use.WeatherData;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
 

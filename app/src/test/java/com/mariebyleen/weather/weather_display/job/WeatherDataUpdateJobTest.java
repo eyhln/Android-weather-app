@@ -11,7 +11,7 @@ import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentC
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponseMain;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponseCity;
-import com.mariebyleen.weather.weather_display.model.use.WeatherData;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import org.junit.Before;
 import org.junit.Rule;
