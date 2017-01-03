@@ -10,13 +10,12 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
+import com.mariebyleen.weather.location.activity.LocationViewContract;
 import com.mariebyleen.weather.location.model.LocationFetcher;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
 import com.mariebyleen.weather.location.model.fetcher.NetworkLocation;
-import com.mariebyleen.weather.location.presenter.LocationPresenter;
-import com.mariebyleen.weather.location.presenter.LocationViewContract;
-import com.mariebyleen.weather.location.view.LocationPresenterContract;
+import com.mariebyleen.weather.location.view_model.LocationViewModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -25,24 +24,17 @@ import dagger.Provides;
 @PerActivity
 public class LocationModule {
 
-    private LocationViewContract view;
     private Context context;
+    private LocationViewContract view;
 
     public LocationModule(LocationViewContract view, Context context) {
-        this.view = view;
         this.context = context;
     }
 
     @PerActivity
     @Provides
-    LocationViewContract provideLocationViewContract() {
-        return view;
-    }
-
-    @PerActivity
-    @Provides
-    LocationPresenterContract provideLocationPresenterContract(WeatherLocation location) {
-        return new LocationPresenter(view, location);
+    LocationViewModel provideLocationViewModel(WeatherLocation location) {
+        return new LocationViewModel(view, location);
     }
 
     @PerActivity

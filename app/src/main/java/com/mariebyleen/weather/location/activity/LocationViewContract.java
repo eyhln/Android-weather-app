@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.location.presenter;
+package com.mariebyleen.weather.location.activity;
 
 public interface LocationViewContract  {
 

@@ -2,8 +2,8 @@ package com.mariebyleen.weather.location.di.component;
 
 import com.mariebyleen.weather.application.di.component.ApplicationComponent;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
+import com.mariebyleen.weather.location.activity.LocationActivity;
 import com.mariebyleen.weather.location.di.module.LocationModule;
-import com.mariebyleen.weather.location.view.LocationFragment;
 
 import dagger.Component;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 @PerActivity
 public interface LocationComponent {
 
-    void inject(LocationFragment locationFragment);
+    void inject(LocationActivity locationActivity);
 }
