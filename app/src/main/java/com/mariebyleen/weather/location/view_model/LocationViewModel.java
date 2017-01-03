@@ -1,11 +1,13 @@
 package com.mariebyleen.weather.location.view_model;
 
-import com.mariebyleen.weather.location.model.WeatherLocation;
+import android.databinding.BaseObservable;
+
 import com.mariebyleen.weather.location.activity.LocationViewContract;
+import com.mariebyleen.weather.location.model.WeatherLocation;
 
 import javax.inject.Inject;
 
-public class LocationViewModel {
+public class LocationViewModel extends BaseObservable {
 
     private final String dialogText = "";
 
@@ -15,6 +17,7 @@ public class LocationViewModel {
     @Inject
     public LocationViewModel(LocationViewContract view, WeatherLocation location) {
         this.location = location;
+        this.view = view;
     }
 
     public void useCurrentLocation() {

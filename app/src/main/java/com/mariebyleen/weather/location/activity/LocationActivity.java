@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +13,7 @@ import android.widget.Button;
 
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.base.BaseActivity;
+import com.mariebyleen.weather.databinding.ActivityLocationBinding;
 import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
 import com.mariebyleen.weather.location.view_model.LocationViewModel;
@@ -44,6 +46,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         onCreateResolveDaggerDependency();
+        onCreateSetupDataBinding();
     }
 
     private void onCreateResolveDaggerDependency() {
@@ -51,6 +54,11 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
                 .applicationComponent(getApplicationComponent())
                 .locationModule(new LocationModule(this, this))
                 .build().inject(this);
+    }
+
+    private void onCreateSetupDataBinding() {
+        ActivityLocationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_location);
+        binding.setViewModel(viewModel);
     }
 
     @OnClick(R.id.button_use_current_location)
