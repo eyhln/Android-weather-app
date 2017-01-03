@@ -49,6 +49,7 @@ public class ForecastRecyclerAdapter
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        forecasts = savedData.getForecasts();
         notifyDataSetChanged();
     }
 
