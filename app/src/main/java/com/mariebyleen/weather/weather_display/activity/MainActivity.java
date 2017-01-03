@@ -1,7 +1,6 @@
 package com.mariebyleen.weather.weather_display.activity;
 
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import com.mariebyleen.weather.R;
@@ -25,7 +23,6 @@ import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 
 import javax.inject.Inject;
 
-import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,18 +41,11 @@ public class MainActivity extends BaseActivity {
     @Inject
     ForecastRecyclerAdapter adapter;
 
-    @BindView(R.id.container_layout)
-    LinearLayout container;
-
     @BindView(R.id.button_expand_collapse)
     @Nullable
     ToggleButton button;
     @BindView(R.id.current_conditions_detail_content)
     GridLayout detailContent;
-    @BindDrawable(R.drawable.ic_expand_more_black_24dp)
-    Drawable expandMore;
-    @BindDrawable(R.drawable.ic_expand_less_black_24dp)
-    Drawable expandLess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +124,6 @@ public class MainActivity extends BaseActivity {
         viewModel.animateDetailView(button, detailContent);
 
     }
-
-
 
     @Override
     public void onDestroy() {
