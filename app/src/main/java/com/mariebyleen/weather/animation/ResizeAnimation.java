@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.activity;
+package com.mariebyleen.weather.animation;
 
 import android.view.View;
 import android.view.animation.Animation;

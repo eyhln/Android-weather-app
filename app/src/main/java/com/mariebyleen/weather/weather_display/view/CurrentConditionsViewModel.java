@@ -6,7 +6,7 @@ import android.databinding.Bindable;
 import android.view.View;
 import android.widget.ToggleButton;
 
-import com.mariebyleen.weather.weather_display.activity.ResizeAnimation;
+import com.mariebyleen.weather.animation.ResizeAnimation;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
