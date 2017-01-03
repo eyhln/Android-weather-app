@@ -3,6 +3,7 @@ package com.mariebyleen.weather.weather_display.activity;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
@@ -46,7 +48,9 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.container_layout)
     LinearLayout container;
+
     @BindView(R.id.button_expand_collapse)
+    @Nullable
     ToggleButton button;
     @BindView(R.id.current_conditions_detail_content)
     GridLayout detailContent;
@@ -85,7 +89,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void onCreateSetupDetailView() {
-        button.setChecked(true);
+        if (button != null)
+            button.setChecked(true);
     }
 
     @Override
@@ -125,12 +130,15 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Optional
     @OnClick(R.id.button_expand_collapse)
     public void showAndHideDetailContent() {
-        if (button.isChecked())
-            animateDetailContent(DETAIL_VIEW_HEIGHT, 0);
-        else
-            animateDetailContent(0, DETAIL_VIEW_HEIGHT);
+        if (button != null) {
+            if (button.isChecked())
+                animateDetailContent(DETAIL_VIEW_HEIGHT, 0);
+            else
+                animateDetailContent(0, DETAIL_VIEW_HEIGHT);
+        }
     }
 
     private void animateDetailContent(int startSize, int endSize) {
