@@ -7,11 +7,6 @@
           type="com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel"/>
     </data>
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    <LinearLayout
         android:id="@+id/container_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -192,8 +187,6 @@
                 android:textAlignment="viewStart"/>
 
         </GridLayout>
-
-    </LinearLayout>
 
 
         <RelativeLayout android:orientation="vertical"

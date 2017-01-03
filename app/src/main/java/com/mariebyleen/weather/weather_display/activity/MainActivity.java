@@ -33,6 +33,8 @@ import static com.mariebyleen.weather.application.WeatherApplication.getApplicat
 
 public class MainActivity extends BaseActivity {
 
+    private final int DETAIL_VIEW_HEIGHT = 373;
+
     @Inject
     WeatherDataService weatherDataService;
     @Inject
@@ -60,6 +62,7 @@ public class MainActivity extends BaseActivity {
         onCreateSetupDataBinding();
         ButterKnife.bind(this);
         onCreateSetupToolbar();
+        onCreateSetupDetailView();
         weatherDataService.manageJobRequests();
     }
 
@@ -79,6 +82,10 @@ public class MainActivity extends BaseActivity {
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.setConditions(viewModel);
         viewModel.onViewCreate();
+    }
+
+    private void onCreateSetupDetailView() {
+        button.setChecked(true);
     }
 
     @Override
@@ -120,16 +127,16 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.button_expand_collapse)
     public void showAndHideDetailContent() {
-        if (button.isChecked()) {
-            ResizeAnimation resizeAnimation = new ResizeAnimation(detailContent, 373, 0);
-            resizeAnimation.setDuration(400);
-            detailContent.startAnimation(resizeAnimation);
-        }
-        else {
-            ResizeAnimation resizeAnimation = new ResizeAnimation(detailContent, 0, 373);
-            resizeAnimation.setDuration(400);
-            detailContent.startAnimation(resizeAnimation);
-        }
+        if (button.isChecked())
+            animateDetailContent(DETAIL_VIEW_HEIGHT, 0);
+        else
+            animateDetailContent(0, DETAIL_VIEW_HEIGHT);
+    }
+
+    private void animateDetailContent(int startSize, int endSize) {
+        ResizeAnimation resizeAnimation = new ResizeAnimation(detailContent, startSize, endSize);
+        resizeAnimation.setDuration(300);
+        detailContent.startAnimation(resizeAnimation);
     }
 
     @Override
