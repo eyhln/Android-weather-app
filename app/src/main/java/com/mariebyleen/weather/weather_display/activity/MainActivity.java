@@ -35,8 +35,6 @@ import static com.mariebyleen.weather.application.WeatherApplication.getApplicat
 
 public class MainActivity extends BaseActivity {
 
-    private final int DETAIL_VIEW_HEIGHT = 373;
-
     @Inject
     WeatherDataService weatherDataService;
     @Inject
@@ -133,19 +131,11 @@ public class MainActivity extends BaseActivity {
     @Optional
     @OnClick(R.id.button_expand_collapse)
     public void showAndHideDetailContent() {
-        if (button != null) {
-            if (button.isChecked())
-                animateDetailContent(DETAIL_VIEW_HEIGHT, 0);
-            else
-                animateDetailContent(0, DETAIL_VIEW_HEIGHT);
-        }
+        viewModel.animateDetailView(button, detailContent);
+
     }
 
-    private void animateDetailContent(int startSize, int endSize) {
-        ResizeAnimation resizeAnimation = new ResizeAnimation(detailContent, startSize, endSize);
-        resizeAnimation.setDuration(300);
-        detailContent.startAnimation(resizeAnimation);
-    }
+
 
     @Override
     public void onDestroy() {

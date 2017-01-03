@@ -3,7 +3,10 @@ package com.mariebyleen.weather.weather_display.view;
 import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.view.View;
+import android.widget.ToggleButton;
 
+import com.mariebyleen.weather.weather_display.activity.ResizeAnimation;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
@@ -20,6 +23,7 @@ public class CurrentConditionsViewModel extends BaseObservable
     private final double M_SEC_TO_M_SEC = 1;
     private final String[] directions = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S",
             "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
+    private final int DETAIL_VIEW_HEIGHT = 373;
 
     private SharedPreferences preferences;
     private SavedDataRetriever savedData;
@@ -131,12 +135,19 @@ public class CurrentConditionsViewModel extends BaseObservable
         return formatter.formatTimeFromEpoch(weatherData.getSunsetTime());
     }
 
-    @Bindable
-    public boolean getIsDay() {
-        long sunrise = weatherData.getSunriseTime();
-        long sunset = weatherData.getSunsetTime();
-        long updateTime = weatherData.getUpdateTime();
-        return (sunrise < updateTime && updateTime < sunset);
+    public void animateDetailView(ToggleButton toggle, View detailView) {
+        if (toggle != null) {
+            if (toggle.isChecked())
+                animateDetailContent(detailView, DETAIL_VIEW_HEIGHT, 0);
+            else
+                animateDetailContent(detailView, 0, DETAIL_VIEW_HEIGHT);
+        }
+    }
+
+    private void animateDetailContent(View detailContent, int startSize, int endSize) {
+        ResizeAnimation resizeAnimation = new ResizeAnimation(detailContent, startSize, endSize);
+        resizeAnimation.setDuration(300);
+        detailContent.startAnimation(resizeAnimation);
     }
 
     public void setWeatherData(WeatherData weatherData) {
