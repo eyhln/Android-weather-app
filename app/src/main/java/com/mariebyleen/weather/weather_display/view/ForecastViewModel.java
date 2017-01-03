@@ -46,7 +46,7 @@ public class ForecastViewModel extends BaseObservable {
         if (position == 1)
             return savedData.getTomorrowString();
         long forecastTime = forecast.getTime();
-        DateFormat format = new SimpleDateFormat("EEEE, MMM d", locale);
+        DateFormat format = new SimpleDateFormat("EEE, MMM d", locale);
         Date updateTime = new Date(forecastTime*1000);
         return format.format(updateTime);
     }

@@ -17,6 +17,10 @@
     <string name="current_conditions">Current Conditions</string>
     <string name="forecast">Forecast</string>
 
+    // Toggle
+    <string name="more">More</string>
+    <string name="less">Less</string>
+
     // Current Conditions
     <string name="updated">Last update: %s</string>
     <string name="humidity">Humidity: %s</string>

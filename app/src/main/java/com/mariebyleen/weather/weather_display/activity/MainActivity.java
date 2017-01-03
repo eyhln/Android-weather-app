@@ -1,6 +1,7 @@
 package com.mariebyleen.weather.weather_display.activity;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.ToggleButton;
 
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.base.BaseActivity;
@@ -19,6 +23,11 @@ import com.mariebyleen.weather.weather_display.job.WeatherDataService;
 import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 
 import javax.inject.Inject;
+
+import butterknife.BindDrawable;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
@@ -33,11 +42,23 @@ public class MainActivity extends BaseActivity {
     @Inject
     ForecastRecyclerAdapter adapter;
 
+    @BindView(R.id.container_layout)
+    LinearLayout container;
+    @BindView(R.id.button_expand_collapse)
+    ToggleButton button;
+    @BindView(R.id.current_conditions_detail_content)
+    GridLayout detailContent;
+    @BindDrawable(R.drawable.ic_expand_more_black_24dp)
+    Drawable expandMore;
+    @BindDrawable(R.drawable.ic_expand_less_black_24dp)
+    Drawable expandLess;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onCreateResolveDaggerDependency();
         onCreateSetupDataBinding();
+        ButterKnife.bind(this);
         onCreateSetupToolbar();
         weatherDataService.manageJobRequests();
     }
@@ -94,6 +115,20 @@ public class MainActivity extends BaseActivity {
             default:
                 super.onOptionsItemSelected(item);
                 return true;
+        }
+    }
+
+    @OnClick(R.id.button_expand_collapse)
+    public void showAndHideDetailContent() {
+        if (button.isChecked()) {
+            ResizeAnimation resizeAnimation = new ResizeAnimation(detailContent, 373, 0);
+            resizeAnimation.setDuration(400);
+            detailContent.startAnimation(resizeAnimation);
+        }
+        else {
+            ResizeAnimation resizeAnimation = new ResizeAnimation(detailContent, 0, 373);
+            resizeAnimation.setDuration(400);
+            detailContent.startAnimation(resizeAnimation);
         }
     }
 

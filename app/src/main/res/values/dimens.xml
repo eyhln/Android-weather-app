@@ -6,4 +6,6 @@
     <dimen name="button_padding">16dp</dimen>
     <dimen name="button_width">288dp</dimen>
     <dimen name="button_margin">16dp</dimen>
+
+    <dimen name="grid_layout_margin">8dp</dimen>
 </resources>
