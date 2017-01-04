@@ -10,7 +10,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.location.activity.LocationViewContract;
+import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.model.LocationFetcher;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;

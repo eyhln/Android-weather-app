@@ -1,7 +1,6 @@
 package com.mariebyleen.weather.location.activity;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +15,7 @@ import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityLocationBinding;
 import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
+import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.view_model.LocationViewModel;
 
 import javax.inject.Inject;
@@ -28,8 +28,6 @@ import static com.mariebyleen.weather.application.WeatherApplication.getApplicat
 public class LocationActivity extends BaseActivity implements LocationViewContract {
 
     private final static int PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION = 1;
-
-    private ProgressDialog dialog;
 
     @BindView(R.id.button_use_current_location)
     Button useCurrentLocation;
@@ -64,22 +62,6 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     @OnClick(R.id.button_use_current_location)
     public void useCurrentLocation() {
         viewModel.useCurrentLocation();
-    }
-
-    public void showProgressDialog(String message) {
-        if (dialog == null) {
-            dialog = new ProgressDialog(this);
-            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            dialog.setCancelable(true);
-        }
-        dialog.setMessage(message);
-        dialog.show();
-
-    }
-
-    public void hideProgressDialog() {
-        if (dialog != null && dialog.isShowing())
-            dialog.dismiss();
     }
 
     public void disableUseCurrentLocationOption() {
