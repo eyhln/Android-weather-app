@@ -5,6 +5,7 @@ import android.databinding.BaseObservable;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mariebyleen.weather.api.GeoNamesApiService;
@@ -43,28 +44,35 @@ public class LocationViewModel extends BaseObservable {
         this.apiService = apiService;
     }
 
-    public void onViewResume(final AutoCompleteTextView locationTextView, final Activity activity) {
+    public void onViewResume(final AutoCompleteTextView locationTextView, final Activity activity,
+                             final Button selectButton) {
+        selectButton.setEnabled(false);
         formatDropdownMenu(locationTextView);
+        locationTextView.setThreshold(1);
         locationTextViewSub = RxTextView.textChanges(locationTextView)
                 .debounce(300, TimeUnit.MILLISECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io())
                 .map(new Func1<CharSequence, String>() {
                     @Override
                     public String call(CharSequence charSequence) {
                             return charSequence.toString();
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<String, Boolean>() {
                     @Override
                     public Boolean call(String s) {
                         for(int i = 0; i < dropDownSuggestionsState.length; i++) {
-                            if (s.equals(dropDownSuggestionsState[i]))
+                            if (s.equals(dropDownSuggestionsState[i])) {
+                                selectButton.setEnabled(true);
                                 return false;
+                            }
+                            else
+                                selectButton.setEnabled(false);
                         }
                         return true;
                     }
                 })
+                .observeOn(Schedulers.io())
                 .switchMap(new Func1<String, Observable<SearchLocations>>() {
                     @Override
                     public Observable<SearchLocations> call(String s) {

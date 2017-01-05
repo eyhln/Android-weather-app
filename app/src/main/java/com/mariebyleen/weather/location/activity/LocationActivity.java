@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Subscription;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
@@ -38,13 +37,6 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     @Inject
     LocationViewModel viewModel;
 
-    private AutoCompleteTextView enterLocationField;
-    private Subscription editLocationFieldSub;
-
-    private static final String[] COUNTRIES = new String[] {
-            "Belgium", "France", "Italy", "Germany", "Spain"
-    };
-
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, LocationActivity.class);
     }
@@ -56,7 +48,6 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
         ButterKnife.bind(this);
         onCreateResolveDaggerDependency();
         onCreateSetupDataBinding();
-        enterLocationField = (AutoCompleteTextView) findViewById(R.id.choose_location_field);
     }
 
     private void onCreateResolveDaggerDependency() {
@@ -73,7 +64,10 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @Override
     protected void onResume() {
-        viewModel.onViewResume(enterLocationField, this);
+        AutoCompleteTextView enterLocationField =
+                (AutoCompleteTextView) findViewById(R.id.choose_location_field);
+        Button selectLocation = (Button)findViewById(R.id.button_select_location);
+        viewModel.onViewResume(enterLocationField, this, selectLocation);
         super.onResume();
     }
 
