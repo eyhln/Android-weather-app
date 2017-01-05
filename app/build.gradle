@@ -61,6 +61,7 @@ dependencies {
     // RxJava
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
+    compile 'com.jakewharton.rxbinding:rxbinding:1.0.0'
 
     // android-job
     compile 'com.evernote:android-job:1.1.3'

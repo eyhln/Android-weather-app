@@ -6,6 +6,7 @@ import android.content.res.Resources;
 
 import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
+import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
 import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.weather_display.job.WeatherJobCreator;
@@ -24,6 +25,7 @@ public interface ApplicationComponent {
     Gson exposeGson();
     Navigator exposeNavigator();
     JobManager exposeJobManager();
+    GeoNamesApiService exposeGeoNamesApiService();
 
     void inject(WeatherJobCreator weatherJobCreator);
 }

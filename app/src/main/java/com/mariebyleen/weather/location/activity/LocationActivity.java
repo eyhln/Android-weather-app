@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.mariebyleen.weather.R;
@@ -21,7 +22,9 @@ import com.mariebyleen.weather.location.view_model.LocationViewModel;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Subscription;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
@@ -35,6 +38,13 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     @Inject
     LocationViewModel viewModel;
 
+    private AutoCompleteTextView enterLocationField;
+    private Subscription editLocationFieldSub;
+
+    private static final String[] COUNTRIES = new String[] {
+            "Belgium", "France", "Italy", "Germany", "Spain"
+    };
+
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, LocationActivity.class);
     }
@@ -43,8 +53,10 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+        ButterKnife.bind(this);
         onCreateResolveDaggerDependency();
         onCreateSetupDataBinding();
+        enterLocationField = (AutoCompleteTextView) findViewById(R.id.choose_location_field);
     }
 
     private void onCreateResolveDaggerDependency() {
@@ -57,6 +69,12 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     private void onCreateSetupDataBinding() {
         ActivityLocationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_location);
         binding.setViewModel(viewModel);
+    }
+
+    @Override
+    protected void onResume() {
+        viewModel.onViewResume(enterLocationField, this);
+        super.onResume();
     }
 
     @OnClick(R.id.button_use_current_location)
@@ -96,7 +114,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @Override
     public void onStop() {
-        viewModel.onStop();
+        viewModel.onViewStop();
         super.onStop();
     }
 }

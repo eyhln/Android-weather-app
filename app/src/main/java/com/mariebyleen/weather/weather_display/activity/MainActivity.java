@@ -122,7 +122,6 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.button_expand_collapse)
     public void showAndHideDetailContent() {
         viewModel.animateDetailView(button, detailContent);
-
     }
 
     @Override

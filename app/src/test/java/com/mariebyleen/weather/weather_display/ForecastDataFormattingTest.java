@@ -25,7 +25,7 @@ public class ForecastDataFormattingTest {
         forecast = setUpFakeForecast();
         formatter = new DisplayDataFormatter();
         savedData = new SavedDataRetriever(null, null, null, null);
-        viewModel = new ForecastViewModel(forecast, formatter, savedData);
+        viewModel = new ForecastViewModel(forecast, formatter, savedData, 0);
     }
 
     private DailyForecast setUpFakeForecast() {

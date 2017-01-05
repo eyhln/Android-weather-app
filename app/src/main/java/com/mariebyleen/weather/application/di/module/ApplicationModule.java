@@ -31,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApplicationModule {
 
     private final String weatherBaseUrl = "http://api.openweathermap.org/data/2.5/";
-    private final String geoNamesBaseUrl = "http://api.geonames.org/searchJSON?cities=cities1000&isNameRequired=true&orderby=relevance&maxRows=10&username=mbyleen";
+    private final String geoNamesBaseUrl = "http://api.geonames.org/";
 
     private Context context;
     private Application application;
