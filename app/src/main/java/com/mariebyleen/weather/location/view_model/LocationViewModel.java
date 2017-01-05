@@ -40,6 +40,7 @@ public class LocationViewModel extends BaseObservable {
     }
 
     public void onViewResume(final AutoCompleteTextView enterLocationField, final Activity activity) {
+        formatDropdownMenu(enterLocationField);
         editLocationFieldSub = RxTextView.textChanges(enterLocationField)
                 .debounce(400, TimeUnit.MILLISECONDS)
                 .map(new Func1<CharSequence, String>() {
@@ -73,23 +74,33 @@ public class LocationViewModel extends BaseObservable {
 
                     @Override
                     public void onNext(SearchLocations searchLocations) {
-                        SearchLocation[] locations = searchLocations.getGeonames();
-
-                        if (locations != null && locations.length > 0) {
-                            String[] names = new String[locations.length];
-                            for (int i =0; i < locations.length; i++) {
-                                names[i] = locations[i].getToponymName();
-                            }
-
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                                     activity,
                                     android.R.layout.simple_dropdown_item_1line,
-                                    names);
+                                    mapLocationNames(searchLocations));
                             enterLocationField.setAdapter(adapter);
                             enterLocationField.showDropDown();
                         }
-                    }
-                });
+                    });
+    }
+
+    private String[] mapLocationNames(SearchLocations searchLocations) {
+        SearchLocation[] locations = searchLocations.getGeonames();
+        if (locations != null && locations.length > 0) {
+            String[] names = new String[locations.length];
+            for (int i = 0; i < locations.length; i++) {
+                String name = locations[i].getToponymName();
+                String admin = locations[i].getAdminName1();
+                String country = locations[i].getCountryCode();
+                names[i] = String.format("%s, %s, %s", name, admin, country);
+            }
+            return names;
+        }
+        return new String[0];
+    }
+
+    private void formatDropdownMenu(AutoCompleteTextView textView) {
+        textView.setDropDownWidth(900);
     }
 
 
