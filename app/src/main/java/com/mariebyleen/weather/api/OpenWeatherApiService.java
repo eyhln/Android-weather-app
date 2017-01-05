@@ -19,10 +19,4 @@ public interface OpenWeatherApiService {
                                              @Query("lon") float lon,
                                              @Query("cnt") int count,
                                              @Query("appid") String apiKey);
-
-    @GET("find")
-    Observable<CurrentConditionsResponse> getLocation(@Query("q") String searchString,
-                                                      @Query("type") String mode,
-                                                      @Query("cnt") int numResults,
-                                                      @Query("appid") String apiKey);
 }

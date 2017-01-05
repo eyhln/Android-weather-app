@@ -9,13 +9,15 @@ import android.preference.PreferenceManager;
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
+import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.weather_display.job.WeatherJobCreator;
 import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.weather_display.job.WeatherDataService;
+import com.mariebyleen.weather.weather_display.job.WeatherJobCreator;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -28,13 +30,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApplicationModule {
 
+    private final String weatherBaseUrl = "http://api.openweathermap.org/data/2.5/";
+    private final String geoNamesBaseUrl = "http://api.geonames.org/searchJSON?cities=cities1000&isNameRequired=true&orderby=relevance&maxRows=10&username=mbyleen";
+
     private Context context;
-    private String baseUrl;
     private Application application;
 
-    public ApplicationModule(Context context, String baseUrl, Application application) {
+    public ApplicationModule(Context context, Application application) {
         this.context = context;
-        this.baseUrl = baseUrl;
         this.application = application;
     }
 
@@ -106,10 +109,11 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    Retrofit provideRetrofit(OkHttpClient client, GsonConverterFactory converterFactory,
+    @Named("OpenWeatherRetrofit")
+    Retrofit provideWeatherRetrofit(OkHttpClient client, GsonConverterFactory converterFactory,
                              RxJavaCallAdapterFactory adapterFactory) {
         return new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(weatherBaseUrl)
                 .addConverterFactory(converterFactory)
                 .addCallAdapterFactory(adapterFactory)
                 .client(client)
@@ -118,7 +122,26 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    OpenWeatherApiService provideOpenWeatherApiService(Retrofit retrofit) {
+    @Named("GeoNamesRetrofit")
+    Retrofit provideGeoNamesRetrofit(OkHttpClient client, GsonConverterFactory converterFactory,
+                             RxJavaCallAdapterFactory adapterFactory) {
+        return new Retrofit.Builder()
+                .baseUrl(geoNamesBaseUrl)
+                .addConverterFactory(converterFactory)
+                .addCallAdapterFactory(adapterFactory)
+                .client(client)
+                .build();
+    }
+
+    @Singleton
+    @Provides
+    GeoNamesApiService provideGeoNamesApiService(@Named("GeoNamesRetrofit") Retrofit retrofit) {
+        return retrofit.create(GeoNamesApiService.class);
+    }
+
+    @Singleton
+    @Provides
+    OpenWeatherApiService provideOpenWeatherApiService(@Named("OpenWeatherRetrofit") Retrofit retrofit) {
         return retrofit.create(OpenWeatherApiService.class);
     }
 

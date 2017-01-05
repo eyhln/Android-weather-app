@@ -10,7 +10,6 @@ import com.mariebyleen.weather.application.di.module.ApplicationModule;
 public class WeatherApplication extends Application {
 
     private static ApplicationComponent applicationComponent;
-    private static final String baseUrl = "http://api.openweathermap.org/data/2.5/";
     private static final String apiKey = "bb5dd17d68b943dbf98a7512901fcc04";
 
     @Override
@@ -21,7 +20,7 @@ public class WeatherApplication extends Application {
 
     private void initializeAndroidComponents() {
         applicationComponent = DaggerApplicationComponent.builder()
-            .applicationModule(new ApplicationModule(getApplicationContext(), baseUrl, this))
+            .applicationModule(new ApplicationModule(getApplicationContext(), this))
             .build();
     }
 
