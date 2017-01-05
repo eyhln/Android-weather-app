@@ -25,10 +25,14 @@ import rx.schedulers.Schedulers;
 
 public class LocationViewModel extends BaseObservable {
 
+    private final int NUM_SUGGESTIONS = 8;
+
     private WeatherLocation location;
     private LocationViewContract view;
     private GeoNamesApiService apiService;
-    private Subscription editLocationFieldSub;
+    private Subscription locationTextViewSub;
+
+    private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
 
     @Inject
     public LocationViewModel(LocationViewContract view,
@@ -39,24 +43,33 @@ public class LocationViewModel extends BaseObservable {
         this.apiService = apiService;
     }
 
-    public void onViewResume(final AutoCompleteTextView enterLocationField, final Activity activity) {
-        formatDropdownMenu(enterLocationField);
-        editLocationFieldSub = RxTextView.textChanges(enterLocationField)
-                .debounce(400, TimeUnit.MILLISECONDS)
+    public void onViewResume(final AutoCompleteTextView locationTextView, final Activity activity) {
+        formatDropdownMenu(locationTextView);
+        locationTextViewSub = RxTextView.textChanges(locationTextView)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
                 .map(new Func1<CharSequence, String>() {
                     @Override
                     public String call(CharSequence charSequence) {
                             return charSequence.toString();
                     }
                 })
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io())
+                .filter(new Func1<String, Boolean>() {
+                    @Override
+                    public Boolean call(String s) {
+                        for(int i = 0; i < dropDownSuggestionsState.length; i++) {
+                            if (s.equals(dropDownSuggestionsState[i]))
+                                return false;
+                        }
+                        return true;
+                    }
+                })
                 .switchMap(new Func1<String, Observable<SearchLocations>>() {
                     @Override
                     public Observable<SearchLocations> call(String s) {
-                        Observable<SearchLocations> locations = apiService.getSearchLocations(s);
-                        Log.d("RX", locations.toString());
-                            return locations;
+                        Log.d("RX", "call made");
+                        return apiService.getSearchLocations(s, NUM_SUGGESTIONS);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -74,12 +87,14 @@ public class LocationViewModel extends BaseObservable {
 
                     @Override
                     public void onNext(SearchLocations searchLocations) {
+                        String[] locations = mapLocationNames(searchLocations);
+                        dropDownSuggestionsState = locations;
                             ArrayAdapter<String> adapter = new ArrayAdapter<>(
                                     activity,
                                     android.R.layout.simple_dropdown_item_1line,
-                                    mapLocationNames(searchLocations));
-                            enterLocationField.setAdapter(adapter);
-                            enterLocationField.showDropDown();
+                                    locations);
+                            locationTextView.setAdapter(adapter);
+                            locationTextView.showDropDown();
                         }
                     });
     }
@@ -104,6 +119,8 @@ public class LocationViewModel extends BaseObservable {
     }
 
 
+
+
     public void useCurrentLocation() {
         view.checkPermissions();
     }
@@ -117,7 +134,7 @@ public class LocationViewModel extends BaseObservable {
     }
 
     public void onViewStop() {
-        if (editLocationFieldSub != null)
-            editLocationFieldSub.unsubscribe();
+        if (locationTextViewSub != null)
+            locationTextViewSub.unsubscribe();
     }
 }
