@@ -35,6 +35,9 @@ public class LocationViewModel extends BaseObservable {
 
     private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
 
+    private AutoCompleteTextView locationTextView;
+    private Button selectButton;
+
     @Inject
     public LocationViewModel(LocationViewContract view,
                              WeatherLocation location,
@@ -44,17 +47,16 @@ public class LocationViewModel extends BaseObservable {
         this.apiService = apiService;
     }
 
-    public void onViewResume(final AutoCompleteTextView locationTextView, final Activity activity,
-                             final Button selectButton) {
+    public void setupSearchSuggestions(final AutoCompleteTextView locationTextView, final Activity activity,
+                                       final Button selectButton) {
         selectButton.setEnabled(false);
-        formatDropdownMenu(locationTextView);
-        locationTextView.setThreshold(1);
+        formatAutoCompleteTextView(locationTextView);
         locationTextViewSub = RxTextView.textChanges(locationTextView)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(new Func1<CharSequence, String>() {
                     @Override
                     public String call(CharSequence charSequence) {
-                            return charSequence.toString();
+                        return charSequence.toString();
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,7 +78,6 @@ public class LocationViewModel extends BaseObservable {
                 .switchMap(new Func1<String, Observable<SearchLocations>>() {
                     @Override
                     public Observable<SearchLocations> call(String s) {
-                        Log.d("RX", "call made");
                         return apiService.getSearchLocations(s, NUM_SUGGESTIONS);
                     }
                 })
@@ -97,12 +98,7 @@ public class LocationViewModel extends BaseObservable {
                     public void onNext(SearchLocations searchLocations) {
                         String[] locations = mapLocationNames(searchLocations);
                         dropDownSuggestionsState = locations;
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                    activity,
-                                    android.R.layout.simple_dropdown_item_1line,
-                                    locations);
-                            locationTextView.setAdapter(adapter);
-                            locationTextView.showDropDown();
+                        showDropDownSuggestions(locations, activity);
                         }
                     });
     }
@@ -122,12 +118,19 @@ public class LocationViewModel extends BaseObservable {
         return new String[0];
     }
 
-    private void formatDropdownMenu(AutoCompleteTextView textView) {
-        textView.setDropDownWidth(900);
+    private void showDropDownSuggestions(String[] suggestions, Activity activity) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                activity,
+                android.R.layout.simple_dropdown_item_1line,
+                suggestions);
+        locationTextView.setAdapter(adapter);
+        locationTextView.showDropDown();
     }
 
-
-
+    private void formatAutoCompleteTextView(AutoCompleteTextView textView) {
+        textView.setThreshold(1);
+        textView.setDropDownWidth(900);
+    }
 
     public void useCurrentLocation() {
         view.checkPermissions();

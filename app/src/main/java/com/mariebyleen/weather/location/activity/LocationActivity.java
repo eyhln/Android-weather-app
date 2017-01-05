@@ -67,7 +67,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
         AutoCompleteTextView enterLocationField =
                 (AutoCompleteTextView) findViewById(R.id.choose_location_field);
         Button selectLocation = (Button)findViewById(R.id.button_select_location);
-        viewModel.onViewResume(enterLocationField, this, selectLocation);
+        viewModel.setupSearchSuggestions(enterLocationField, this, selectLocation);
         super.onResume();
     }
 
