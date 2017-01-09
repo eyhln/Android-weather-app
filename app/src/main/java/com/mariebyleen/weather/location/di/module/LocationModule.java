@@ -2,7 +2,6 @@ package com.mariebyleen.weather.location.di.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.LocationManager;
 
@@ -13,12 +12,13 @@ import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
 import com.mariebyleen.weather.job.WeatherDataService;
-import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.model.LocationFetcher;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
 import com.mariebyleen.weather.location.model.fetcher.NetworkLocation;
+import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.view_model.LocationViewModel;
+import com.mariebyleen.weather.preferences.Preferences;
 
 import dagger.Module;
 import dagger.Provides;
@@ -39,10 +39,9 @@ public class LocationModule {
     @Provides
     LocationViewModel provideLocationViewModel(WeatherLocation location,
                                                GeoNamesApiService apiService,
-                                               SharedPreferences preferences,
-                                               Resources resources,
+                                               Preferences preferences,
                                                WeatherDataService weatherDataService) {
-        return new LocationViewModel(view, location, apiService, preferences, resources, weatherDataService);
+        return new LocationViewModel(view, location, apiService, preferences, weatherDataService);
     }
 
     @PerActivity

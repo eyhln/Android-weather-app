@@ -11,9 +11,10 @@ import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
-import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.job.WeatherJobCreator;
+import com.mariebyleen.weather.navigation.Navigator;
+import com.mariebyleen.weather.preferences.Preferences;
 
 import java.util.concurrent.TimeUnit;
 
@@ -78,6 +79,12 @@ public class ApplicationModule {
     @Provides
     SharedPreferences provideSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Singleton
+    @Provides
+    Preferences providePreferences(SharedPreferences preferences, Resources resources, Gson gson) {
+        return new Preferences(preferences, resources, gson);
     }
 
     @Singleton

@@ -8,8 +8,9 @@ import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
-import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.job.WeatherJobCreator;
+import com.mariebyleen.weather.navigation.Navigator;
+import com.mariebyleen.weather.preferences.Preferences;
 
 import javax.inject.Singleton;
 
@@ -20,8 +21,9 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     Context exposeContext();
-    Resources exposeResources();
+    Preferences exposePreferences();
     SharedPreferences exposeSharedPreferences();
+    Resources exposeResources();
     Gson exposeGson();
     Navigator exposeNavigator();
     JobManager exposeJobManager();

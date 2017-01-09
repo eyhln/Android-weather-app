@@ -1,8 +1,6 @@
 package com.mariebyleen.weather.location.view_model;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.databinding.BaseObservable;
 import android.util.Log;
 import android.widget.AutoCompleteTextView;
@@ -15,6 +13,7 @@ import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocation;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
 import com.mariebyleen.weather.location.model.WeatherLocation;
+import com.mariebyleen.weather.preferences.Preferences;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,16 +33,12 @@ public class LocationViewModel extends BaseObservable {
     private WeatherLocation location;
     private LocationViewContract view;
     private GeoNamesApiService apiService;
-    private SharedPreferences preferences;
-    private Resources resources;
+    private Preferences preferences;
     private WeatherDataService weatherDataService;
 
     private Subscription locationTextViewSub;
     private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
     private AutoCompleteTextView searchLocationsTextView;
-
-    private String latKey;
-    private String lonKey;
 
     private SearchLocations model;
 
@@ -51,14 +46,12 @@ public class LocationViewModel extends BaseObservable {
     public LocationViewModel(LocationViewContract view,
                              WeatherLocation location,
                              GeoNamesApiService apiService,
-                             SharedPreferences preferences,
-                             Resources resources,
+                             Preferences preferences,
                              WeatherDataService weatherDataService) {
         this.location = location;
         this.view = view;
         this.apiService = apiService;
         this.preferences = preferences;
-        this.resources = resources;
         this.weatherDataService = weatherDataService;
 
     }
@@ -156,8 +149,6 @@ public class LocationViewModel extends BaseObservable {
     }
 
     public void saveSearchLocationCoordinates() {
-        getCoordinateKeys();
-
         SearchLocation[] locationSuggestions = model.getGeonames();
         String selectedLocationName = view.getSearchTextViewText();
 
@@ -168,20 +159,12 @@ public class LocationViewModel extends BaseObservable {
         }
     }
 
-    private void getCoordinateKeys() {
-        if (latKey == null)
-            latKey = resources.getString(R.string.preference_latitude_key);
-        if (lonKey == null)
-            lonKey = resources.getString(R.string.preference_longitude_key);
-    }
-
     private void saveCoordinates(int index) {
-        SharedPreferences.Editor editor = preferences.edit();
         SearchLocation selectedLocation = model.getGeonames()[index];
         float lat = Float.parseFloat(selectedLocation.getLat());
-        editor.putFloat(latKey, lat).apply();
+        preferences.putFloat(R.string.preference_latitude_key, lat);
         float lon = Float.parseFloat(selectedLocation.getLng());
-        editor.putFloat(lonKey, lon).apply();
+        preferences.putFloat(R.string.preference_longitude_key, lon);
     }
 
     public void useCurrentLocation() {
