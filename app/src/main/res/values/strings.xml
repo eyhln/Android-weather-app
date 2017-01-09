@@ -49,12 +49,24 @@
 
     // LOCATION
 
+    // Headings
+    <string name="search_locations">Search Locations</string>
+    <string name="recent_locations">Use Recent Location</string>
+
     // button text
     <string name="use_current_location">Use Current Location</string>
     <string name="choose_location">Choose Location</string>
     <string name="select_location">Select</string>
 
     <string name="find_current_location_progress_dialog">Finding Location&#8230;</string>
+
+    <string name="preference_latitude_key">
+        <xliff:g id="preference_key">lat</xliff:g>
+    </string>
+
+    <string name="preference_longitude_key">
+        <xliff:g id="preference_key">lon</xliff:g>
+    </string>
 
 
     // SETTINGS

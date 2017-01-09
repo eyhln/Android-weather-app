@@ -1,5 +1,7 @@
 package com.mariebyleen.weather.weather_display.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +18,7 @@ import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityMainBinding;
 import com.mariebyleen.weather.navigation.Navigator;
+import com.mariebyleen.weather.settings.activity.PreferencesActivity;
 import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 import com.mariebyleen.weather.job.WeatherDataService;
@@ -31,6 +34,10 @@ import butterknife.Optional;
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
 public class MainActivity extends BaseActivity {
+
+    public static Intent getCallingIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
 
     @Inject
     WeatherDataService weatherDataService;

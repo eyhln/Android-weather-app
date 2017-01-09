@@ -2,6 +2,7 @@ package com.mariebyleen.weather.location.di.module;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.LocationManager;
 
@@ -11,6 +12,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
+import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.model.LocationFetcher;
 import com.mariebyleen.weather.location.model.WeatherLocation;
@@ -35,8 +37,12 @@ public class LocationModule {
 
     @PerActivity
     @Provides
-    LocationViewModel provideLocationViewModel(WeatherLocation location, GeoNamesApiService apiService) {
-        return new LocationViewModel(view, location, apiService);
+    LocationViewModel provideLocationViewModel(WeatherLocation location,
+                                               GeoNamesApiService apiService,
+                                               SharedPreferences preferences,
+                                               Resources resources,
+                                               WeatherDataService weatherDataService) {
+        return new LocationViewModel(view, location, apiService, preferences, resources, weatherDataService);
     }
 
     @PerActivity

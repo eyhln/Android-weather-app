@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.mariebyleen.weather.location.activity.LocationActivity;
 import com.mariebyleen.weather.settings.activity.PreferencesActivity;
+import com.mariebyleen.weather.weather_display.activity.MainActivity;
 
 import javax.inject.Inject;
 
@@ -23,6 +24,13 @@ public class Navigator {
     public void navigateToLocationEditor(Context context) {
         if (context != null) {
             Intent intentToLaunch = LocationActivity.getCallingIntent(context);
+            context.startActivity(intentToLaunch);
+        }
+    }
+
+    public void navigateToMain(Context context) {
+        if (context != null) {
+            Intent intentToLaunch = MainActivity.getCallingIntent(context);
             context.startActivity(intentToLaunch);
         }
     }

@@ -11,9 +11,9 @@ import com.google.gson.Gson;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
-import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import rx.Observable;
 import rx.Observer;
@@ -31,6 +31,11 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     private SharedPreferences preferences;
     private Resources resources;
 
+    private String latKey;
+    private String lonKey;
+    private float latitude;
+    private float longitude;
+
     private boolean jobSuccess = false;
 
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
@@ -43,6 +48,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
         this.gson = gson;
         this.preferences = preferences;
         this.resources = resources;
+
+        getSavedCoordinates();
     }
 
     public static JobRequest buildAutoUpdateJobRequest(SharedPreferences preferences, Resources resources) {
@@ -72,9 +79,6 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
 
 
     protected Observable<WeatherData> getWeatherObservable() {
-        // TODO remove these default values
-        float latitude = preferences.getFloat("lat",  38.9716700f);
-        float longitude = preferences.getFloat("lon",  -95.2352500f);
         Observable<CurrentConditionsResponse> conditions =
                 weatherApiService.getCurrentConditions(latitude, longitude, getApiKey());
         Observable<ForecastResponse> forecast =
@@ -88,6 +92,19 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
                         return mapper.map(ccResponse, fResponse);
                     }
                 });
+    }
+
+    private void getSavedCoordinates() {
+        getCoordinateKeys();
+        latitude = preferences.getFloat(latKey,  0.00f);
+        longitude = preferences.getFloat(lonKey,  0.00f);
+    }
+
+    private void getCoordinateKeys() {
+        if (latKey == null)
+            latKey = resources.getString(R.string.preference_latitude_key);
+        if (lonKey == null)
+            lonKey = resources.getString(R.string.preference_longitude_key);
     }
 
     @Override
@@ -115,5 +132,4 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
                 currentConditionsJson);
         prefsEditor.apply();
     }
-
 }

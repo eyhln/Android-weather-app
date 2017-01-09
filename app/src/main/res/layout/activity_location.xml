@@ -8,63 +8,84 @@
                   type="com.mariebyleen.weather.location.view_model.LocationViewModel"/>
     </data>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/day_sky_blue">
+
+            <Button
+                android:id="@+id/button_use_current_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/use_current_location"
+                android:padding="@dimen/button_padding"
+                android:layout_margin="48dp"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+
     <android.support.constraint.ConstraintLayout
         android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
-
-        <Button
-            android:id="@+id/button_use_current_location"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:text="@string/use_current_location"
-            android:padding="@dimen/button_padding"
-            android:layout_marginTop="56dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            />
-
-        <Button
-            android:id="@+id/button_choose_location"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:text="@string/choose_location"
-            android:padding="@dimen/button_padding"
-            android:layout_margin="@dimen/button_margin"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="48dp"
-            app:layout_constraintTop_toBottomOf="@+id/button_use_current_location"
-            android:layout_marginStart="32dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginEnd="32dp"
-            app:layout_constraintRight_toRightOf="parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/darkgrey">
 
         <AutoCompleteTextView
             android:id="@+id/choose_location_field"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/button_padding"
             android:layout_margin="@dimen/button_margin"
             android:minWidth="150dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintTop_toBottomOf="@+id/button_choose_location"
-            app:layout_constraintLeft_toLeftOf="@+id/button_choose_location"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            />
 
         <Button
             android:id="@+id/button_select_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/select_location"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintLeft_toRightOf="@+id/choose_location_field"
+            app:layout_constraintBottom_toBottomOf="@+id/choose_location_field"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="@string/search_locations"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:id="@+id/textView"
+            android:paddingStart="16dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="@string/recent_locations"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:id="@+id/textView2"
+            android:paddingStart="16dp"
             app:layout_constraintTop_toBottomOf="@+id/choose_location_field"
-            android:layout_marginTop="24dp"/>
-
-
+            android:layout_marginTop="24dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
 
 </layout>

@@ -15,8 +15,6 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
     private SharedPreferences preferences;
     private Resources resources;
 
-    private String firstRunKey;
-
     @Inject
     public WeatherDataService(JobManager jobManager, SharedPreferences preferences,
                               Resources resources) {

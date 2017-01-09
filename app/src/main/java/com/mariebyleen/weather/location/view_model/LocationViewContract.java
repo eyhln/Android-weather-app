@@ -5,5 +5,7 @@ public interface LocationViewContract  {
     void checkPermissions();
     void disableUseCurrentLocationOption();
     void showLocationSuggestions(String[] suggestions);
+    String getSearchTextViewText();
+    void navigateToMainActivity();
 
 }

@@ -19,6 +19,7 @@ import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
 import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.view_model.LocationViewModel;
+import com.mariebyleen.weather.navigation.Navigator;
 
 import javax.inject.Inject;
 
@@ -41,6 +42,8 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @Inject
     LocationViewModel viewModel;
+    @Inject
+    Navigator navigator;
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, LocationActivity.class);
@@ -114,6 +117,19 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
                 suggestions);
         locationTextView.setAdapter(adapter);
         locationTextView.showDropDown();
+    }
+
+    @OnClick(R.id.button_select_location)
+    public void selectSearchLocation() {
+        viewModel.selectSearchLocation();
+    }
+
+    public String getSearchTextViewText() {
+        return locationTextView.getText().toString();
+    }
+
+    public void navigateToMainActivity() {
+        navigator.navigateToMain(this);
     }
 
     @Override

@@ -1,13 +1,17 @@
 package com.mariebyleen.weather.location.view_model;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.databinding.BaseObservable;
 import android.util.Log;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.api.GeoNamesApiService;
+import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocation;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
 import com.mariebyleen.weather.location.model.WeatherLocation;
@@ -30,24 +34,45 @@ public class LocationViewModel extends BaseObservable {
     private WeatherLocation location;
     private LocationViewContract view;
     private GeoNamesApiService apiService;
-    private Subscription locationTextViewSub;
+    private SharedPreferences preferences;
+    private Resources resources;
+    private WeatherDataService weatherDataService;
 
+    private Subscription locationTextViewSub;
     private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
+    private AutoCompleteTextView searchLocationsTextView;
+
+    private String latKey;
+    private String lonKey;
+
+    private SearchLocations model;
 
     @Inject
     public LocationViewModel(LocationViewContract view,
                              WeatherLocation location,
-                             GeoNamesApiService apiService) {
+                             GeoNamesApiService apiService,
+                             SharedPreferences preferences,
+                             Resources resources,
+                             WeatherDataService weatherDataService) {
         this.location = location;
         this.view = view;
         this.apiService = apiService;
+        this.preferences = preferences;
+        this.resources = resources;
+        this.weatherDataService = weatherDataService;
+
     }
 
-    public void setupSearchSuggestions(final AutoCompleteTextView locationTextView, final Activity activity,
+    public void setModel(SearchLocations searchLocations) {
+        model = searchLocations;
+    }
+
+    public void setupSearchSuggestions(final AutoCompleteTextView searchLocationsTextView, final Activity activity,
                                        final Button selectButton) {
+        this.searchLocationsTextView = searchLocationsTextView;
         selectButton.setEnabled(false);
-        formatAutoCompleteTextView(locationTextView);
-        locationTextViewSub = RxTextView.textChanges(locationTextView)
+        formatAutoCompleteTextView(searchLocationsTextView);
+        locationTextViewSub = RxTextView.textChanges(searchLocationsTextView)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(new Func1<CharSequence, String>() {
                     @Override
@@ -92,6 +117,7 @@ public class LocationViewModel extends BaseObservable {
 
                     @Override
                     public void onNext(SearchLocations searchLocations) {
+                        model = searchLocations;
                         String[] locations = mapLocationNames(searchLocations);
                         dropDownSuggestionsState = locations;
                         view.showLocationSuggestions(locations);
@@ -104,19 +130,58 @@ public class LocationViewModel extends BaseObservable {
         if (locations != null && locations.length > 0) {
             String[] names = new String[locations.length];
             for (int i = 0; i < locations.length; i++) {
-                String name = locations[i].getToponymName();
-                String admin = locations[i].getAdminName1();
-                String country = locations[i].getCountryName();
-                names[i] = String.format("%s, %s, %s", name, admin, country);
+                names[i] = mapLocationName(locations[i]);
             }
             return names;
         }
         return new String[0];
     }
 
+    private String mapLocationName(SearchLocation location) {
+        String name = location.getToponymName();
+        String admin = location.getAdminName1();
+        String country = location.getCountryName();
+        return String.format("%s, %s, %s", name, admin, country);
+    }
+
     private void formatAutoCompleteTextView(AutoCompleteTextView textView) {
         textView.setThreshold(1);
         textView.setDropDownWidth(900);
+    }
+
+    public void selectSearchLocation() {
+        saveSearchLocationCoordinates();
+        weatherDataService.scheduleOneOffUpdate();
+        view.navigateToMainActivity();
+    }
+
+    public void saveSearchLocationCoordinates() {
+        getCoordinateKeys();
+
+        SearchLocation[] locationSuggestions = model.getGeonames();
+        String selectedLocationName = view.getSearchTextViewText();
+
+        for (int i = 0; i < locationSuggestions.length; i++) {
+            if (selectedLocationName.equals(mapLocationName(locationSuggestions[i]))) {
+                saveCoordinates(i);
+            }
+        }
+    }
+
+    private void getCoordinateKeys() {
+        if (latKey == null)
+            latKey = resources.getString(R.string.preference_latitude_key);
+        if (lonKey == null)
+            lonKey = resources.getString(R.string.preference_longitude_key);
+    }
+
+    private void saveCoordinates(int index) {
+        SharedPreferences.Editor editor = preferences.edit();
+        SearchLocation selectedLocation = model.getGeonames()[index];
+        float lat = Float.parseFloat(selectedLocation.getLat());
+        editor.putFloat(latKey, lat).apply();
+        float lon = Float.parseFloat(selectedLocation.getLng());
+        editor.putFloat(lonKey, lon).apply();
     }
 
     public void useCurrentLocation() {
