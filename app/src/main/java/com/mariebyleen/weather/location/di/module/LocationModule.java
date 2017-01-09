@@ -29,6 +29,7 @@ public class LocationModule {
     private LocationViewContract view;
 
     public LocationModule(LocationViewContract view, Context context) {
+        this.view = view;
         this.context = context;
     }
 

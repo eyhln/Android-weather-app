@@ -3,7 +3,6 @@ package com.mariebyleen.weather.location.view_model;
 import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
@@ -34,9 +33,6 @@ public class LocationViewModel extends BaseObservable {
     private Subscription locationTextViewSub;
 
     private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
-
-    private AutoCompleteTextView locationTextView;
-    private Button selectButton;
 
     @Inject
     public LocationViewModel(LocationViewContract view,
@@ -98,7 +94,7 @@ public class LocationViewModel extends BaseObservable {
                     public void onNext(SearchLocations searchLocations) {
                         String[] locations = mapLocationNames(searchLocations);
                         dropDownSuggestionsState = locations;
-                        showDropDownSuggestions(locations, activity);
+                        view.showLocationSuggestions(locations);
                         }
                     });
     }
@@ -110,21 +106,12 @@ public class LocationViewModel extends BaseObservable {
             for (int i = 0; i < locations.length; i++) {
                 String name = locations[i].getToponymName();
                 String admin = locations[i].getAdminName1();
-                String country = locations[i].getCountryCode();
+                String country = locations[i].getCountryName();
                 names[i] = String.format("%s, %s, %s", name, admin, country);
             }
             return names;
         }
         return new String[0];
-    }
-
-    private void showDropDownSuggestions(String[] suggestions, Activity activity) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                activity,
-                android.R.layout.simple_dropdown_item_1line,
-                suggestions);
-        locationTextView.setAdapter(adapter);
-        locationTextView.showDropDown();
     }
 
     private void formatAutoCompleteTextView(AutoCompleteTextView textView) {

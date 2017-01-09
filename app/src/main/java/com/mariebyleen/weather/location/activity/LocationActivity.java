@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
@@ -33,6 +34,8 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @BindView(R.id.button_use_current_location)
     Button useCurrentLocation;
+
+    private AutoCompleteTextView locationTextView;
 
     @Inject
     LocationViewModel viewModel;
@@ -64,10 +67,9 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @Override
     protected void onResume() {
-        AutoCompleteTextView enterLocationField =
-                (AutoCompleteTextView) findViewById(R.id.choose_location_field);
+        locationTextView = (AutoCompleteTextView) findViewById(R.id.choose_location_field);
         Button selectLocation = (Button)findViewById(R.id.button_select_location);
-        viewModel.setupSearchSuggestions(enterLocationField, this, selectLocation);
+        viewModel.setupSearchSuggestions(locationTextView, this, selectLocation);
         super.onResume();
     }
 
@@ -104,6 +106,15 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
                 return;
             }
         }
+    }
+
+    public void showLocationSuggestions(String[] suggestions) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                suggestions);
+        locationTextView.setAdapter(adapter);
+        locationTextView.showDropDown();
     }
 
     @Override
