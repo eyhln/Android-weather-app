@@ -12,8 +12,8 @@ import com.google.gson.Gson;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.navigation.Navigator;
-import com.mariebyleen.weather.weather_display.job.WeatherDataService;
-import com.mariebyleen.weather.weather_display.job.WeatherJobCreator;
+import com.mariebyleen.weather.job.WeatherDataService;
+import com.mariebyleen.weather.job.WeatherJobCreator;
 
 import java.util.concurrent.TimeUnit;
 

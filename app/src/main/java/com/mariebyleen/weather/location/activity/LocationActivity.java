@@ -34,8 +34,10 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @BindView(R.id.button_use_current_location)
     Button useCurrentLocation;
-
-    private AutoCompleteTextView locationTextView;
+    @BindView(R.id.choose_location_field)
+    AutoCompleteTextView locationTextView;
+    @BindView(R.id.button_select_location)
+    Button selectLocation;
 
     @Inject
     LocationViewModel viewModel;
@@ -47,10 +49,9 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
-        ButterKnife.bind(this);
         onCreateResolveDaggerDependency();
         onCreateSetupDataBinding();
+        ButterKnife.bind(this);
     }
 
     private void onCreateResolveDaggerDependency() {
@@ -67,8 +68,6 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @Override
     protected void onResume() {
-        locationTextView = (AutoCompleteTextView) findViewById(R.id.choose_location_field);
-        Button selectLocation = (Button)findViewById(R.id.button_select_location);
         viewModel.setupSearchSuggestions(locationTextView, this, selectLocation);
         super.onResume();
     }
