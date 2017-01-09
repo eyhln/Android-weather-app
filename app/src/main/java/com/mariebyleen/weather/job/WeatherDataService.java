@@ -6,21 +6,24 @@ import android.content.res.Resources;
 
 import com.evernote.android.job.JobManager;
 import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.preferences.Preferences;
 
 import javax.inject.Inject;
 
 public class WeatherDataService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private JobManager jobManager;
-    private SharedPreferences preferences;
+    private SharedPreferences sharedPreferences;
     private Resources resources;
+    private Preferences preferences;
 
     @Inject
-    public WeatherDataService(JobManager jobManager, SharedPreferences preferences,
-                              Resources resources) {
+    public WeatherDataService(JobManager jobManager, SharedPreferences sharedPreferences,
+                              Resources resources, Preferences preferences) {
         this.jobManager = jobManager;
-        this.preferences = preferences;
+        this.sharedPreferences = sharedPreferences;
         this.resources = resources;
+        this.preferences = preferences;
     }
 
     public void manageJobRequests() {
@@ -41,6 +44,6 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
     }
 
     private void scheduleAutoUpdateJobs() {
-        jobManager.schedule(WeatherDataUpdateJob.buildAutoUpdateJobRequest(preferences, resources));
+        jobManager.schedule(WeatherDataUpdateJob.buildAutoUpdateJobRequest(preferences));
     }
 }

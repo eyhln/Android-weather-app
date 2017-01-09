@@ -1,15 +1,13 @@
 package com.mariebyleen.weather.job;
 
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
-import com.google.gson.Gson;
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
@@ -27,12 +25,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
 
     private OpenWeatherApiService weatherApiService;
     private WeatherMapper mapper;
-    private Gson gson;
-    private SharedPreferences preferences;
-    private Resources resources;
+    private Preferences preferences;
 
-    private String latKey;
-    private String lonKey;
     private float latitude;
     private float longitude;
 
@@ -40,21 +34,16 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
 
     public WeatherDataUpdateJob(OpenWeatherApiService weatherApiService,
                                 WeatherMapper mapper,
-                                Gson gson,
-                                SharedPreferences preferences,
-                                Resources resources) {
+                                Preferences preferences) {
         this.weatherApiService = weatherApiService;
         this.mapper = mapper;
-        this.gson = gson;
         this.preferences = preferences;
-        this.resources = resources;
 
         getSavedCoordinates();
     }
 
-    public static JobRequest buildAutoUpdateJobRequest(SharedPreferences preferences, Resources resources) {
-        String periodString = preferences.getString(
-                resources.getString(R.string.preference_update_period_key), "900000");
+    public static JobRequest buildAutoUpdateJobRequest(Preferences preferences) {
+        String periodString = preferences.getString(R.string.preference_update_period_key, "900000");
         int period = Integer.parseInt(periodString);
         return new JobRequest.Builder(TAG)
                 .setPeriodic(period)
@@ -95,16 +84,8 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     }
 
     private void getSavedCoordinates() {
-        getCoordinateKeys();
-        latitude = preferences.getFloat(latKey,  0.00f);
-        longitude = preferences.getFloat(lonKey,  0.00f);
-    }
-
-    private void getCoordinateKeys() {
-        if (latKey == null)
-            latKey = resources.getString(R.string.preference_latitude_key);
-        if (lonKey == null)
-            lonKey = resources.getString(R.string.preference_longitude_key);
+        latitude = preferences.getFloat(R.string.preference_latitude_key,  0.00f);
+        longitude = preferences.getFloat(R.string.preference_longitude_key,  0.00f);
     }
 
     @Override
@@ -125,11 +106,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
     }
 
     private void saveData(WeatherData weatherData) {
-        SharedPreferences.Editor prefsEditor = preferences.edit();
         weatherData.setUpdateTime(System.currentTimeMillis() / 1000);
-        String currentConditionsJson = gson.toJson(weatherData);
-        prefsEditor.putString(resources.getString(R.string.preference_weather_data_key),
-                currentConditionsJson);
-        prefsEditor.apply();
+        preferences.putWeatherData(weatherData);
     }
 }

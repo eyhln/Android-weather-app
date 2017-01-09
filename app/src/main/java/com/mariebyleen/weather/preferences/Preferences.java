@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 import com.google.gson.Gson;
+import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import javax.inject.Inject;
 
@@ -37,6 +39,25 @@ public class Preferences {
         String tag = getTag(tagStringResource);
         return preferences.getFloat(tag, defaultValue);
     }
+
+    public String getString(int tagStringResource, String defaultValue) {
+        String tag = getTag(tagStringResource);
+        return preferences.getString(tag, defaultValue);
+    }
+
+    public void putWeatherData(WeatherData weatherData) {
+        String tag = getTag(R.string.preference_weather_data_key);
+        String currentConditionsJson = gson.toJson(weatherData);
+        editor.putString(tag, currentConditionsJson);
+        editor.apply();
+    }
+
+    /*
+    public WeatherData getWeatherData() {
+        String tag = getTag(R.string.preference_weather_data_key);
+
+    }
+    */
 
 
 }
