@@ -23,7 +23,7 @@ public class Preferences {
         editor = preferences.edit();
     }
 
-    private String getTag(int tagStringResource) {
+    public String getTag(int tagStringResource) {
         return resources.getString(tagStringResource);
     }
 

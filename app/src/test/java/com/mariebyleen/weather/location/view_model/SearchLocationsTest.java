@@ -59,8 +59,8 @@ public class SearchLocationsTest {
 
     @Test
     public void savesCoordinatesFromModel() {
-        when(resources.getString(R.string.preference_latitude_key)).thenReturn("lat");
-        when(resources.getString(R.string.preference_longitude_key)).thenReturn("lon");
+        when(preferences.getTag(R.string.preference_latitude_key)).thenReturn("lat");
+        when(preferences.getTag(R.string.preference_longitude_key)).thenReturn("lon");
 
         SearchLocations model = createFakeModel("Test", "Test", "Test", "12.345", "12.345");
         viewModel.setModel(model);
