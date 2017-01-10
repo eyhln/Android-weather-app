@@ -7,13 +7,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.api.GeoNamesApiService;
-import com.mariebyleen.weather.job.WeatherDataService;
+import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocation;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.preferences.Preferences;
+import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,13 +28,15 @@ import rx.schedulers.Schedulers;
 
 public class LocationViewModel extends BaseObservable {
 
+    private final String TAG = "LocationViewModel";
+
     private final int NUM_SUGGESTIONS = 8;
 
     private WeatherLocation location;
     private LocationViewContract view;
     private GeoNamesApiService apiService;
     private Preferences preferences;
-    private WeatherDataService weatherDataService;
+    private OpenWeatherCaller caller;
 
     private Subscription locationTextViewSub;
     private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
@@ -42,18 +44,20 @@ public class LocationViewModel extends BaseObservable {
 
     private SearchLocations model;
 
+    private float latitude;
+    private float longitude;
+
     @Inject
     public LocationViewModel(LocationViewContract view,
                              WeatherLocation location,
                              GeoNamesApiService apiService,
                              Preferences preferences,
-                             WeatherDataService weatherDataService) {
+                             OpenWeatherCaller caller) {
         this.location = location;
         this.view = view;
         this.apiService = apiService;
         this.preferences = preferences;
-        this.weatherDataService = weatherDataService;
-
+        this.caller = caller;
     }
 
     public void setModel(SearchLocations searchLocations) {
@@ -144,8 +148,25 @@ public class LocationViewModel extends BaseObservable {
 
     public void selectSearchLocation() {
         saveSearchLocationCoordinates();
-        weatherDataService.scheduleOneOffUpdate();
-        view.navigateToMainActivity();
+        caller.getWeatherObservable(latitude, longitude)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<WeatherData>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.i(TAG, "WeatherData data saved");
+                        view.navigateToMainActivity(latitude, longitude);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "Error retrieving weather data: \n" + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(WeatherData weatherData) {
+                        caller.saveData(weatherData);
+                    }
+                });
     }
 
     public void saveSearchLocationCoordinates() {
@@ -162,9 +183,10 @@ public class LocationViewModel extends BaseObservable {
     private void saveCoordinates(int index) {
         SearchLocation selectedLocation = model.getGeonames()[index];
         float lat = Float.parseFloat(selectedLocation.getLat());
-        preferences.putFloat(R.string.preference_latitude_key, lat);
+        latitude = lat;
         float lon = Float.parseFloat(selectedLocation.getLng());
-        preferences.putFloat(R.string.preference_longitude_key, lon);
+        longitude = lon;
+        preferences.putCoordinates(lat, lon);
     }
 
     public void useCurrentLocation() {

@@ -11,10 +11,12 @@ import com.evernote.android.job.JobManager;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.job.WeatherJobCreator;
 import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.preferences.Preferences;
+import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
 
 import java.util.concurrent.TimeUnit;
 
@@ -62,6 +64,14 @@ public class ApplicationModule {
     @Provides
     JobCreator provideJobCreator() {
         return new WeatherJobCreator();
+    }
+
+    @Singleton
+    @Provides
+    OpenWeatherCaller provideOpenWeatherCaller(WeatherMapper mapper,
+                                               OpenWeatherApiService weatherApiService,
+                                               Preferences preferences) {
+        return new OpenWeatherCaller(mapper, weatherApiService, preferences);
     }
 
     @Singleton
@@ -158,4 +168,5 @@ public class ApplicationModule {
     Navigator provideNavigator() {
         return new Navigator();
     }
+
 }

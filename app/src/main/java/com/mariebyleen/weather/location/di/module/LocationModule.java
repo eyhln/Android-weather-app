@@ -10,8 +10,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.mariebyleen.weather.api.GeoNamesApiService;
+import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.location.model.LocationFetcher;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
@@ -40,8 +40,8 @@ public class LocationModule {
     LocationViewModel provideLocationViewModel(WeatherLocation location,
                                                GeoNamesApiService apiService,
                                                Preferences preferences,
-                                               WeatherDataService weatherDataService) {
-        return new LocationViewModel(view, location, apiService, preferences, weatherDataService);
+                                               OpenWeatherCaller caller) {
+        return new LocationViewModel(view, location, apiService, preferences, caller);
     }
 
     @PerActivity
