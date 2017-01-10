@@ -40,7 +40,7 @@ public class WeatherDataUpdateJob extends Job implements Observer<WeatherData> {
 
     public static JobRequest buildOneOffUpdateJobRequest() {
         return new JobRequest.Builder(TAG)
-                .setExecutionWindow(2000, 3000)
+                .setExecutionWindow(10, 100)
                 .build();
     }
 
