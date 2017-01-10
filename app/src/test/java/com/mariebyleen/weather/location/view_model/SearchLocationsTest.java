@@ -1,16 +1,10 @@
 package com.mariebyleen.weather.location.view_model;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 
-import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
-import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.api.GeoNamesApiService;
-import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocation;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
-import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.preferences.Preferences;
 
 import org.junit.Before;
@@ -30,38 +24,21 @@ public class SearchLocationsTest {
 
     @Mock
     LocationViewContract view;
-    @Mock
-    WeatherLocation location;
-    @Mock
-    GeoNamesApiService apiService;
-    @Mock
-    WeatherDataService weatherDataService;
-    @Mock
-    Resources resources;
-
 
     private LocationViewModel viewModel;
 
-
     private SharedPreferences sharedPreferences;
     private Preferences preferences;
-    private Gson gson;
 
     @Before
     public void init() {
         sharedPreferences = new FakeSharedPreferences();
-        gson = new Gson();
-        preferences = new Preferences(sharedPreferences, resources, gson);
-        viewModel = new LocationViewModel(view, location, apiService, preferences, weatherDataService);
-
-
+        preferences = new Preferences(sharedPreferences, null, null);
+        viewModel = new LocationViewModel(view, null, null, preferences, null);
     }
 
     @Test
     public void savesCoordinatesFromModel() {
-        when(preferences.getTag(R.string.preference_latitude_key)).thenReturn("lat");
-        when(preferences.getTag(R.string.preference_longitude_key)).thenReturn("lon");
-
         SearchLocations model = createFakeModel("Test", "Test", "Test", "12.345", "12.345");
         viewModel.setModel(model);
 
@@ -69,8 +46,8 @@ public class SearchLocationsTest {
 
         viewModel.saveSearchLocationCoordinates();
 
-        assertEquals(12.345f, preferences.getFloat(R.string.preference_latitude_key, 0.00f));
-        assertEquals(12.345f, preferences.getFloat(R.string.preference_longitude_key, 0.00f));
+        assertEquals(12.345f, preferences.getLatitude());
+        assertEquals(12.345f, preferences.getLongitude());
     }
 
     private SearchLocations createFakeModel(String name, String stateName, String countryName,

@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.api.OpenWeatherApiService;
+import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponseMain;
@@ -43,18 +44,20 @@ public class WeatherDataUpdateJobTest {
     @Mock
     Resources resources;
 
-    private SharedPreferences preferences;
+    private SharedPreferences sharedPreferences;
     private Gson gson;
     private WeatherMapper mapper;
+    private Preferences preferences;
 
     private WeatherDataUpdateJob job;
 
     @Before
     public void init() {
-        preferences = new FakeSharedPreferences();
+        sharedPreferences = new FakeSharedPreferences();
         gson = new Gson();
         mapper = new WeatherMapper();
-        job = new WeatherDataUpdateJob(weatherApiService, mapper, gson, preferences, resources);
+        preferences = new Preferences(sharedPreferences, resources, gson);
+        job = new WeatherDataUpdateJob(weatherApiService, mapper, preferences);
     }
 
     @Test
@@ -79,7 +82,7 @@ public class WeatherDataUpdateJobTest {
     }
 
         private void setCoordinateValues() {
-            FakeSharedPreferences.Editor editor = preferences.edit();
+            FakeSharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putFloat("lat", 0);
             editor.putFloat("lon", 0);
         }
@@ -112,7 +115,7 @@ public class WeatherDataUpdateJobTest {
 
         job.onNext(saveWeatherData);
 
-        String weatherJson = preferences.getString("WeatherData", "");
+        String weatherJson = sharedPreferences.getString("WeatherData", "");
         WeatherData retrieveWeatherData = gson.fromJson(weatherJson, WeatherData.class);
         assertEquals(saveWeatherData.getTemperature(), retrieveWeatherData.getTemperature());
     }
