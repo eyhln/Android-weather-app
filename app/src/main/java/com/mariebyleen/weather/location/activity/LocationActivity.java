@@ -21,7 +21,7 @@ import com.mariebyleen.weather.databinding.ActivityLocationBinding;
 import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
 import com.mariebyleen.weather.location.view_model.LocationViewContract;
-import com.mariebyleen.weather.location.view_model.LocationViewModel;
+import com.mariebyleen.weather.location.view_model.LocationPresenter;
 import com.mariebyleen.weather.navigation.Navigator;
 
 import javax.inject.Inject;
@@ -46,7 +46,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     Spinner spinner;
 
     @Inject
-    LocationViewModel viewModel;
+    LocationPresenter viewModel;
     @Inject
     Navigator navigator;
 

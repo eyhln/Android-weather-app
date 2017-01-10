@@ -28,9 +28,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class LocationViewModel extends BaseObservable {
+public class LocationPresenter extends BaseObservable {
 
-    private final String TAG = "LocationViewModel";
+    private final String TAG = "LocationPresenter";
 
     private final int NUM_SUGGESTIONS = 8;
 
@@ -52,7 +52,7 @@ public class LocationViewModel extends BaseObservable {
     private float longitude;
 
     @Inject
-    public LocationViewModel(LocationViewContract view,
+    public LocationPresenter(LocationViewContract view,
                              WeatherLocation location,
                              GeoNamesApiService apiService,
                              Preferences preferences,

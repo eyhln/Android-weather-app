@@ -25,7 +25,7 @@ public class SearchLocationsTest {
     @Mock
     LocationViewContract view;
 
-    private LocationViewModel viewModel;
+    private LocationPresenter viewModel;
 
     private SharedPreferences sharedPreferences;
     private Preferences preferences;
@@ -34,7 +34,7 @@ public class SearchLocationsTest {
     public void init() {
         sharedPreferences = new FakeSharedPreferences();
         preferences = new Preferences(sharedPreferences, null, null);
-        viewModel = new LocationViewModel(view, null, null, preferences, null);
+        viewModel = new LocationPresenter(view, null, null, preferences, null);
     }
 
     @Test
