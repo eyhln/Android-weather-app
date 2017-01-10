@@ -29,35 +29,52 @@ public class Preferences {
         return resources.getString(tagStringResource);
     }
 
-    public void putFloat(int tagStringResource, float value) {
-        String tag = getTag(tagStringResource);
-        editor.putFloat(tag, value);
-        editor.apply();
+    public void putCoordinates(float lat, float lon) {
+        editor.putFloat("lat", lat);
+        editor.putFloat("lon", lon);
+        editor.commit();
     }
 
-    public float getFloat(int tagStringResource, float defaultValue) {
-        String tag = getTag(tagStringResource);
-        return preferences.getFloat(tag, defaultValue);
+    public float getLatitude() {
+        return preferences.getFloat("lat", 0.00f);
     }
 
-    public String getString(int tagStringResource, String defaultValue) {
-        String tag = getTag(tagStringResource);
-        return preferences.getString(tag, defaultValue);
+    public float getLongitude() {
+        return preferences.getFloat("lon", 0.00f);
     }
 
     public void putWeatherData(WeatherData weatherData) {
-        String tag = getTag(R.string.preference_weather_data_key);
         String currentConditionsJson = gson.toJson(weatherData);
-        editor.putString(tag, currentConditionsJson);
+        editor.putString("WeatherData", currentConditionsJson);
         editor.apply();
     }
 
-    /*
     public WeatherData getWeatherData() {
-        String tag = getTag(R.string.preference_weather_data_key);
-
+        String weatherJson = preferences.getString("WeatherData", "");
+        if (weatherJson.equals(""))
+            return new WeatherData();
+        return gson.fromJson(weatherJson,
+                WeatherData.class);
     }
-    */
+
+    public String getTempUnitsPreferenceCode() {
+        String tag = getTag(R.string.preference_units_of_measurement_key);
+        return preferences.getString(tag, "");
+    }
+
+    public String getWindSpeedUnits() {
+        String tag = getTag(R.string.preference_speed_units_key);
+        String speedUnits = preferences.getString(tag, null);
+        if (speedUnits != null)
+            return speedUnits;
+        else return "";
+    }
+
+    public int getUpdatePeriod() {
+        String tag = getTag(R.string.preference_update_period_key);
+        String periodString = preferences.getString(tag, "900000");
+        return Integer.parseInt(periodString);
+    }
 
 
 }

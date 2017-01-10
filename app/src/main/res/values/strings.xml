@@ -42,11 +42,6 @@
     <string name="fahrenheit">F</string>
     <string name="celsius">C</string>
 
-    <string name="preference_weather_data_key">
-        <xliff:g id="preference_key">WeatherData</xliff:g>
-    </string>
-
-
     // LOCATION
 
     // Headings
@@ -59,15 +54,6 @@
     <string name="select_location">Select</string>
 
     <string name="find_current_location_progress_dialog">Finding Location&#8230;</string>
-
-    <string name="preference_latitude_key">
-        <xliff:g id="preference_key">lat</xliff:g>
-    </string>
-
-    <string name="preference_longitude_key">
-        <xliff:g id="preference_key">lon</xliff:g>
-    </string>
-
 
     // SETTINGS
 
