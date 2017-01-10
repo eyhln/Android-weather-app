@@ -1,7 +1,5 @@
 package com.mariebyleen.weather.location.view_model;
 
-import android.database.Cursor;
-
 public interface LocationViewContract  {
 
     void checkPermissions();
@@ -10,6 +8,5 @@ public interface LocationViewContract  {
     String getSearchTextViewText();
     void navigateToMainActivity();
     void showCouldNotGetDataErrorMessage();
-    void displayRecentLocationsData(Cursor cursor);
 
 }

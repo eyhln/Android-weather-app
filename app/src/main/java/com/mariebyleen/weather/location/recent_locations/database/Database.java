@@ -19,7 +19,7 @@ import static com.mariebyleen.weather.location.recent_locations.database.RecentL
 public class Database {
 
     private final int MAX_ROWS = 10;
-    private final int NO_MATCH_FOUND = -100;
+    private final int NO_MATCH_FOUND = -1000;
 
     private RecentLocationsDbHelper dbHelper;
 
@@ -33,7 +33,7 @@ public class Database {
         if (recentLocations.length >= MAX_ROWS) {
             dbWrite.execSQL(SQL_DELETE_OLDEST_ENTRY);
         }
-        int positionOfMatch = nameToInsertAlreadyInList(name, recentLocations);
+        int positionOfMatch = matchingEntryAlreadyListed(name, recentLocations);
         if (positionOfMatch != NO_MATCH_FOUND) {
             Object[] matchingName = new Object[1];
             matchingName[0] = recentLocations[positionOfMatch].getName();
@@ -42,7 +42,7 @@ public class Database {
         addRow(name, lat, lon);
     }
 
-        private int nameToInsertAlreadyInList(String name, RecentLocation[] recentLocations) {
+        private int matchingEntryAlreadyListed(String name, RecentLocation[] recentLocations) {
             for (int i = 0; i < recentLocations.length; i++) {
                 if (name.equals(recentLocations[i].getName()))
                     return i;
@@ -85,12 +85,6 @@ public class Database {
             cursor.moveToNext();
         }
         return recentLocations;
-    }
-
-    public String[] getRecentLocationNames() {
-        Cursor cursor = getAllEntriesNewestFirst();
-        int numRows = getRowCount();
-        return readCursorDataNamesToStringArray(cursor, numRows);
     }
 
     private String[] readCursorDataNamesToStringArray(Cursor cursor, int numRows) {

@@ -51,6 +51,8 @@ public class LocationPresenter extends BaseObservable {
     private float latitude;
     private float longitude;
 
+    private RecentLocation[] recentLocations;
+
     @Inject
     public LocationPresenter(LocationViewContract view,
                              WeatherLocation location,
@@ -155,6 +157,10 @@ public class LocationPresenter extends BaseObservable {
     public void selectSearchLocation() {
         saveSearchLocationCoordinates();
         database.insertRecentLocation(name, latitude, longitude);
+        updateWeatherData(latitude, longitude);
+    }
+
+    private void updateWeatherData(float latitude, float longitude) {
         caller.getWeatherObservable(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<WeatherData>() {
@@ -200,11 +206,25 @@ public class LocationPresenter extends BaseObservable {
 
     public String[] getRecentLocationNames() {
         RecentLocation[] recentLocations = database.getRecentLocations();
+        this.recentLocations = recentLocations;
         String[] names = new String[recentLocations.length];
         for (int i = 0; i< recentLocations.length; i++) {
             names[i] = recentLocations[i].getName();
         }
         return names;
+    }
+
+    public void selectRecentLocation(String selection) {
+        if (recentLocations != null) {
+            for (int i = 0; i< recentLocations.length; i++) {
+                String name = recentLocations[i].getName();
+                float lat = recentLocations[i].getLat();
+                float lon = recentLocations[i].getLon();
+                if (selection.equals(name))
+                    database.insertRecentLocation(name, lat, lon);
+                    updateWeatherData(lat,lon);
+            }
+        }
     }
 
     public void useCurrentLocation() {

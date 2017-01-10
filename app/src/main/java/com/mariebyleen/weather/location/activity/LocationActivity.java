@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -20,8 +19,8 @@ import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityLocationBinding;
 import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
-import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.view_model.LocationPresenter;
+import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.navigation.Navigator;
 
 import javax.inject.Inject;
@@ -46,7 +45,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     Spinner spinner;
 
     @Inject
-    LocationPresenter viewModel;
+    LocationPresenter locationPresenter;
     @Inject
     Navigator navigator;
 
@@ -72,11 +71,11 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     private void onCreateSetupDataBinding() {
         ActivityLocationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_location);
-        binding.setViewModel(viewModel);
+        binding.setViewModel(locationPresenter);
     }
 
     private void onCreatePopulateSpinner() {
-        String[] recentLocations = viewModel.getRecentLocationNames();
+        String[] recentLocations = locationPresenter.getRecentLocationNames();
         ArrayAdapter<String> adapter =new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 recentLocations);
@@ -85,13 +84,13 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @Override
     protected void onResume() {
-        viewModel.setupSearchSuggestions(locationTextView, this, selectLocation);
+        locationPresenter.setupSearchSuggestions(locationTextView, this, selectLocation);
         super.onResume();
     }
 
     @OnClick(R.id.button_use_current_location)
     public void useCurrentLocation() {
-        viewModel.useCurrentLocation();
+        locationPresenter.useCurrentLocation();
     }
 
     public void disableUseCurrentLocationOption() {
@@ -115,9 +114,9 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
             case PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    viewModel.onLocationPermissionGranted();
+                    locationPresenter.onLocationPermissionGranted();
                 } else {
-                    viewModel.onLocationPermissionDenied();
+                    locationPresenter.onLocationPermissionDenied();
                 }
                 return;
             }
@@ -135,7 +134,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @OnClick(R.id.button_select_search_location)
     public void selectSearchLocation() {
-        viewModel.selectSearchLocation();
+        locationPresenter.selectSearchLocation();
     }
 
     public String getSearchTextViewText() {
@@ -150,13 +149,15 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
         Toast.makeText(this, R.string.could_not_get_data_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    public void displayRecentLocationsData(Cursor cursor) {
-
+    @OnClick(R.id.button_select_recent_location)
+    public void onClickSelectRecentLocation() {
+        String selection = (String) spinner.getSelectedItem();
+        locationPresenter.selectRecentLocation(selection);
     }
 
     @Override
     public void onStop() {
-        viewModel.onViewStop();
+        locationPresenter.onViewStop();
         super.onStop();
     }
 }
