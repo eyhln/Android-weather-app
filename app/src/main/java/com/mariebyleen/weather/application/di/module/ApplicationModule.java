@@ -14,6 +14,7 @@ import com.mariebyleen.weather.api.OpenWeatherApiService;
 import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.job.WeatherJobCreator;
+import com.mariebyleen.weather.location.recent_locations.database.RecentLocationsDbHelper;
 import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
@@ -51,6 +52,12 @@ public class ApplicationModule {
                                                  Resources resources,
                                                  Preferences preferences) {
         return new WeatherDataService(jobManager, sharedPreferences, resources, preferences);
+    }
+
+    @Singleton
+    @Provides
+    RecentLocationsDbHelper provideRecentLocationsDbHelper(Context context) {
+        return new RecentLocationsDbHelper(context);
     }
 
     @Singleton

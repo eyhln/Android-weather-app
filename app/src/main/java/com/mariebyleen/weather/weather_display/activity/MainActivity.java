@@ -15,6 +15,7 @@ import android.widget.GridLayout;
 import android.widget.ToggleButton;
 
 import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityMainBinding;
 import com.mariebyleen.weather.job.WeatherDataService;
@@ -44,6 +45,8 @@ public class MainActivity extends BaseActivity {
     CurrentConditionsViewModel viewModel;
     @Inject
     Navigator navigator;
+    @Inject
+    OpenWeatherCaller caller;
     @Inject
     ForecastRecyclerAdapter adapter;
 

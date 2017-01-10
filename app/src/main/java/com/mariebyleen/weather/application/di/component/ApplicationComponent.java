@@ -9,6 +9,7 @@ import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.application.di.module.ApplicationModule;
 import com.mariebyleen.weather.job.WeatherJobCreator;
+import com.mariebyleen.weather.location.recent_locations.database.RecentLocationsDbHelper;
 import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.preferences.Preferences;
 
@@ -28,6 +29,7 @@ public interface ApplicationComponent {
     Navigator exposeNavigator();
     JobManager exposeJobManager();
     GeoNamesApiService exposeGeoNamesApiService();
+    RecentLocationsDbHelper exposeRecentLocationsDbHelper();
 
     void inject(WeatherJobCreator weatherJobCreator);
 }

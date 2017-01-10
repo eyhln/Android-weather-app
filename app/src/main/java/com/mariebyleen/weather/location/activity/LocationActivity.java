@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -11,6 +12,8 @@ import android.support.v4.content.ContextCompat;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.base.BaseActivity;
@@ -37,8 +40,10 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     Button useCurrentLocation;
     @BindView(R.id.choose_location_field)
     AutoCompleteTextView locationTextView;
-    @BindView(R.id.button_select_location)
+    @BindView(R.id.button_select_search_location)
     Button selectLocation;
+    @BindView(R.id.spinner)
+    Spinner spinner;
 
     @Inject
     LocationViewModel viewModel;
@@ -55,6 +60,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
         onCreateResolveDaggerDependency();
         onCreateSetupDataBinding();
         ButterKnife.bind(this);
+        onCreatePopulateSpinner();
     }
 
     private void onCreateResolveDaggerDependency() {
@@ -67,6 +73,14 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     private void onCreateSetupDataBinding() {
         ActivityLocationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_location);
         binding.setViewModel(viewModel);
+    }
+
+    private void onCreatePopulateSpinner() {
+        String[] recentLocations = viewModel.getRecentLocationNames();
+        ArrayAdapter<String> adapter =new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                recentLocations);
+        spinner.setAdapter(adapter);
     }
 
     @Override
@@ -119,7 +133,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
         locationTextView.showDropDown();
     }
 
-    @OnClick(R.id.button_select_location)
+    @OnClick(R.id.button_select_search_location)
     public void selectSearchLocation() {
         viewModel.selectSearchLocation();
     }
@@ -130,6 +144,14 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     public void navigateToMainActivity() {
         navigator.navigateToMain(this);
+    }
+
+    public void showCouldNotGetDataErrorMessage() {
+        Toast.makeText(this, R.string.could_not_get_data_error_message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void displayRecentLocationsData(Cursor cursor) {
+
     }
 
     @Override

@@ -16,6 +16,8 @@ import com.mariebyleen.weather.location.model.LocationFetcher;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
 import com.mariebyleen.weather.location.model.fetcher.NetworkLocation;
+import com.mariebyleen.weather.location.recent_locations.database.Database;
+import com.mariebyleen.weather.location.recent_locations.database.RecentLocationsDbHelper;
 import com.mariebyleen.weather.location.view_model.LocationViewContract;
 import com.mariebyleen.weather.location.view_model.LocationViewModel;
 import com.mariebyleen.weather.preferences.Preferences;
@@ -40,8 +42,15 @@ public class LocationModule {
     LocationViewModel provideLocationViewModel(WeatherLocation location,
                                                GeoNamesApiService apiService,
                                                Preferences preferences,
-                                               OpenWeatherCaller caller) {
-        return new LocationViewModel(view, location, apiService, preferences, caller);
+                                               OpenWeatherCaller caller,
+                                               Database database) {
+        return new LocationViewModel(view, location, apiService, preferences, caller, database);
+    }
+
+    @PerActivity
+    @Provides
+    Database provideDatabase(RecentLocationsDbHelper dbHelper) {
+        return new Database(dbHelper);
     }
 
     @PerActivity

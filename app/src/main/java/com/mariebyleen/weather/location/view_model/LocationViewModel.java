@@ -12,6 +12,8 @@ import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocation;
 import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
 import com.mariebyleen.weather.location.model.WeatherLocation;
+import com.mariebyleen.weather.location.recent_locations.database.Database;
+import com.mariebyleen.weather.location.recent_locations.model.RecentLocation;
 import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
@@ -37,6 +39,7 @@ public class LocationViewModel extends BaseObservable {
     private GeoNamesApiService apiService;
     private Preferences preferences;
     private OpenWeatherCaller caller;
+    private Database database;
 
     private Subscription locationTextViewSub;
     private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
@@ -44,6 +47,7 @@ public class LocationViewModel extends BaseObservable {
 
     private SearchLocations model;
 
+    private String name;
     private float latitude;
     private float longitude;
 
@@ -52,12 +56,14 @@ public class LocationViewModel extends BaseObservable {
                              WeatherLocation location,
                              GeoNamesApiService apiService,
                              Preferences preferences,
-                             OpenWeatherCaller caller) {
+                             OpenWeatherCaller caller,
+                             Database database) {
         this.location = location;
         this.view = view;
         this.apiService = apiService;
         this.preferences = preferences;
         this.caller = caller;
+        this.database = database;
     }
 
     public void setModel(SearchLocations searchLocations) {
@@ -148,6 +154,7 @@ public class LocationViewModel extends BaseObservable {
 
     public void selectSearchLocation() {
         saveSearchLocationCoordinates();
+        database.insertRecentLocation(name, latitude, longitude);
         caller.getWeatherObservable(latitude, longitude)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<WeatherData>() {
@@ -160,6 +167,7 @@ public class LocationViewModel extends BaseObservable {
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "Error retrieving weather data: \n" + e.toString());
+                        view.showCouldNotGetDataErrorMessage();
                     }
 
                     @Override
@@ -172,6 +180,7 @@ public class LocationViewModel extends BaseObservable {
     public void saveSearchLocationCoordinates() {
         SearchLocation[] locationSuggestions = model.getGeonames();
         String selectedLocationName = view.getSearchTextViewText();
+        name = selectedLocationName;
 
         for (int i = 0; i < locationSuggestions.length; i++) {
             if (selectedLocationName.equals(mapLocationName(locationSuggestions[i]))) {
@@ -187,6 +196,15 @@ public class LocationViewModel extends BaseObservable {
         float lon = Float.parseFloat(selectedLocation.getLng());
         longitude = lon;
         preferences.putCoordinates(lat, lon);
+    }
+
+    public String[] getRecentLocationNames() {
+        RecentLocation[] recentLocations = database.getRecentLocations();
+        String[] names = new String[recentLocations.length];
+        for (int i = 0; i< recentLocations.length; i++) {
+            names[i] = recentLocations[i].getName();
+        }
+        return names;
     }
 
     public void useCurrentLocation() {
