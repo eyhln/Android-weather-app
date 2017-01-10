@@ -154,7 +154,7 @@ public class LocationViewModel extends BaseObservable {
                     @Override
                     public void onCompleted() {
                         Log.i(TAG, "WeatherData data saved");
-                        view.navigateToMainActivity(latitude, longitude);
+                        view.navigateToMainActivity();
                     }
 
                     @Override
