@@ -7,10 +7,11 @@ import android.content.res.Resources;
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
 import com.mariebyleen.weather.R;
+import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
-import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
+import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,10 +35,11 @@ public class CurrentConditionsDataFormattingTest {
     Resources resources;
 
     private WeatherData data;
-    private SharedPreferences preferences;
+    private SharedPreferences sharedPreferences;
     private Gson gson;
     private SavedDataRetriever savedDataRetriever;
     private DisplayDataFormatter formatter;
+    private Preferences preferences;
     private CurrentConditionsViewModel viewModel;
 
     private final double WARM_DAY_KELVIN = 300.0;
@@ -46,17 +48,18 @@ public class CurrentConditionsDataFormattingTest {
 
     @Before
     public void init() {
-        preferences = new FakeSharedPreferences();
+        sharedPreferences = new FakeSharedPreferences();
         gson = new Gson();
-        savedDataRetriever = new SavedDataRetriever(preferences, gson, resources, formatter);
+        preferences = new Preferences(sharedPreferences, resources, gson);
+        savedDataRetriever = new SavedDataRetriever(preferences, resources, formatter);
         formatter = new DisplayDataFormatter();
-        viewModel = new CurrentConditionsViewModel(preferences, savedDataRetriever, formatter);
+        viewModel = new CurrentConditionsViewModel(sharedPreferences, savedDataRetriever, formatter);
         data = new WeatherData();
     }
 
     @Test
     public void EmptyStringPreferenceTemperatureFormat_inCelsius() {
-        preferences.edit().putString("UNITS", "0").apply();
+        sharedPreferences.edit().putString("UNITS", "0").apply();
         testTemperatureFormat("", WARM_DAY_CELSIUS);
     }
 
@@ -102,7 +105,7 @@ public class CurrentConditionsDataFormattingTest {
     private void setUpUnitsPreference(String unitsCode) {
         when(resources.getString(R.string.preference_units_of_measurement_key))
                 .thenReturn("UNITS");
-        preferences.edit().putString("UNITS", unitsCode).apply();
+        sharedPreferences.edit().putString("UNITS", unitsCode).apply();
         viewModel.onViewResume();
     }
 

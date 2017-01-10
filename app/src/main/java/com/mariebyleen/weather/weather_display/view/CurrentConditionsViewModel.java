@@ -80,7 +80,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public boolean getUseFahrenheit() {
-        return useFahrenheitState;
+        return savedData.unitsPrefSetToFahrenheit();
     }
 
     @Bindable

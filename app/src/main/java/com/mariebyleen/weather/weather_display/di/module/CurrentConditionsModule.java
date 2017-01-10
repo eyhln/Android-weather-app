@@ -3,12 +3,12 @@ package com.mariebyleen.weather.weather_display.di.module;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 
-import com.google.gson.Gson;
 import com.mariebyleen.weather.application.di.scope.PerActivity;
-import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
+import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.activity.ForecastRecyclerAdapter;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
+import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -34,11 +34,10 @@ public class CurrentConditionsModule {
 
     @PerActivity
     @Provides
-    SavedDataRetriever provideSavedDataRetriever(SharedPreferences preferences,
-                                                 Gson gson,
+    SavedDataRetriever provideSavedDataRetriever(Preferences preferences,
                                                  Resources resources,
                                                  DisplayDataFormatter formatter) {
-        return new SavedDataRetriever(preferences, gson, resources, formatter);
+        return new SavedDataRetriever(preferences, resources, formatter);
     }
 
     @PerActivity
