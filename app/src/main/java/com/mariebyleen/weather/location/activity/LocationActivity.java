@@ -19,8 +19,8 @@ import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityLocationBinding;
 import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
-import com.mariebyleen.weather.location.view_model.LocationPresenter;
-import com.mariebyleen.weather.location.view_model.LocationViewContract;
+import com.mariebyleen.weather.location.presenter.LocationPresenter;
+import com.mariebyleen.weather.location.presenter.LocationViewContract;
 import com.mariebyleen.weather.navigation.Navigator;
 
 import javax.inject.Inject;

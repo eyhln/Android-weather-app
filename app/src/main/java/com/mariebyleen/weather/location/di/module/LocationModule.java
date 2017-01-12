@@ -17,9 +17,11 @@ import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
 import com.mariebyleen.weather.location.model.fetcher.NetworkLocation;
 import com.mariebyleen.weather.location.recent_locations.database.Database;
+import com.mariebyleen.weather.location.recent_locations.database.DatabaseReadWrite;
+import com.mariebyleen.weather.location.recent_locations.database.DatabaseReadWriteImpl;
 import com.mariebyleen.weather.location.recent_locations.database.RecentLocationsDbHelper;
-import com.mariebyleen.weather.location.view_model.LocationViewContract;
-import com.mariebyleen.weather.location.view_model.LocationPresenter;
+import com.mariebyleen.weather.location.presenter.LocationViewContract;
+import com.mariebyleen.weather.location.presenter.LocationPresenter;
 import com.mariebyleen.weather.preferences.Preferences;
 
 import dagger.Module;
@@ -49,8 +51,14 @@ public class LocationModule {
 
     @PerActivity
     @Provides
-    Database provideDatabase(RecentLocationsDbHelper dbHelper) {
-        return new Database(dbHelper);
+    Database provideDatabase(DatabaseReadWrite db) {
+        return new Database(db);
+    }
+
+    @PerActivity
+    @Provides
+    DatabaseReadWrite provideDatabaseReadWrite(RecentLocationsDbHelper dbHelper) {
+        return new DatabaseReadWriteImpl(dbHelper);
     }
 
     @PerActivity

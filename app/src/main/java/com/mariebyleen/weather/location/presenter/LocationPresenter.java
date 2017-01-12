@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.location.view_model;
+package com.mariebyleen.weather.location.presenter;
 
 import android.app.Activity;
 import android.databinding.BaseObservable;
@@ -221,7 +221,6 @@ public class LocationPresenter extends BaseObservable {
                 float lat = recentLocations[i].getLat();
                 float lon = recentLocations[i].getLon();
                 if (selection.equals(name))
-                    database.insertRecentLocation(name, lat, lon);
                     updateWeatherData(lat,lon);
             }
         }

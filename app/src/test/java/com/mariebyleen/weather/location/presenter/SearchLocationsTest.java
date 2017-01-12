@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.location.view_model;
+package com.mariebyleen.weather.location.presenter;
 
 import android.content.SharedPreferences;
 
@@ -34,7 +34,7 @@ public class SearchLocationsTest {
     public void init() {
         sharedPreferences = new FakeSharedPreferences();
         preferences = new Preferences(sharedPreferences, null, null);
-        viewModel = new LocationPresenter(view, null, null, preferences, null);
+        viewModel = new LocationPresenter(view, null, null, preferences, null, null);
     }
 
     @Test
