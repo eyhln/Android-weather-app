@@ -53,14 +53,14 @@ public class PreferencesTest {
     @Test
     public void testPutLongitude() {
         preferences.putCoordinates(0.000f, 12.345f);
-        assertEquals(-12.345f, sharedPreferences.getFloat("lon", 0.00f));
+        assertEquals(12.345f, sharedPreferences.getFloat("lon", 0.00f));
     }
 
     @Test
     public void testGetLongitude() {
-        sharedPreferences.edit().putFloat("lon", 12.345f).apply();
+        sharedPreferences.edit().putFloat("lon", -12.345f).apply();
         float value = preferences.getLongitude();
-        assertEquals(12.345f, value);
+        assertEquals(-12.345f, value);
     }
 
     @Test

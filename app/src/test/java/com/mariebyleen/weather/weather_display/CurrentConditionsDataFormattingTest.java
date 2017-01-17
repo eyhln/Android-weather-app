@@ -70,7 +70,7 @@ public class CurrentConditionsDataFormattingTest {
 
     @Test
     public void TemperatureFormat_inFahrenheit() {
-        testTemperatureFormat("1", WARM_DAY_FAHRENHEIT);
+        testTemperatureFormat("Fahrenheit", WARM_DAY_FAHRENHEIT);
     }
 
     private void testTemperatureFormat(String unitsCode, String expected) {
@@ -86,12 +86,12 @@ public class CurrentConditionsDataFormattingTest {
 
     @Test
     public void UnitsIndicator_inCelsius() {
-        testUnitsIndicatorFormat("0", false);
+        testUnitsIndicatorFormat("Celsius", false);
     }
 
     @Test
     public void UnitsIndicator_inFahrenheit() {
-        testUnitsIndicatorFormat("1", true);
+        testUnitsIndicatorFormat("Fahrenheit", true);
     }
 
     private void testUnitsIndicatorFormat(String unitsCode, boolean useFahrenheit) {
