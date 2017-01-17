@@ -5,6 +5,7 @@ import android.content.res.Resources;
 
 import com.google.gson.Gson;
 import com.mariebyleen.weather.FakeSharedPreferences;
+import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import org.junit.Before;
@@ -16,6 +17,7 @@ import org.mockito.junit.MockitoRule;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 public class PreferencesTest {
 
@@ -69,22 +71,40 @@ public class PreferencesTest {
 
         preferences.putWeatherData(weatherData);
 
-        String weatherJson = sharedPreferences.getString("WeatherData", "");
-        WeatherData retrieveWeatherData = gson.fromJson(weatherJson, WeatherData.class);
+        WeatherData retrieveWeatherData = getSavedWeatherData();
         assertNotNull(retrieveWeatherData);
         assertTemperaturesMatch(weatherData, retrieveWeatherData);
+    }
+
+    private WeatherData getSavedWeatherData() {
+        String weatherJson = sharedPreferences.getString("WeatherData", "");
+        return gson.fromJson(weatherJson, WeatherData.class);
     }
 
     @Test
     public void testGetWeatherData() {
         WeatherData weatherData = createFakeWeatherData();
-        String currentConditionsJson = gson.toJson(weatherData);
-        sharedPreferences.edit().putString("WeatherData", currentConditionsJson).apply();
+        saveWeatherData(weatherData);
 
         WeatherData savedWeatherData = preferences.getWeatherData();
 
         assertNotNull(savedWeatherData);
         assertTemperaturesMatch(weatherData, savedWeatherData);
+    }
+
+    @Test
+    public void testGetNullWeatherData() {
+        WeatherData weatherData = null;
+        saveWeatherData(weatherData);
+
+        WeatherData savedWeatherData = preferences.getWeatherData();
+        assertNotNull(savedWeatherData);
+    }
+
+    @Test
+    public void testGetUnsavedWeatherData() {
+        WeatherData savedWeatherData = preferences.getWeatherData();
+        assertNotNull(savedWeatherData);
     }
 
     private WeatherData createFakeWeatherData() {
@@ -93,12 +113,46 @@ public class PreferencesTest {
         return weatherData;
     }
 
+    private void saveWeatherData(WeatherData weatherData) {
+        String currentConditionsJson = gson.toJson(weatherData);
+        sharedPreferences.edit().putString("WeatherData", currentConditionsJson).apply();
+    }
+
     private void assertTemperaturesMatch(WeatherData expected, WeatherData test) {
         assertEquals(expected.getTemperature(), test.getTemperature());
     }
 
     @Test
     public void testGetTempUnitsPreferenceCode() {
-
+        String expected = "Fahrenheit";
+        sharedPreferences.edit().putString("UNITS", expected).apply();
+        when(resources.getString(R.string.preference_units_of_measurement_key)).thenReturn("UNITS");
+        String code = preferences.getTempUnitsPreferenceCode();
+        assertEquals(expected, code);
     }
+
+    @Test
+    public void testGetWindSpeedUnits() {
+        String expected = "mph";
+        sharedPreferences.edit().putString("SPEED_UNITS", expected).apply();
+        when(resources.getString(R.string.preference_speed_units_key)).thenReturn("SPEED_UNITS");
+        String units = preferences.getWindSpeedUnits();
+        assertEquals(expected, units);
+    }
+
+    @Test
+    public void testGetUpdatePeriod() {
+        sharedPreferences.edit().putString("UPDATE_PERIOD", "1500").apply();
+        when(resources.getString(R.string.preference_update_period_key)).thenReturn("UPDATE_PERIOD");
+        int period =  preferences.getUpdatePeriod();
+        assertEquals(1500, period);
+    }
+
+    @Test
+    public void testGetUnsavedUpdatePeriodReturnsDefault() {
+        when(resources.getString(R.string.preference_update_period_key)).thenReturn("UPDATE_PERIOD");
+        int period = preferences.getUpdatePeriod();
+        assertEquals(900000, period);
+    }
+
 }
