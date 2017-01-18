@@ -51,10 +51,11 @@ public class Preferences {
 
     public WeatherData getWeatherData() {
         String weatherJson = preferences.getString("WeatherData", "");
-        if (weatherJson.equals(""))
+        WeatherData weatherData = gson.fromJson(weatherJson, WeatherData.class);
+        if (weatherData == null || weatherJson.equals(""))
             return new WeatherData();
-        return gson.fromJson(weatherJson,
-                WeatherData.class);
+
+        return weatherData;
     }
 
     public String getTempUnitsPreferenceCode() {
@@ -64,10 +65,7 @@ public class Preferences {
 
     public String getWindSpeedUnits() {
         String tag = getTag(R.string.preference_speed_units_key);
-        String speedUnits = preferences.getString(tag, null);
-        if (speedUnits != null)
-            return speedUnits;
-        else return "";
+        return preferences.getString(tag, "");
     }
 
     public int getUpdatePeriod() {
@@ -75,6 +73,4 @@ public class Preferences {
         String periodString = preferences.getString(tag, "900000");
         return Integer.parseInt(periodString);
     }
-
-
 }
