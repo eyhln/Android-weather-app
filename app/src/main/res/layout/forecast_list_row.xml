@@ -41,7 +41,7 @@
 
         <TextView
             android:text="@{viewModel.description}"
-            android:layout_width="100dp"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:id="@+id/textView9"
             tools:text="Clear sky"
