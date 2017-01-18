@@ -48,10 +48,9 @@ public class ApplicationModule {
     @Singleton
     @Provides
     WeatherDataService provideWeatherDataService(JobManager jobManager,
-                                                 SharedPreferences sharedPreferences,
                                                  Resources resources,
                                                  Preferences preferences) {
-        return new WeatherDataService(jobManager, sharedPreferences, resources, preferences);
+        return new WeatherDataService(jobManager, resources, preferences);
     }
 
     @Singleton

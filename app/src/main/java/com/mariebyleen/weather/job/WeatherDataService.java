@@ -13,15 +13,12 @@ import javax.inject.Inject;
 public class WeatherDataService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private JobManager jobManager;
-    private SharedPreferences sharedPreferences;
     private Resources resources;
     private Preferences preferences;
 
     @Inject
-    public WeatherDataService(JobManager jobManager, SharedPreferences sharedPreferences,
-                              Resources resources, Preferences preferences) {
+    public WeatherDataService(JobManager jobManager, Resources resources, Preferences preferences) {
         this.jobManager = jobManager;
-        this.sharedPreferences = sharedPreferences;
         this.resources = resources;
         this.preferences = preferences;
     }
