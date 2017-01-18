@@ -22,7 +22,7 @@ import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.navigation.Navigator;
 import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
-import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.view_model.CurrentConditionsViewModel;
 
 import javax.inject.Inject;
 

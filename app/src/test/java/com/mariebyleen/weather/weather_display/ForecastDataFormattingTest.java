@@ -8,7 +8,7 @@ import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.model.mapped.DailyForecast;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
-import com.mariebyleen.weather.weather_display.view.ForecastViewModel;
+import com.mariebyleen.weather.weather_display.view_model.ForecastViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;

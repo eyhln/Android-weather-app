@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.weather_display.view;
+package com.mariebyleen.weather.weather_display.view_model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;

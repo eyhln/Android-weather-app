@@ -8,7 +8,7 @@ import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.activity.ForecastRecyclerAdapter;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
-import com.mariebyleen.weather.weather_display.view.CurrentConditionsViewModel;
+import com.mariebyleen.weather.weather_display.view_model.CurrentConditionsViewModel;
 
 import dagger.Module;
 import dagger.Provides;

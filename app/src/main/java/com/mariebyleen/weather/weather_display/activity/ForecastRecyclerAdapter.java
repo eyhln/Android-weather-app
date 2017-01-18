@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.mariebyleen.weather.BR;
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.weather_display.view.ForecastViewModel;
+import com.mariebyleen.weather.weather_display.view_model.ForecastViewModel;
 import com.mariebyleen.weather.weather_display.util.SavedDataRetriever;
 
 
