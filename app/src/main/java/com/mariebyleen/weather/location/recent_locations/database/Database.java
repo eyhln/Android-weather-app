@@ -35,9 +35,11 @@ public class Database {
     }
 
     private int matchingEntryAlreadyListed(String name, RecentLocation[] recentLocations) {
-        for (int i = 0; i < recentLocations.length; i++) {
-            if (name.equals(recentLocations[i].getName()))
-                return i;
+        if (recentLocations != null) {
+            for (int i = 0; i < recentLocations.length; i++) {
+                if (name.equals(recentLocations[i].getName()))
+                    return i;
+            }
         }
         return NO_MATCH_FOUND;
     }
