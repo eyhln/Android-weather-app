@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +15,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.databinding.ActivityLocationBinding;
 import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
 import com.mariebyleen.weather.location.presenter.LocationPresenter;
@@ -57,7 +55,7 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onCreateResolveDaggerDependency();
-        onCreateSetupDataBinding();
+        setContentView(R.layout.activity_location);
         ButterKnife.bind(this);
         onCreatePopulateSpinner();
     }
@@ -67,11 +65,6 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
                 .applicationComponent(getApplicationComponent())
                 .locationModule(new LocationModule(this, this))
                 .build().inject(this);
-    }
-
-    private void onCreateSetupDataBinding() {
-        ActivityLocationBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_location);
-        binding.setViewModel(locationPresenter);
     }
 
     private void onCreatePopulateSpinner() {
