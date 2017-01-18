@@ -94,8 +94,7 @@ public class PreferencesTest {
 
     @Test
     public void testGetNullWeatherData() {
-        WeatherData weatherData = null;
-        saveWeatherData(weatherData);
+        saveWeatherData(null);
 
         WeatherData savedWeatherData = preferences.getWeatherData();
         assertNotNull(savedWeatherData);
