@@ -9,12 +9,16 @@ import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponseMain;
+import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponseSys;
+import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponseWeather;
+import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponseWind;
 import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponse;
-import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponseCity;
+import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponseList;
+import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponseListTemp;
+import com.mariebyleen.weather.weather_display.model.forecast.ForecastResponseListWeather;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -43,6 +47,8 @@ public class OpenWeatherCallerTest {
     OpenWeatherApiService weatherApiService;
     @Mock
     Resources resources;
+    @Mock
+    Preferences mockPreferences;
 
     private SharedPreferences sharedPreferences;
     private Gson gson;
@@ -61,50 +67,75 @@ public class OpenWeatherCallerTest {
     }
 
     @Test
-    @Ignore("need to fix test subscriber")
     public void current_and_forecast_data_are_zipped() {
-        setCoordinateValues();
         when(weatherApiService.getCurrentConditions(anyFloat(), anyFloat(), anyString()))
                 .thenReturn(getTestCurrentConditionsObservable(100.0));
         when(weatherApiService.getForecast(anyFloat(), anyFloat(), anyInt(), anyString()))
-                .thenReturn(getTestForecastObservable("TEST"));
+                .thenReturn(getTestForecastObservable("Test"));
         TestSubscriber<WeatherData> testSubscriber = new TestSubscriber<>();
 
         caller.getWeatherObservable(0.0f, 0.0f)
                 .subscribe(testSubscriber);
 
-        // Empty list of events received -- look up
         List<WeatherData> weatherDataEvents = testSubscriber.getOnNextEvents();
-        WeatherData weatherData = weatherDataEvents.get(0);
-
         testSubscriber.assertNoErrors();
+
+        WeatherData weatherData = weatherDataEvents.get(0);
         assertNotNull(weatherData);
         assertEquals(100.0, weatherData.getTemperature());
-        assertEquals("TEST", weatherData.getCountry());
-    }
+        assertEquals("Test", weatherData.getForecasts()[0].getDescription());
 
-        private void setCoordinateValues() {
-            FakeSharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putFloat("lat", 0.0f);
-            editor.putFloat("lon", 0.0f);
-        }
+    }
 
         private Observable<CurrentConditionsResponse>
                                         getTestCurrentConditionsObservable(double temp) {
             CurrentConditionsResponse currentConditions = new CurrentConditionsResponse();
+            currentConditions.setDt(0);
+            currentConditions.setName("Name");
+            CurrentConditionsResponseSys sys = new CurrentConditionsResponseSys();
+            sys.setSunrise(0);
+            sys.setSunset(0);
+            currentConditions.setSys(sys);
             CurrentConditionsResponseMain main = new CurrentConditionsResponseMain();
             main.setTemp(temp);
+            main.setHumidity(0.0);
             currentConditions.setMain(main);
+            CurrentConditionsResponseWind wind = new CurrentConditionsResponseWind();
+            wind.setSpeed(0.0);
+            wind.setDeg(0.0);
+            currentConditions.setWind(wind);
+            CurrentConditionsResponseWeather weather = new CurrentConditionsResponseWeather();
+            weather.setIcon("Icon");
+            weather.setDescription("Description");
+            CurrentConditionsResponseWeather[] weatherArray = new CurrentConditionsResponseWeather[1];
+            weatherArray[0] = weather;
+            currentConditions.setWeather(weatherArray);
             List<CurrentConditionsResponse> cc = new ArrayList<>(1);
             cc.add(currentConditions);
             return Observable.from(cc);
         }
 
-        private Observable<ForecastResponse> getTestForecastObservable(String country) {
+        private Observable<ForecastResponse> getTestForecastObservable(String description) {
+            int numEntries = 2;
             ForecastResponse forecast = new ForecastResponse();
-            ForecastResponseCity city = new ForecastResponseCity();
-            city.setCountry(country);
-            forecast.setCity(city);
+            ForecastResponseList[] list = new ForecastResponseList[numEntries];
+            for (int i = 0; i < numEntries; i++) {
+                ForecastResponseList entry = new ForecastResponseList();
+                entry.setDt(0);
+                ForecastResponseListTemp temp = new ForecastResponseListTemp();
+                temp.setMin(0.0);
+                temp.setMax(0.0);
+                entry.setTemp(temp);
+                ForecastResponseListWeather[] weather = new ForecastResponseListWeather[1];
+                ForecastResponseListWeather weatherEntry = new ForecastResponseListWeather();
+                weatherEntry.setIcon("Icon");
+                weatherEntry.setDescription(description);
+                weather[0] = weatherEntry;
+                entry.setWeather(weather);
+                list[i] = entry;
+            }
+            forecast.setList(list);
+
             List<ForecastResponse> f = new ArrayList<>(1);
             f.add(forecast);
             return Observable.from(f);
