@@ -1,10 +1,8 @@
 package com.mariebyleen.weather.location.presenter;
 
-import android.app.Activity;
 import android.databinding.BaseObservable;
 import android.util.Log;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mariebyleen.weather.api.GeoNamesApiService;
@@ -17,6 +15,8 @@ import com.mariebyleen.weather.location.recent_locations.model.RecentLocation;
 import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -72,11 +72,13 @@ public class LocationPresenter extends BaseObservable {
         model = searchLocations;
     }
 
-    public void setupSearchSuggestions(final AutoCompleteTextView searchLocationsTextView, final Activity activity,
-                                       final Button selectButton) {
+    public void checkForConnectivity() {}
+
+    public void setupSearchSuggestions(final AutoCompleteTextView searchLocationsTextView) {
         this.searchLocationsTextView = searchLocationsTextView;
-        selectButton.setEnabled(false);
         formatAutoCompleteTextView(searchLocationsTextView);
+        view.enableSearchLocationSelection(false);
+
         locationTextViewSub = RxTextView.textChanges(searchLocationsTextView)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(new Func1<CharSequence, String>() {
@@ -89,18 +91,12 @@ public class LocationPresenter extends BaseObservable {
                 .filter(new Func1<String, Boolean>() {
                     @Override
                     public Boolean call(String s) {
-                        for(int i = 0; i < dropDownSuggestionsState.length; i++) {
-                            if (s.equals(dropDownSuggestionsState[i])) {
-                                selectButton.setEnabled(true);
-                                return false;
-                            }
-                            else
-                                selectButton.setEnabled(false);
-                        }
-                        return true;
+                        boolean isValid = inputIsValid(s);
+                        view.enableSearchLocationSelection(isValid);
+                        return !isValid;
                     }
                 })
-                .observeOn(Schedulers.io())
+                .observeOn(Schedulers.newThread())
                 .switchMap(new Func1<String, Observable<SearchLocations>>() {
                     @Override
                     public Observable<SearchLocations> call(String s) {
@@ -111,13 +107,13 @@ public class LocationPresenter extends BaseObservable {
                 .subscribe(new Subscriber<SearchLocations>() {
                     @Override
                     public void onCompleted() {
-                        Log.d("RX", "Completed");
+                        Log.d(TAG, "Completed");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("RX", e.toString());
-                        e.printStackTrace();
+                        Log.e(TAG, e.toString());
+                        view.showNoAccessToSearchErrorMessage();
                     }
 
                     @Override
@@ -128,6 +124,17 @@ public class LocationPresenter extends BaseObservable {
                         view.showLocationSuggestions(locations);
                         }
                     });
+    }
+
+    private boolean inputIsValid(String s) {
+        if (dropDownSuggestionsState == null)
+            return false;
+
+        for(int i = 0; i < dropDownSuggestionsState.length; i++) {
+            if (s.equals(dropDownSuggestionsState[i]))
+                return true;
+        }
+        return false;
     }
 
     private String[] mapLocationNames(SearchLocations searchLocations) {
@@ -160,9 +167,63 @@ public class LocationPresenter extends BaseObservable {
         updateWeatherData(latitude, longitude);
     }
 
+    protected void saveSearchLocationCoordinates() {
+        if (model != null) {
+            SearchLocation[] locationSuggestions = model.getGeonames();
+            String selectedLocationName = view.getSearchTextViewText();
+            name = selectedLocationName;
+
+            for (int i = 0; i < locationSuggestions.length; i++) {
+                if (selectedLocationName.equals(mapLocationName(locationSuggestions[i]))) {
+                    saveCoordinates(i);
+                }
+            }
+        }
+    }
+
+    private void saveCoordinates(int index) {
+        SearchLocation selectedLocation = model.getGeonames()[index];
+        float lat = Float.parseFloat(selectedLocation.getLat());
+        latitude = lat;
+        float lon = Float.parseFloat(selectedLocation.getLng());
+        longitude = lon;
+        preferences.putCoordinates(lat, lon);
+    }
+
+    public String[] getRecentLocationNames() {
+        RecentLocation[] recentLocations = database.getRecentLocations();
+        if (recentLocations != null) {
+            this.recentLocations = recentLocations;
+            return getLocationsWithNullEntriesRemoved(recentLocations);
+        }
+        return new String[0];
+    }
+
+    private String[] getLocationsWithNullEntriesRemoved(RecentLocation[] recentLocations) {
+        List<String> names = new ArrayList<>();
+        for (int i = 0; i< recentLocations.length; i++) {
+            if (recentLocations[i] != null && recentLocations[i].getName() != null)
+                names.add(recentLocations[i].getName());
+        }
+        return names.toArray(new String[names.size()]);
+    }
+
+    public void selectRecentLocation(String selection) {
+        if (recentLocations != null) {
+            for (int i = 0; i< recentLocations.length; i++) {
+                String name = recentLocations[i].getName();
+                float lat = recentLocations[i].getLat();
+                float lon = recentLocations[i].getLon();
+                if (selection.equals(name))
+                    updateWeatherData(lat,lon);
+            }
+        }
+    }
+
     private void updateWeatherData(float latitude, float longitude) {
         caller.getWeatherObservable(latitude, longitude)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<WeatherData>() {
                     @Override
                     public void onCompleted() {
@@ -181,49 +242,6 @@ public class LocationPresenter extends BaseObservable {
                         caller.saveData(weatherData);
                     }
                 });
-    }
-
-    public void saveSearchLocationCoordinates() {
-        SearchLocation[] locationSuggestions = model.getGeonames();
-        String selectedLocationName = view.getSearchTextViewText();
-        name = selectedLocationName;
-
-        for (int i = 0; i < locationSuggestions.length; i++) {
-            if (selectedLocationName.equals(mapLocationName(locationSuggestions[i]))) {
-                saveCoordinates(i);
-            }
-        }
-    }
-
-    private void saveCoordinates(int index) {
-        SearchLocation selectedLocation = model.getGeonames()[index];
-        float lat = Float.parseFloat(selectedLocation.getLat());
-        latitude = lat;
-        float lon = Float.parseFloat(selectedLocation.getLng());
-        longitude = lon;
-        preferences.putCoordinates(lat, lon);
-    }
-
-    public String[] getRecentLocationNames() {
-        RecentLocation[] recentLocations = database.getRecentLocations();
-        this.recentLocations = recentLocations;
-        String[] names = new String[recentLocations.length];
-        for (int i = 0; i< recentLocations.length; i++) {
-            names[i] = recentLocations[i].getName();
-        }
-        return names;
-    }
-
-    public void selectRecentLocation(String selection) {
-        if (recentLocations != null) {
-            for (int i = 0; i< recentLocations.length; i++) {
-                String name = recentLocations[i].getName();
-                float lat = recentLocations[i].getLat();
-                float lon = recentLocations[i].getLon();
-                if (selection.equals(name))
-                    updateWeatherData(lat,lon);
-            }
-        }
     }
 
     public void useCurrentLocation() {

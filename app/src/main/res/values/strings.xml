@@ -53,11 +53,13 @@
     <string name="choose_location">Choose Location</string>
     <string name="select_location">Select</string>
 
+    // Error messages
     <string name="could_not_get_data_error_message">Error loading data</string>
+    <string name="search_not_available_error_message">Unable to access search</string>
 
     // SETTINGS
 
-    // Update data
+    // Update period
     <string name="update_period_title">AutoRefresh Period</string>
     <string name="update_period_summary_default">Choose how frequently to refresh the weather data</string>
     <string name="update_period_summary_specific">Refresh weather data every %s</string>

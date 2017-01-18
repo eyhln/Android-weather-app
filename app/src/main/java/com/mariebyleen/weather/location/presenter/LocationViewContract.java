@@ -8,5 +8,7 @@ public interface LocationViewContract  {
     String getSearchTextViewText();
     void navigateToMainActivity();
     void showCouldNotGetDataErrorMessage();
+    void enableSearchLocationSelection(boolean enable);
+    void showNoAccessToSearchErrorMessage();
 
 }
