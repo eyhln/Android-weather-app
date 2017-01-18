@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -15,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mariebyleen.weather.R;
-import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityLocationBinding;
 import com.mariebyleen.weather.location.di.component.DaggerLocationComponent;
 import com.mariebyleen.weather.location.di.module.LocationModule;
@@ -31,7 +31,7 @@ import butterknife.OnClick;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
-public class LocationActivity extends BaseActivity implements LocationViewContract {
+public class LocationActivity extends AppCompatActivity implements LocationViewContract {
 
     private final static int PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION = 1;
 
@@ -40,7 +40,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
     @BindView(R.id.choose_location_field)
     AutoCompleteTextView locationTextView;
     @BindView(R.id.button_select_search_location)
-    Button selectLocation;
+    Button selectSearchLocation;
     @BindView(R.id.spinner)
     Spinner spinner;
 
@@ -76,7 +76,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     private void onCreatePopulateSpinner() {
         String[] recentLocations = locationPresenter.getRecentLocationNames();
-        ArrayAdapter<String> adapter =new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 recentLocations);
         spinner.setAdapter(adapter);
@@ -84,7 +84,7 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     @Override
     protected void onResume() {
-        locationPresenter.setupSearchSuggestions(locationTextView, this, selectLocation);
+        locationPresenter.setupSearchSuggestions(locationTextView);
         super.onResume();
     }
 
@@ -132,6 +132,10 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
         locationTextView.showDropDown();
     }
 
+    public void enableSearchLocationSelection(boolean enable) {
+            selectSearchLocation.setEnabled(enable);
+    }
+
     @OnClick(R.id.button_select_search_location)
     public void selectSearchLocation() {
         locationPresenter.selectSearchLocation();
@@ -147,6 +151,10 @@ public class LocationActivity extends BaseActivity implements LocationViewContra
 
     public void showCouldNotGetDataErrorMessage() {
         Toast.makeText(this, R.string.could_not_get_data_error_message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showNoAccessToSearchErrorMessage() {
+        Toast.makeText(this, R.string.search_not_available_error_message, Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.button_select_recent_location)

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +17,6 @@ import android.widget.ToggleButton;
 
 import com.mariebyleen.weather.R;
 import com.mariebyleen.weather.api.OpenWeatherCaller;
-import com.mariebyleen.weather.base.BaseActivity;
 import com.mariebyleen.weather.databinding.ActivityMainBinding;
 import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.navigation.Navigator;
@@ -33,7 +33,7 @@ import butterknife.Optional;
 
 import static com.mariebyleen.weather.application.WeatherApplication.getApplicationComponent;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static Intent getCallingIntent(Context context) {
         return new Intent(context, MainActivity.class);
