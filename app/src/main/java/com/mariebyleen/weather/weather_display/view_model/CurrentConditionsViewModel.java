@@ -80,7 +80,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public boolean getUseFahrenheit() {
-        return savedData.unitsPrefSetToFahrenheit();
+        return useFahrenheitState;
     }
 
     @Bindable
@@ -121,7 +121,6 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getUpdateTime() {
-        //return (String)DateUtils.getRelativeTimeSpanString(weatherData.getUpdateTime() * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         return formatter.formatTimeFromEpoch(weatherData.getUpdateTime());
     }
 
