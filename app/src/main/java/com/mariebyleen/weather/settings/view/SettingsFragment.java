@@ -12,7 +12,7 @@ import butterknife.BindArray;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 
-public class PreferencesFragment extends PreferenceFragment
+public class SettingsFragment extends PreferenceFragment
         implements Preference.OnPreferenceChangeListener {
 
     private final String LAST_SPEED_WITH_CELSIUS_KEY = "lastSpeed";
@@ -89,7 +89,6 @@ public class PreferencesFragment extends PreferenceFragment
         }
 
         private String getStoredValue(Preference preference) {
-            // TODO set default value of units based on primary Locale
             String key = preference.getKey();
             return preference.getSharedPreferences().getString(key, null);
         }

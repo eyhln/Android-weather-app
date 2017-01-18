@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.mariebyleen.weather.settings.view.PreferencesFragment;
+import com.mariebyleen.weather.settings.view.SettingsFragment;
 
-public class PreferencesActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     public static Intent getCallingIntent(Context context) {
-        return new Intent(context, PreferencesActivity.class);
+        return new Intent(context, SettingsActivity.class);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class PreferencesActivity extends AppCompatActivity {
         if (getFragmentManager().findFragmentById(android.R.id.content) == null) {
             getFragmentManager()
                     .beginTransaction()
-                    .add(android.R.id.content, new PreferencesFragment())
+                    .add(android.R.id.content, new SettingsFragment())
                     .commit();
         }
     }

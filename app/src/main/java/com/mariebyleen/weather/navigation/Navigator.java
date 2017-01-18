@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.mariebyleen.weather.location.activity.LocationActivity;
-import com.mariebyleen.weather.settings.activity.PreferencesActivity;
+import com.mariebyleen.weather.settings.activity.SettingsActivity;
 import com.mariebyleen.weather.weather_display.activity.MainActivity;
 
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ public class Navigator {
 
     public void navigateToPreferences(Context context) {
         if (context != null) {
-            Intent intentToLaunch = PreferencesActivity.getCallingIntent(context);
+            Intent intentToLaunch = SettingsActivity.getCallingIntent(context);
             context.startActivity(intentToLaunch);
         }
     }
