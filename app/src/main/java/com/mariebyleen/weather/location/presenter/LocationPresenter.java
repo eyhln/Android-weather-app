@@ -72,8 +72,6 @@ public class LocationPresenter extends BaseObservable {
         model = searchLocations;
     }
 
-    public void checkForConnectivity() {}
-
     public void setupSearchSuggestions(final AutoCompleteTextView searchLocationsTextView) {
         this.searchLocationsTextView = searchLocationsTextView;
         formatAutoCompleteTextView(searchLocationsTextView);
@@ -113,7 +111,7 @@ public class LocationPresenter extends BaseObservable {
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, e.toString());
-                        view.showNoAccessToSearchErrorMessage();
+                        view.showNoAccessToWeatherServiceErrorMessage();
                     }
 
                     @Override
@@ -234,7 +232,8 @@ public class LocationPresenter extends BaseObservable {
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "Error retrieving weather data: \n" + e.toString());
-                        view.showCouldNotGetDataErrorMessage();
+                        view.showNoAccessToWeatherServiceErrorMessage();
+                        view.enableUseRecentLocationSelection(false);
                     }
 
                     @Override

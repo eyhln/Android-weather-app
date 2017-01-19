@@ -7,8 +7,8 @@ public interface LocationViewContract  {
     void showLocationSuggestions(String[] suggestions);
     String getSearchTextViewText();
     void navigateToMainActivity();
-    void showCouldNotGetDataErrorMessage();
     void enableSearchLocationSelection(boolean enable);
-    void showNoAccessToSearchErrorMessage();
+    void enableUseRecentLocationSelection(boolean enable);
+    void showNoAccessToWeatherServiceErrorMessage();
 
 }

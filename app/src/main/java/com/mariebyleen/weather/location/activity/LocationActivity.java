@@ -41,6 +41,8 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
     Button selectSearchLocation;
     @BindView(R.id.spinner)
     Spinner spinner;
+    @BindView(R.id.button_select_recent_location)
+    Button selectRecentLocation;
 
     @Inject
     LocationPresenter locationPresenter;
@@ -129,6 +131,11 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
             selectSearchLocation.setEnabled(enable);
     }
 
+    @Override
+    public void enableUseRecentLocationSelection(boolean enable) {
+        selectRecentLocation.setEnabled(enable);
+    }
+
     @OnClick(R.id.button_select_search_location)
     public void selectSearchLocation() {
         locationPresenter.selectSearchLocation();
@@ -142,12 +149,8 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
         navigator.navigateToMain(this);
     }
 
-    public void showCouldNotGetDataErrorMessage() {
-        Toast.makeText(this, R.string.could_not_get_data_error_message, Toast.LENGTH_SHORT).show();
-    }
-
-    public void showNoAccessToSearchErrorMessage() {
-        Toast.makeText(this, R.string.search_not_available_error_message, Toast.LENGTH_SHORT).show();
+    public void showNoAccessToWeatherServiceErrorMessage() {
+        Toast.makeText(this, R.string.weather_service_not_available, Toast.LENGTH_LONG).show();
     }
 
     @OnClick(R.id.button_select_recent_location)
