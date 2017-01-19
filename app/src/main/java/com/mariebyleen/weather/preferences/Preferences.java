@@ -73,4 +73,13 @@ public class Preferences {
         String periodString = preferences.getString(tag, "900000");
         return Integer.parseInt(periodString);
     }
+
+    public boolean isFirstRun() {
+        boolean isFirstRun = preferences.getBoolean("FirstRun", true);
+        if(isFirstRun) {
+            editor.putBoolean("FirstRun", Boolean.FALSE);
+            editor.apply();
+        }
+        return isFirstRun;
+    }
 }

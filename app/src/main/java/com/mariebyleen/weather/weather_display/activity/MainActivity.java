@@ -20,6 +20,7 @@ import com.mariebyleen.weather.api.OpenWeatherCaller;
 import com.mariebyleen.weather.databinding.ActivityMainBinding;
 import com.mariebyleen.weather.job.WeatherDataService;
 import com.mariebyleen.weather.navigation.Navigator;
+import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.di.component.DaggerCurrentConditionsComponent;
 import com.mariebyleen.weather.weather_display.di.module.CurrentConditionsModule;
 import com.mariebyleen.weather.weather_display.view_model.CurrentConditionsViewModel;
@@ -49,22 +50,32 @@ public class MainActivity extends AppCompatActivity {
     OpenWeatherCaller caller;
     @Inject
     ForecastRecyclerAdapter adapter;
+    @Inject
+    Preferences preferences;
 
     @BindView(R.id.button_expand_collapse)
     @Nullable
-    ToggleButton button;
+    ToggleButton expandCollapseButton;
     @BindView(R.id.current_conditions_detail_content)
     GridLayout detailContent;
+    @BindView(R.id.recycler_view_forecast)
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onCreateResolveDaggerDependency();
-        onCreateSetupDataBinding();
-        ButterKnife.bind(this);
-        onCreateSetupToolbar();
-        onCreateSetupDetailView();
-        weatherDataService.manageJobRequests();
+        if (preferences.isFirstRun()) {
+            navigator.navigateToLocationEditor(this);
+            finish();
+        }
+        else {
+            weatherDataService.manageJobRequests();
+            onCreateSetupDataBinding();
+            ButterKnife.bind(this);
+            onCreateSetupToolbar();
+            onCreateSetupDetailView();
+        }
     }
 
     private void onCreateSetupToolbar() {
@@ -86,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCreateSetupDetailView() {
-        if (button != null)
-            button.setChecked(true);
+        if (expandCollapseButton != null)
+            expandCollapseButton.setChecked(true);
     }
 
     @Override
@@ -104,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onResumeSetupRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_forecast);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -130,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     @Optional
     @OnClick(R.id.button_expand_collapse)
     public void showAndHideDetailContent() {
-        viewModel.animateDetailView(button, detailContent);
+        viewModel.animateDetailView(expandCollapseButton, detailContent);
     }
 
     @Override
