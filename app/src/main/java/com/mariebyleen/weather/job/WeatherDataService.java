@@ -16,17 +16,22 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
     private Resources resources;
     private Preferences preferences;
 
+    private boolean running;
+
     @Inject
     public WeatherDataService(JobManager jobManager, Resources resources, Preferences preferences) {
         this.jobManager = jobManager;
         this.resources = resources;
         this.preferences = preferences;
+        running = false;
     }
 
     public void manageJobRequests() {
-        if (jobManager.getAllJobRequests().size() == 0) {
+        if (running == false) {
+            scheduleOneOffUpdate();
             scheduleAutoUpdateJobs();
         }
+        running = true;
     }
 
     public void scheduleOneOffUpdate() {
@@ -36,7 +41,7 @@ public class WeatherDataService implements SharedPreferences.OnSharedPreferenceC
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (s.equals(resources.getString(R.string.preference_update_period_key))) {
-            scheduleAutoUpdateJobs();
+            manageJobRequests();
         }
     }
 
