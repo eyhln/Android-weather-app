@@ -6,7 +6,5 @@ public interface DatabaseReadWrite {
 
     Cursor getAllEntriesNewestFirst();
     Cursor getRowCount();
-    void deleteOldestEntry();
-    void deleteNameMatchEntry(String duplicatedName);
     void addRow(String name, float lat, float lon, long time);
 }

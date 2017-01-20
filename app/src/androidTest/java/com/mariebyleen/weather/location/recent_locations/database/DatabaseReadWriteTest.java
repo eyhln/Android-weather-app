@@ -41,6 +41,7 @@ public class DatabaseReadWriteTest {
         float lat = cursor.getFloat(2);
         float lon = cursor.getFloat(3);
         int time = cursor.getInt(4);
+        cursor.close();
 
         assertEquals(1, id);
         assertEquals("Test", name);
@@ -77,62 +78,6 @@ public class DatabaseReadWriteTest {
         int rowCount = cursor.getInt(0);
 
         assertEquals(3, rowCount);
-    }
-
-    @Test
-    public void testDeleteOldestEntry() {
-        for (int i = 0; i < 2; i++)
-            dbRW.addRow("Test", 0.0f, 0.0f, i);
-
-        dbRW.deleteOldestEntry();
-
-        int numRows = getNumRows();
-        Cursor data = getAllData();
-        int time = data.getInt(4);
-
-        assertEquals(1, numRows);
-        assertEquals(1, time);
-    }
-
-    @Test
-    public void testDeleteNameMatchEntry_withMatch() {
-        for (int i = 0; i < 2; i++)
-            dbRW.addRow("Test" + i, 0.0f, 0.0f, i);
-
-        dbRW.deleteNameMatchEntry("Test1");
-
-        int numRows = getNumRows();
-        Cursor data = getAllData();
-        String name = data.getString(1);
-
-        assertEquals(1, numRows);
-        assertEquals("Test0", name);
-    }
-
-    @Test
-    public void testDeleteNameMatchEntry_withNoMatch() {
-        for (int i = 0; i < 2; i++)
-            dbRW.addRow("Test" + i, 0.0f, 0.0f, i);
-
-        dbRW.deleteNameMatchEntry("EntryNotListed");
-
-        int numRows = getNumRows();
-
-        assertEquals(2, numRows);
-    }
-
-    private int getNumRows() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor count = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
-        count.moveToFirst();
-        return count.getInt(0);
-    }
-
-    private Cursor getAllData() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-        data.moveToFirst();
-        return data;
     }
 
     @After

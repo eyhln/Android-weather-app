@@ -9,16 +9,14 @@ import static com.mariebyleen.weather.location.recent_locations.database.RecentL
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.RecentLocationRow.COLUMN_NAME_LOCATION_NAME;
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.RecentLocationRow.COLUMN_NAME_LONGITUDE;
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.RecentLocationRow.TABLE_NAME;
-import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.SQL_DELETE_NAME_MATCH_ENTRY;
-import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.SQL_DELETE_OLDEST_ENTRY;
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.SQL_NUMBER_OF_ROWS;
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.SQL_SELECT_ALL_ENTRIES_NEWEST_FIRST;
 
 public class DatabaseReadWriteImpl implements DatabaseReadWrite {
 
-    private RecentLocationsDbHelper dbHelper;
+    private DbHelper dbHelper;
 
-    public DatabaseReadWriteImpl(RecentLocationsDbHelper dbHelper) {
+    public DatabaseReadWriteImpl(DbHelper dbHelper) {
         this.dbHelper = dbHelper;
     }
 
@@ -30,18 +28,6 @@ public class DatabaseReadWriteImpl implements DatabaseReadWrite {
     public Cursor getRowCount() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         return db.rawQuery(SQL_NUMBER_OF_ROWS, null);
-    }
-
-    public void deleteOldestEntry() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.execSQL(SQL_DELETE_OLDEST_ENTRY);
-    }
-
-    public void deleteNameMatchEntry(String duplicatedName) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Object[] matchingName = new Object[1];
-        matchingName[0] = duplicatedName;
-        db.execSQL(SQL_DELETE_NAME_MATCH_ENTRY, matchingName);
     }
 
     public void addRow(String name, float lat, float lon, long time) {
