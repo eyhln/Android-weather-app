@@ -1,4 +1,4 @@
-package com.mariebyleen.weather;
+package com.mariebyleen.weather.preferences;
 
 import android.content.SharedPreferences;
 
