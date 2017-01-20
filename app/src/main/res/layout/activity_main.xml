@@ -14,14 +14,12 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="16dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@{conditions.weatherData.iconResourceId}"
                 android:alpha="0.84"
@@ -37,7 +35,7 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
-                app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
@@ -119,7 +117,7 @@
             android:visibility="visible"
             android:layout_height="0dp"
             android:layout_width="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:orientation="vertical"
             android:layout_gravity="center">
 
@@ -202,6 +200,7 @@
                 android:id="@+id/recycler_view_forecast"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+
         </RelativeLayout>
 
     </LinearLayout>

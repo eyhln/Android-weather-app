@@ -1,15 +1,17 @@
 package com.mariebyleen.weather.location.recent_locations.model;
 
 
+import java.util.List;
+
 public class RecentLocations {
 
-    private RecentLocation[] recentLocations;
+    private List<RecentLocation> recentLocations;
 
-    public RecentLocations(RecentLocation[] recentLocations) {
+    public RecentLocations(List<RecentLocation> recentLocations) {
         this.recentLocations = recentLocations;
     }
 
-    public RecentLocation[] getRecentLocations() {
+    public List<RecentLocation> getRecentLocations() {
         return recentLocations;
     }
 }
