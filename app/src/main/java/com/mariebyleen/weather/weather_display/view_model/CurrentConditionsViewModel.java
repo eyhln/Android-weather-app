@@ -31,9 +31,6 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     private WeatherData weatherData;
 
-
-    private boolean useFahrenheitState;
-
     @Inject
     public CurrentConditionsViewModel(SharedPreferences preferences,
                                       SavedDataRetriever savedData,
@@ -50,7 +47,6 @@ public class CurrentConditionsViewModel extends BaseObservable
     public void onViewResume() {
         if (weatherData == null) {
             weatherData = savedData.getSavedWeatherData();
-            useFahrenheitState = savedData.unitsPrefSetToFahrenheit();
         }
     }
 
@@ -60,10 +56,9 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals(savedData.weatherDataTag))
+        if (s.equals(savedData.weatherDataTag)) {
             weatherData = savedData.getSavedWeatherData();
-        if (s.equals(savedData.temperatureUnitsPrefTag))
-            useFahrenheitState = savedData.unitsPrefSetToFahrenheit();
+        }
         notifyChange();
     }
 
@@ -80,7 +75,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public boolean getUseFahrenheit() {
-        return useFahrenheitState;
+        return savedData.unitsPrefSetToFahrenheit();
     }
 
     @Bindable
