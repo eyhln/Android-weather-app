@@ -21,8 +21,7 @@
         android:layout_width="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
-        android:gravity="center_vertical"
->
+        android:gravity="center_vertical">
 
         <TextView
             android:text="@{viewModel.dateDisplayTitle}"
@@ -45,38 +44,23 @@
 
         <TextView
             android:text="@{viewModel.description}"
-            android:layout_width="64dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:id="@+id/textView9"
             tools:text="Clear sky"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
         <TextView
-            android:text="@{@string/min_temp + ' ' + viewModel.minTemp + ' ' + @string/temp_divider}"
+            android:text="@{@string/min_temp + ' ' + viewModel.minTemp + ' ' + @string/temp_divider + ' ' + @string/max_temp + ' ' + viewModel.maxTemp + @string/degrees(viewModel.useFahrenheit ? @string/fahrenheit : @string/celsius)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="L 34 /"
+            tools:text="L 34 / H 56 F"
             app:layout_constraintTop_toTopOf="parent"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="8dp"/>
-
-        <TextView
-            android:text="@{@string/max_temp + ' ' + viewModel.maxTemp + @string/degrees(viewModel.useFahrenheit ? @string/fahrenheit : @string/celsius)}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="H 56 F"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 
