@@ -79,6 +79,7 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
 
     @Override
     protected void onResume() {
+        locationPresenter.onViewResume();
         locationPresenter.setupSearchSuggestions(locationTextView);
         super.onResume();
     }
@@ -157,6 +158,12 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
     public void onClickSelectRecentLocation() {
         String selection = (String) spinner.getSelectedItem();
         locationPresenter.selectRecentLocation(selection);
+    }
+
+    @Override
+    protected void onPause() {
+        locationPresenter.onViewPause();
+        super.onPause();
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.recent_locations.database.Database;
 import com.mariebyleen.weather.location.recent_locations.model.RecentLocation;
+import com.mariebyleen.weather.location.recent_locations.model.RecentLocations;
 import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
@@ -47,11 +48,7 @@ public class LocationPresenter extends BaseObservable {
 
     private SearchLocations model;
 
-    private String name;
-    private float latitude;
-    private float longitude;
-
-    private RecentLocation[] recentLocations;
+    private RecentLocations recentLocations;
 
     @Inject
     public LocationPresenter(LocationViewContract view,
@@ -66,6 +63,12 @@ public class LocationPresenter extends BaseObservable {
         this.preferences = preferences;
         this.caller = caller;
         this.database = database;
+    }
+
+    public void onViewResume() {
+        if (recentLocations == null) {
+            recentLocations = database.getRecentLocations();
+        }
     }
 
     public void setModel(SearchLocations searchLocations) {
@@ -160,12 +163,17 @@ public class LocationPresenter extends BaseObservable {
     }
 
     public void selectSearchLocation() {
-        saveSearchLocationCoordinates();
-        database.insertRecentLocation(name, latitude, longitude);
-        updateWeatherData(latitude, longitude);
+        /*
+        RecentLocation selectedLocation = saveSearchLocationCoordinates();
+        database.insertRecentLocation(selectedLocation);
+        updateWeatherData(selectedLocation.getLat(), selectedLocation.getLon());
+        */
     }
 
-    protected void saveSearchLocationCoordinates() {
+    protected RecentLocation saveSearchLocationCoordinates() {
+        String name = null;
+        float lat = 0f;
+        float lon = 0f;
         if (model != null) {
             SearchLocation[] locationSuggestions = model.getGeonames();
             String selectedLocationName = view.getSearchTextViewText();
@@ -173,26 +181,19 @@ public class LocationPresenter extends BaseObservable {
 
             for (int i = 0; i < locationSuggestions.length; i++) {
                 if (selectedLocationName.equals(mapLocationName(locationSuggestions[i]))) {
-                    saveCoordinates(i);
+                    SearchLocation selectedLocation = model.getGeonames()[i];
+                    lat = Float.parseFloat(selectedLocation.getLat());
+                    lon = Float.parseFloat(selectedLocation.getLng());
+                    preferences.putCoordinates(lat, lon);
                 }
             }
         }
-    }
-
-    private void saveCoordinates(int index) {
-        SearchLocation selectedLocation = model.getGeonames()[index];
-        float lat = Float.parseFloat(selectedLocation.getLat());
-        latitude = lat;
-        float lon = Float.parseFloat(selectedLocation.getLng());
-        longitude = lon;
-        preferences.putCoordinates(lat, lon);
+        return new RecentLocation(name, lat, lon, 0);
     }
 
     public String[] getRecentLocationNames() {
-        RecentLocation[] recentLocations = database.getRecentLocations();
         if (recentLocations != null) {
-            this.recentLocations = recentLocations;
-            return getLocationsWithNullEntriesRemoved(recentLocations);
+            return getLocationsWithNullEntriesRemoved(recentLocations.getRecentLocations());
         }
         return new String[0];
     }
@@ -208,11 +209,12 @@ public class LocationPresenter extends BaseObservable {
 
     public void selectRecentLocation(String selection) {
         if (recentLocations != null) {
-            for (int i = 0; i< recentLocations.length; i++) {
-                String name = recentLocations[i].getName();
-                float lat = recentLocations[i].getLat();
-                float lon = recentLocations[i].getLon();
+            for (int i = 0; i< recentLocations.getRecentLocations().length; i++) {
+                String name = recentLocations.getRecentLocations()[i].getName();
+                float lat = recentLocations.getRecentLocations()[i].getLat();
+                float lon = recentLocations.getRecentLocations()[i].getLon();
                 if (selection.equals(name))
+                    // Save recent location as most recent location
                     updateWeatherData(lat,lon);
             }
         }
@@ -241,6 +243,10 @@ public class LocationPresenter extends BaseObservable {
                         caller.saveData(weatherData);
                     }
                 });
+    }
+
+    public void onViewPause() {
+        database.insertRecentLocations(recentLocations);
     }
 
     public void useCurrentLocation() {
