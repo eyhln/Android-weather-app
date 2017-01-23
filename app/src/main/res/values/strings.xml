@@ -54,8 +54,7 @@
     <string name="select_location">Select</string>
 
     // Error messages
-    <string name="could_not_get_data_error_message">Error loading data</string>
-    <string name="search_not_available_error_message">Unable to access search</string>
+    <string name="weather_service_not_available">Weather service not available</string>
 
     // SETTINGS
 
