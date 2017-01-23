@@ -10,7 +10,7 @@
     </style>
 
     <style name="MainActivity" parent="AppTheme">
-        <item name="android:windowBackground">@color/day_sky_blue</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
 
     <style name="day">
