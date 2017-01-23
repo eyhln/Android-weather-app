@@ -38,6 +38,12 @@ public class DisplayDataFormatter {
         return format.format(updateTime);
     }
 
+    public String formatDateTimeFromEpoch(long unixTime) {
+        DateFormat format = new SimpleDateFormat("h:mm a, MMMM d", locale);
+        Date updateTime = new Date(unixTime*1000);
+        return format.format(updateTime);
+    }
+
     public String formatHumidity(double humidity) {
         double roundHumidity = Math.round(humidity) / 100.0;
         return NumberFormat.getPercentInstance().format(roundHumidity);

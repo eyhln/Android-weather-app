@@ -116,7 +116,7 @@ public class CurrentConditionsViewModel extends BaseObservable
 
     @Bindable
     public String getUpdateTime() {
-        return formatter.formatTimeFromEpoch(weatherData.getUpdateTime());
+        return formatter.formatDateTimeFromEpoch(weatherData.getUpdateTime());
     }
 
     @Bindable
