@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.SQL_CREATE_ENTRIES;
 
-public class RecentLocationsDbHelper extends SQLiteOpenHelper {
+public class RecentLocationsDbHelper extends SQLiteOpenHelper implements DbHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "RecentLocations.db";
