@@ -5,9 +5,9 @@ public class RecentLocation {
     private String name;
     private float lat;
     private float lon;
-    private int time;
+    private long time;
 
-    public RecentLocation(String name, float lat, float lon, int time) {
+    public RecentLocation(String name, float lat, float lon, long time) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -26,7 +26,7 @@ public class RecentLocation {
         return lon;
     }
 
-    public int getTime() { return time; }
+    public long getTime() { return time; }
 
     @Override
     public boolean equals(Object o) {
