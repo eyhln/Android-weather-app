@@ -23,15 +23,13 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="fitCenter"
+                android:layout_marginTop="16dp"
                 app:srcCompat="@{conditions.weatherData.iconResourceId}"
                 android:alpha="0.84"
                 android:id="@+id/imageView4"
