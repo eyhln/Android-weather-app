@@ -1,8 +1,8 @@
-package com.mariebyleen.weather.location.model.JsonModel;
+package com.mariebyleen.weather.location.search_locations.model;
 
 public class SearchLocations {
     private int totalResultsCount;
-    private SearchLocation[] geonames;
+    private SearchLocation[] locations;
 
     public int getTotalResultsCount() {
         return this.totalResultsCount;
@@ -12,11 +12,11 @@ public class SearchLocations {
         this.totalResultsCount = totalResultsCount;
     }
 
-    public SearchLocation[] getGeonames() {
-        return this.geonames;
+    public SearchLocation[] getLocations() {
+        return this.locations;
     }
 
-    public void setGeonames(SearchLocation[] geonames) {
-        this.geonames = geonames;
+    public void setLocations(SearchLocation[] locations) {
+        this.locations = locations;
     }
 }

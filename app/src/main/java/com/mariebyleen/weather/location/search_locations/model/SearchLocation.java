@@ -1,4 +1,4 @@
-package com.mariebyleen.weather.location.model.JsonModel;
+package com.mariebyleen.weather.location.search_locations.model;
 
 public class SearchLocation {
     private String adminCode1;
