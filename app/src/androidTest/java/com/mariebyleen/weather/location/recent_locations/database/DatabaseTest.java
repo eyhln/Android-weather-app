@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.RecentLocationRow.COLUMN_NAME_LOCATION_NAME;
 import static com.mariebyleen.weather.location.recent_locations.database.RecentLocationContract.RecentLocationRow.TABLE_NAME;
 import static junit.framework.Assert.assertEquals;
@@ -23,14 +26,14 @@ public class DatabaseTest {
 
     private Context context;
     private TestDbHelper dbHelper;
-    private DatabaseReadWriteImpl dbRW;
+    private DatabaseReadWrite dbRW;
     private Database database;
 
     @Before
     public void initialize() {
         context = InstrumentationRegistry.getTargetContext();
         dbHelper = new TestDbHelper(context);
-        dbRW = new DatabaseReadWriteImpl(dbHelper);
+        dbRW = new DatabaseReadWrite(dbHelper);
         database = new Database(dbRW);
     }
 
@@ -43,14 +46,14 @@ public class DatabaseTest {
 
         RecentLocations recentLocations = database.getRecentLocations();
 
-        assertEquals(2, recentLocations.getRecentLocations().length);
+        assertEquals(2, recentLocations.getRecentLocations().size());
 
-        RecentLocation testLocation1 = recentLocations.getRecentLocations()[0];
+        RecentLocation testLocation1 = recentLocations.getRecentLocations().get(0);
         assertEquals("Test1", testLocation1.getName());
         assertEquals(1f, testLocation1.getLat());
         assertEquals(1f, testLocation1.getLon());
 
-        RecentLocation testLocation0 = recentLocations.getRecentLocations()[1];
+        RecentLocation testLocation0 = recentLocations.getRecentLocations().get(1);
         assertEquals("Test0", testLocation0.getName());
         assertEquals(0f, testLocation0.getLat());
         assertEquals(0f, testLocation0.getLon());
@@ -60,16 +63,14 @@ public class DatabaseTest {
     public void testGetRecentLocations_noLocations() {
         RecentLocations recentLocations = database.getRecentLocations();
 
-        assertEquals(0, recentLocations.getRecentLocations().length);
+        assertEquals(0, recentLocations.getRecentLocations().size());
     }
 
     @Test
     public void testInsertRecentLocations() {
-        RecentLocation[] locations = new RecentLocation[2];
-        RecentLocation location1 = new RecentLocation("Test1", 0.0f, 0.0f, 12345);
-        RecentLocation location2 = new RecentLocation("Test2", 0.0f, 0.0f, 12346);
-        locations[0] = location1;
-        locations[1] = location2;
+        List<RecentLocation> locations = new ArrayList<>();
+        locations.add(new RecentLocation("Test1", 0.0f, 0.0f, 12345));
+        locations.add(new RecentLocation("Test2", 0.0f, 0.0f, 12346));
         RecentLocations recentLocations = new RecentLocations(locations);
 
         database.insertRecentLocations(recentLocations);

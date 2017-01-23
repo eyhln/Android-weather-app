@@ -20,13 +20,14 @@ public class DatabaseReadWriteTest {
 
     private Context context;
     private TestDbHelper dbHelper;
-    private DatabaseReadWriteImpl dbRW;
+
+    private DatabaseReadWrite dbRW;
 
     @Before
     public void initialize() {
         context = InstrumentationRegistry.getTargetContext();
         dbHelper = new TestDbHelper(context);
-        dbRW = new DatabaseReadWriteImpl(dbHelper);
+        dbRW = new DatabaseReadWrite(dbHelper);
     }
 
     @Test
