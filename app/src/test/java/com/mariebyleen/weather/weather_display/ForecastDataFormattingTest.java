@@ -3,7 +3,7 @@ package com.mariebyleen.weather.weather_display;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 
-import com.mariebyleen.weather.FakeSharedPreferences;
+import com.mariebyleen.weather.preferences.FakeSharedPreferences;
 import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.model.mapped.DailyForecast;
 import com.mariebyleen.weather.weather_display.util.DisplayDataFormatter;

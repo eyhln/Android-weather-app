@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 import com.google.gson.Gson;
-import com.mariebyleen.weather.FakeSharedPreferences;
+import com.mariebyleen.weather.preferences.FakeSharedPreferences;
 import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.mapper.WeatherMapper;
 import com.mariebyleen.weather.weather_display.model.current_conditions.CurrentConditionsResponse;
