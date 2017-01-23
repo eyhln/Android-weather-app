@@ -1,6 +1,6 @@
 package com.mariebyleen.weather.api;
 
-import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
+import com.mariebyleen.weather.location.search_locations.model.SearchLocations;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
