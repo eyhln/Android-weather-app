@@ -128,9 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 navigator.navigateToPreferences(this);
                 return true;
             case R.id.menu_item_location:
-                navigator.navigateToLocationEditor(this);
-            case R.id.menu_item_update:
-                weatherDataService.scheduleOneOffUpdate();
+                navigator.navigateToLocationEditor(this);;
             default:
                 super.onOptionsItemSelected(item);
                 return true;
