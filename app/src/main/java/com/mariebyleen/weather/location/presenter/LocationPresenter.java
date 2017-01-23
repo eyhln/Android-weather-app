@@ -1,18 +1,18 @@
 package com.mariebyleen.weather.location.presenter;
 
-import android.databinding.BaseObservable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.AutoCompleteTextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.api.OpenWeatherCaller;
-import com.mariebyleen.weather.location.model.JsonModel.SearchLocation;
-import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.recent_locations.database.Database;
 import com.mariebyleen.weather.location.recent_locations.model.RecentLocation;
 import com.mariebyleen.weather.location.recent_locations.model.RecentLocations;
+import com.mariebyleen.weather.location.search_locations.model.SearchLocation;
+import com.mariebyleen.weather.location.search_locations.model.SearchLocations;
 import com.mariebyleen.weather.preferences.Preferences;
 import com.mariebyleen.weather.weather_display.model.mapped.WeatherData;
 
@@ -29,40 +29,47 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class LocationPresenter extends BaseObservable {
+public class LocationPresenter {
 
     private final String TAG = "LocationPresenter";
 
-    private final int NUM_SUGGESTIONS = 8;
+    public static final int MAX_RECENT_LOCATIONS = 10;
+    private final int NUM_SEARCH_SUGGESTIONS = 8;
 
     private WeatherLocation location;
     private LocationViewContract view;
-    private GeoNamesApiService apiService;
+
     private Preferences preferences;
     private OpenWeatherCaller caller;
     private Database database;
+    private RecentLocationsUpdater recentLocationsUpdater;
+    private GeoNamesApiService apiService;
+    private SelectLocationMapper mapper;
 
     private Subscription locationTextViewSub;
-    private String[] dropDownSuggestionsState = new String[NUM_SUGGESTIONS];
+    private String[] dropDownSuggestionsState = new String[NUM_SEARCH_SUGGESTIONS];
     private AutoCompleteTextView searchLocationsTextView;
-
-    private SearchLocations model;
+    private SearchLocations searchLocations;
 
     private RecentLocations recentLocations;
 
     @Inject
     public LocationPresenter(LocationViewContract view,
                              WeatherLocation location,
-                             GeoNamesApiService apiService,
                              Preferences preferences,
+                             GeoNamesApiService apiService,
                              OpenWeatherCaller caller,
-                             Database database) {
+                             Database database,
+                             RecentLocationsUpdater recentLocationsUpdater,
+                             SelectLocationMapper mapper) {
         this.location = location;
         this.view = view;
         this.apiService = apiService;
         this.preferences = preferences;
         this.caller = caller;
         this.database = database;
+        this.recentLocationsUpdater = recentLocationsUpdater;
+        this.mapper = mapper;
     }
 
     public void onViewResume() {
@@ -71,8 +78,11 @@ public class LocationPresenter extends BaseObservable {
         }
     }
 
-    public void setModel(SearchLocations searchLocations) {
-        model = searchLocations;
+    // Load search locations
+    // --------------------------------------------------------------------------------
+
+    public void setSearchLocations(SearchLocations searchLocations) {
+        this.searchLocations = searchLocations;
     }
 
     public void setupSearchSuggestions(final AutoCompleteTextView searchLocationsTextView) {
@@ -101,7 +111,7 @@ public class LocationPresenter extends BaseObservable {
                 .switchMap(new Func1<String, Observable<SearchLocations>>() {
                     @Override
                     public Observable<SearchLocations> call(String s) {
-                        return apiService.getSearchLocations(s, NUM_SUGGESTIONS);
+                        return apiService.getSearchLocations(s, NUM_SEARCH_SUGGESTIONS);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,12 +129,12 @@ public class LocationPresenter extends BaseObservable {
 
                     @Override
                     public void onNext(SearchLocations searchLocations) {
-                        model = searchLocations;
-                        String[] locations = mapLocationNames(searchLocations);
+                        LocationPresenter.this.searchLocations = searchLocations;
+                        String[] locations = mapper.mapSearchLocationNames(searchLocations);
                         dropDownSuggestionsState = locations;
                         view.showLocationSuggestions(locations);
-                        }
-                    });
+                    }
+                });
     }
 
     private boolean inputIsValid(String s) {
@@ -138,89 +148,102 @@ public class LocationPresenter extends BaseObservable {
         return false;
     }
 
-    private String[] mapLocationNames(SearchLocations searchLocations) {
-        SearchLocation[] locations = searchLocations.getGeonames();
-        if (locations != null && locations.length > 0) {
-            String[] names = new String[locations.length];
-            for (int i = 0; i < locations.length; i++) {
-                names[i] = mapLocationName(locations[i]);
-            }
-            return names;
-        }
-        return new String[0];
-    }
-
-    private String mapLocationName(SearchLocation location) {
-        String name = location.getToponymName();
-        String admin = location.getAdminName1();
-        String country = location.getCountryName();
-        return String.format("%s, %s, %s", name, admin, country);
-    }
-
     private void formatAutoCompleteTextView(AutoCompleteTextView textView) {
         textView.setThreshold(1);
         textView.setDropDownWidth(900);
     }
 
-    public void selectSearchLocation() {
-        /*
-        RecentLocation selectedLocation = saveSearchLocationCoordinates();
-        database.insertRecentLocation(selectedLocation);
-        updateWeatherData(selectedLocation.getLat(), selectedLocation.getLon());
-        */
-    }
-
-    protected RecentLocation saveSearchLocationCoordinates() {
-        String name = null;
-        float lat = 0f;
-        float lon = 0f;
-        if (model != null) {
-            SearchLocation[] locationSuggestions = model.getGeonames();
-            String selectedLocationName = view.getSearchTextViewText();
-            name = selectedLocationName;
-
-            for (int i = 0; i < locationSuggestions.length; i++) {
-                if (selectedLocationName.equals(mapLocationName(locationSuggestions[i]))) {
-                    SearchLocation selectedLocation = model.getGeonames()[i];
-                    lat = Float.parseFloat(selectedLocation.getLat());
-                    lon = Float.parseFloat(selectedLocation.getLng());
-                    preferences.putCoordinates(lat, lon);
-                }
-            }
-        }
-        return new RecentLocation(name, lat, lon, 0);
-    }
+    // Load recent locations
+    // --------------------------------------------------------------------------------
 
     public String[] getRecentLocationNames() {
         if (recentLocations != null) {
-            return getLocationsWithNullEntriesRemoved(recentLocations.getRecentLocations());
+            return getLocationNames(recentLocations);
         }
         return new String[0];
     }
 
-    private String[] getLocationsWithNullEntriesRemoved(RecentLocation[] recentLocations) {
+    public String[] getLocationNames(RecentLocations recentLocations) {
+        List<RecentLocation> locations = recentLocations.getRecentLocations();
         List<String> names = new ArrayList<>();
-        for (int i = 0; i< recentLocations.length; i++) {
-            if (recentLocations[i] != null && recentLocations[i].getName() != null)
-                names.add(recentLocations[i].getName());
+        for (int i = 0; i< locations.size(); i++) {
+            RecentLocation location = locations.get(i);
+            if (location != null && location.getName() != null)
+                names.add(location.getName());
         }
         return names.toArray(new String[names.size()]);
     }
 
-    public void selectRecentLocation(String selection) {
-        if (recentLocations != null) {
-            for (int i = 0; i< recentLocations.getRecentLocations().length; i++) {
-                String name = recentLocations.getRecentLocations()[i].getName();
-                float lat = recentLocations.getRecentLocations()[i].getLat();
-                float lon = recentLocations.getRecentLocations()[i].getLon();
-                if (selection.equals(name))
-                    // Save recent location as most recent location
-                    updateWeatherData(lat,lon);
+    // Select a search location
+    // --------------------------------------------------------------------------------
+
+    public void selectSearchLocation() {
+        SearchLocation selectedLocation = saveLocationCoordinates();
+        RecentLocation location = mapper.mapSearchLocationToRecentLocation(selectedLocation);
+        saveLocationCoordinates(location);
+        updateAndSaveRecentLocationsList(location);
+        updateWeatherDataAndReturn(location);
+    }
+
+    private void updateAndSaveRecentLocationsList(RecentLocation location) {
+        recentLocations = recentLocationsUpdater.updateRecentLocations(recentLocations, location);
+    }
+
+    @Nullable
+    private SearchLocation saveLocationCoordinates() {
+        SearchLocation selectedLocation = null;
+        if (searchLocations != null) {
+            SearchLocation[] locationSuggestions = searchLocations.getLocations();
+            String selectedLocationName = view.getSearchTextViewText();
+
+            for (int i = 0; i < locationSuggestions.length; i++) {
+                if (selectedLocationName.equals(mapper.mapLocationName(locationSuggestions[i]))) {
+                    selectedLocation = searchLocations.getLocations()[i];
+                }
             }
+        }
+        return selectedLocation;
+    }
+
+    private void saveLocationCoordinates(RecentLocation location) {
+        float lat = location.getLat();
+        float lon = location.getLon();
+        preferences.putCoordinates(lat, lon);
+    }
+
+    // Select a recent location
+    // --------------------------------------------------------------------------------
+
+    public void selectRecentLocation(String selection) {
+        if (selection != null) {
+            RecentLocation location = mapSelectionNameToRecentLocation(selection);
+            recentLocations = recentLocationsUpdater.updateRecentLocations(recentLocations, location);
+            database.insertRecentLocations(recentLocations);
+            updateWeatherDataAndReturn(location);
         }
     }
 
-    private void updateWeatherData(float latitude, float longitude) {
+    @Nullable
+    private RecentLocation mapSelectionNameToRecentLocation(String selection) {
+        RecentLocation location = null;
+        if (recentLocations != null) {
+            List<RecentLocation> locations = recentLocations.getRecentLocations();
+            for (int i = 0; i < locations.size(); i++) {
+                RecentLocation currLocation = recentLocations.getRecentLocations().get(i);
+                if (selection.equals(location.getName())) {
+                    location = currLocation;
+                }
+            }
+        }
+        return location;
+    }
+
+    // Update weather data and return to main activity
+    // --------------------------------------------------------------------------------
+
+    public void updateWeatherDataAndReturn(RecentLocation location) {
+        float latitude = location.getLat();
+        float longitude = location.getLon();
         caller.getWeatherObservable(latitude, longitude)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -244,6 +267,8 @@ public class LocationPresenter extends BaseObservable {
                     }
                 });
     }
+
+    // --------------------------------------------------------------------------------
 
     public void onViewPause() {
         database.insertRecentLocations(recentLocations);

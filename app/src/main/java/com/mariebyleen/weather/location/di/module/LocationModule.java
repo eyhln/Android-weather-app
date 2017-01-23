@@ -16,9 +16,10 @@ import com.mariebyleen.weather.location.model.LocationFetcher;
 import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.model.fetcher.FusedLocation;
 import com.mariebyleen.weather.location.model.fetcher.NetworkLocation;
+import com.mariebyleen.weather.location.presenter.RecentLocationsUpdater;
+import com.mariebyleen.weather.location.presenter.SelectLocationMapper;
 import com.mariebyleen.weather.location.recent_locations.database.Database;
 import com.mariebyleen.weather.location.recent_locations.database.DatabaseReadWrite;
-import com.mariebyleen.weather.location.recent_locations.database.DatabaseReadWriteImpl;
 import com.mariebyleen.weather.location.recent_locations.database.RecentLocationsDbHelper;
 import com.mariebyleen.weather.location.presenter.LocationViewContract;
 import com.mariebyleen.weather.location.presenter.LocationPresenter;
@@ -45,8 +46,22 @@ public class LocationModule {
                                                GeoNamesApiService apiService,
                                                Preferences preferences,
                                                OpenWeatherCaller caller,
-                                               Database database) {
-        return new LocationPresenter(view, location, apiService, preferences, caller, database);
+                                               Database database,
+                                               RecentLocationsUpdater updater,
+                                               SelectLocationMapper mapper) {
+        return new LocationPresenter(view, location, preferences, apiService, caller, database, updater, mapper);
+    }
+
+    @PerActivity
+    @Provides
+    RecentLocationsUpdater provideSelectLocationUtils() {
+        return new RecentLocationsUpdater();
+    }
+
+    @PerActivity
+    @Provides
+    SelectLocationMapper provideSelectLocationMapper() {
+        return new SelectLocationMapper();
     }
 
     @PerActivity
@@ -58,7 +73,7 @@ public class LocationModule {
     @PerActivity
     @Provides
     DatabaseReadWrite provideDatabaseReadWrite(RecentLocationsDbHelper dbHelper) {
-        return new DatabaseReadWriteImpl(dbHelper);
+        return new DatabaseReadWrite(dbHelper);
     }
 
     @PerActivity

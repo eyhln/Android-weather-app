@@ -2,9 +2,9 @@ package com.mariebyleen.weather.location.presenter;
 
 import android.content.SharedPreferences;
 
-import com.mariebyleen.weather.FakeSharedPreferences;
-import com.mariebyleen.weather.location.model.JsonModel.SearchLocation;
-import com.mariebyleen.weather.location.model.JsonModel.SearchLocations;
+import com.mariebyleen.weather.preferences.FakeSharedPreferences;
+import com.mariebyleen.weather.location.search_locations.model.SearchLocation;
+import com.mariebyleen.weather.location.search_locations.model.SearchLocations;
 import com.mariebyleen.weather.preferences.Preferences;
 
 import org.junit.Before;
@@ -34,17 +34,17 @@ public class SearchLocationsTest {
     public void init() {
         sharedPreferences = new FakeSharedPreferences();
         preferences = new Preferences(sharedPreferences, null, null);
-        viewModel = new LocationPresenter(view, null, null, preferences, null, null);
+        viewModel = new LocationPresenter(view, null, preferences, null, null,  null, null, null);
     }
 
     @Test
     public void savesCoordinatesFromModel() {
         SearchLocations model = createFakeModel("Test", "Test", "Test", "12.345", "12.345");
-        viewModel.setModel(model);
+        viewModel.setSearchLocations(model);
 
         when(view.getSearchTextViewText()).thenReturn("Test, Test, Test");
 
-        viewModel.saveSearchLocationCoordinates();
+        //viewModel.saveSearchLocationCoordinates();
 
         assertEquals(12.345f, preferences.getLatitude());
         assertEquals(12.345f, preferences.getLongitude());
@@ -61,7 +61,7 @@ public class SearchLocationsTest {
         sampleLocation.setLat(lat);
         sampleLocation.setLng(lon);
         geoNames[0] = sampleLocation;
-        model.setGeonames(geoNames);
+        model.setLocations(geoNames);
         return model;
     }
 }
