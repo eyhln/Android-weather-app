@@ -57,9 +57,8 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onCreateResolveDaggerDependency();
-        setContentView(R.layout.activity_location);
+        setContentView(R.layout.activity_location1);
         ButterKnife.bind(this);
-        onCreatePopulateSpinner();
     }
 
     private void onCreateResolveDaggerDependency() {
@@ -69,7 +68,7 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
                 .build().inject(this);
     }
 
-    private void onCreatePopulateSpinner() {
+    private void onResumePopulateSpinner() {
         String[] recentLocations = locationPresenter.getRecentLocationNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
@@ -80,6 +79,7 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
     @Override
     protected void onResume() {
         locationPresenter.onViewResume();
+        onResumePopulateSpinner();
         locationPresenter.setupSearchSuggestions(locationTextView);
         super.onResume();
     }
