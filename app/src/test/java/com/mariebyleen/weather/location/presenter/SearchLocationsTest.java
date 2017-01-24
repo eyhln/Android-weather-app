@@ -61,7 +61,7 @@ public class SearchLocationsTest {
         sampleLocation.setLat(lat);
         sampleLocation.setLng(lon);
         geoNames[0] = sampleLocation;
-        model.setLocations(geoNames);
+        model.setGeonames(geoNames);
         return model;
     }
 }

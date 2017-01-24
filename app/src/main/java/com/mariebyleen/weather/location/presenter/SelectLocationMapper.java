@@ -13,7 +13,7 @@ public class SelectLocationMapper {
 
 
     public String[] mapSearchLocationNames(SearchLocations searchLocations) {
-        SearchLocation[] locations = searchLocations.getLocations();
+        SearchLocation[] locations = searchLocations.getGeonames();
         if (locations != null && locations.length > 0) {
             String[] names = new String[locations.length];
             for (int i = 0; i < locations.length; i++) {

@@ -25,7 +25,7 @@ public class MapLocationsTest {
         locations[0] = getSearchLocation("0");
         locations[1] = getSearchLocation("1");
         SearchLocations searchLocations = new SearchLocations();
-        searchLocations.setLocations(locations);
+        searchLocations.setGeonames(locations);
 
         String[] names = mapper.mapSearchLocationNames(searchLocations);
 
