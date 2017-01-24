@@ -39,7 +39,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_margin="16dp"
-            app:srcCompat="@{viewModel.forecast.iconResourcesId}"
+            app:srcCompat="@{viewModel.forecast.iconCode}"
             tools:background="@color/colorPrimary"
             app:layout_constraintLeft_toRightOf="@+id/textView8"/>
 

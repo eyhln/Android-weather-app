@@ -45,6 +45,7 @@ public class WeatherMapper {
             forecast.setMinTemp(fResponse.getList()[i].getTemp().getMin());
             forecast.setMaxTemp(fResponse.getList()[i].getTemp().getMax());
             forecast.setIconResourcesId(mapIcon(fResponse.getList()[i].getWeather()[0].getIcon()));
+            forecast.setIconCode(fResponse.getList()[i].getWeather()[0].getIcon());
             forecast.setTime(fResponse.getList()[i].getDt());
             forecast.setDescription(fResponse.getList()[i].getWeather()[0].getDescription());
             forecasts[i] = forecast;

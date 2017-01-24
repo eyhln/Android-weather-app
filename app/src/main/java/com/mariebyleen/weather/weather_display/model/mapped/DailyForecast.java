@@ -9,6 +9,15 @@ public class DailyForecast {
 
     private String description;
     private int iconResourcesId;
+    String iconCode;
+
+    public String getIconCode() {
+        return iconCode;
+    }
+
+    public void setIconCode(String iconCode) {
+        this.iconCode = iconCode;
+    }
 
     public long getTime() {
         return time;
