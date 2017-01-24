@@ -22,6 +22,7 @@ public class Database {
     }
 
     public void insertRecentLocations(RecentLocations recentLocations) {
+        db.clearAllEntries();
         List<RecentLocation> locations = recentLocations.getRecentLocations();
         for (int i = 0; i < locations.size(); i++) {
             RecentLocation location = locations.get(i);

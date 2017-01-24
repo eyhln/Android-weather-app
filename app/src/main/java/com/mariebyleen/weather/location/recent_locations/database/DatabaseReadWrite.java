@@ -20,6 +20,11 @@ public class DatabaseReadWrite {
         this.dbHelper = dbHelper;
     }
 
+    public void clearAllEntries() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
+    }
+
     public Cursor getAllEntriesNewestFirst() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         return db.rawQuery(SQL_SELECT_ALL_ENTRIES_NEWEST_FIRST, null);
