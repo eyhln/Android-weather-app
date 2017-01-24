@@ -2,7 +2,7 @@ package com.mariebyleen.weather.location.search_locations.model;
 
 public class SearchLocations {
     private int totalResultsCount;
-    private SearchLocation[] locations;
+    private SearchLocation[] geonames;
 
     public int getTotalResultsCount() {
         return this.totalResultsCount;
@@ -12,11 +12,11 @@ public class SearchLocations {
         this.totalResultsCount = totalResultsCount;
     }
 
-    public SearchLocation[] getLocations() {
-        return this.locations;
+    public SearchLocation[] getGeonames() {
+        return this.geonames;
     }
 
-    public void setLocations(SearchLocation[] locations) {
-        this.locations = locations;
+    public void setGeonames(SearchLocation[] geonames) {
+        this.geonames = geonames;
     }
 }

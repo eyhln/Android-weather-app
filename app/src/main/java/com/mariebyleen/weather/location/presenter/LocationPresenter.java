@@ -182,23 +182,24 @@ public class LocationPresenter {
         RecentLocation location = mapper.mapSearchLocationToRecentLocation(selectedLocation);
         saveLocationCoordinates(location);
         updateAndSaveRecentLocationsList(location);
-        updateWeatherDataAndReturn(location);
+        //updateWeatherDataAndReturn(location);
     }
 
     private void updateAndSaveRecentLocationsList(RecentLocation location) {
         recentLocations = recentLocationsUpdater.updateRecentLocations(recentLocations, location);
+        database.insertRecentLocations(recentLocations);
     }
 
     @Nullable
     private SearchLocation saveLocationCoordinates() {
         SearchLocation selectedLocation = null;
         if (searchLocations != null) {
-            SearchLocation[] locationSuggestions = searchLocations.getLocations();
+            SearchLocation[] locationSuggestions = searchLocations.getGeonames();
             String selectedLocationName = view.getSearchTextViewText();
 
             for (int i = 0; i < locationSuggestions.length; i++) {
                 if (selectedLocationName.equals(mapper.mapLocationName(locationSuggestions[i]))) {
-                    selectedLocation = searchLocations.getLocations()[i];
+                    selectedLocation = searchLocations.getGeonames()[i];
                 }
             }
         }
