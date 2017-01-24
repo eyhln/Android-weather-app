@@ -23,7 +23,7 @@ public class RecentLocationsUpdater {
         if (location != null && location.getName() != null) {
             this.recentLocations = model.getRecentLocations();
             deleteAnyDuplicateEntry(location);
-            if (recentLocations.size() > MAX_RECENT_LOCATIONS)
+            if (recentLocations.size() >= MAX_RECENT_LOCATIONS)
                 deleteOldestEntry();
             recentLocations.add(0, location);
             RecentLocations newModel = new RecentLocations(recentLocations);
