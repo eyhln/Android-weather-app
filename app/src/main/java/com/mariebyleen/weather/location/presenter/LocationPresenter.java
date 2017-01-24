@@ -182,7 +182,7 @@ public class LocationPresenter {
         RecentLocation location = mapper.mapSearchLocationToRecentLocation(selectedLocation);
         saveLocationCoordinates(location);
         updateAndSaveRecentLocationsList(location);
-        //updateWeatherDataAndReturn(location);
+        updateWeatherDataAndReturn(location);
     }
 
     private void updateAndSaveRecentLocationsList(RecentLocation location) {
