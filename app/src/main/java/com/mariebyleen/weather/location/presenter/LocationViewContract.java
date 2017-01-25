@@ -2,7 +2,8 @@ package com.mariebyleen.weather.location.presenter;
 
 public interface LocationViewContract  {
 
-    void checkPermissions();
+    boolean permissionsGiven();
+    void requestPermissions();
     void disableUseCurrentLocationOption();
     void showLocationSuggestions(String[] suggestions);
     String getSearchTextViewText();

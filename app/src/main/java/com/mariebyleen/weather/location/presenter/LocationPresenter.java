@@ -1,5 +1,10 @@
 package com.mariebyleen.weather.location.presenter;
 
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.AutoCompleteTextView;
@@ -7,7 +12,6 @@ import android.widget.AutoCompleteTextView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mariebyleen.weather.api.GeoNamesApiService;
 import com.mariebyleen.weather.api.OpenWeatherCaller;
-import com.mariebyleen.weather.location.model.WeatherLocation;
 import com.mariebyleen.weather.location.recent_locations.database.Database;
 import com.mariebyleen.weather.location.recent_locations.model.RecentLocation;
 import com.mariebyleen.weather.location.recent_locations.model.RecentLocations;
@@ -29,16 +33,17 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class LocationPresenter {
+public class LocationPresenter implements LocationListener {
 
     private final String TAG = "LocationPresenter";
 
     public static final int MAX_RECENT_LOCATIONS = 10;
     private final int NUM_SEARCH_SUGGESTIONS = 8;
 
-    private WeatherLocation location;
     private LocationViewContract view;
 
+    private LocationManager locationManager;
+    private Criteria criteria;
     private Preferences preferences;
     private OpenWeatherCaller caller;
     private Database database;
@@ -55,14 +60,16 @@ public class LocationPresenter {
 
     @Inject
     public LocationPresenter(LocationViewContract view,
-                             WeatherLocation location,
+                             Criteria criteria,
+                             LocationManager locationManager,
                              Preferences preferences,
                              GeoNamesApiService apiService,
                              OpenWeatherCaller caller,
                              Database database,
                              RecentLocationsUpdater recentLocationsUpdater,
                              SelectLocationMapper mapper) {
-        this.location = location;
+        this.locationManager = locationManager;
+        this.criteria = criteria;
         this.view = view;
         this.apiService = apiService;
         this.preferences = preferences;
@@ -78,6 +85,44 @@ public class LocationPresenter {
         }
     }
 
+    // Select Current Location
+    // --------------------------------------------------------------------------------
+
+    public void useCurrentLocation() {
+        if (view.permissionsGiven())
+            updateLocationData();
+        else
+            view.requestPermissions();
+    }
+
+    public void onLocationPermissionGranted() {
+        updateLocationData();
+    }
+
+    public void onLocationPermissionDenied() {
+        view.disableUseCurrentLocationOption();
+    }
+
+    public void updateLocationData() throws SecurityException {
+        String providerName = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(providerName);
+        if (location != null)
+            updateWeatherDataAndReturn((float)location.getLatitude(), (float)location.getLongitude());
+        else
+            locationManager.requestLocationUpdates(providerName, 0, 0.0f, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) throws SecurityException {
+        locationManager.removeUpdates(this);
+        updateWeatherDataAndReturn((float)location.getLatitude(), (float)location.getLongitude());}
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {}
+    @Override
+    public void onProviderEnabled(String s) {}
+    @Override
+    public void onProviderDisabled(String s) {}
+
     // Load search locations
     // --------------------------------------------------------------------------------
 
@@ -91,6 +136,7 @@ public class LocationPresenter {
         view.enableSearchLocationSelection(false);
 
         locationTextViewSub = RxTextView.textChanges(searchLocationsTextView)
+                .observeOn(Schedulers.computation())
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .map(new Func1<CharSequence, String>() {
                     @Override
@@ -107,7 +153,7 @@ public class LocationPresenter {
                         return !isValid;
                     }
                 })
-                .observeOn(Schedulers.newThread())
+                .observeOn(Schedulers.io())
                 .switchMap(new Func1<String, Observable<SearchLocations>>() {
                     @Override
                     public Observable<SearchLocations> call(String s) {
@@ -182,7 +228,7 @@ public class LocationPresenter {
         RecentLocation location = mapper.mapSearchLocationToRecentLocation(selectedLocation);
         saveLocationCoordinates(location);
         updateAndSaveRecentLocationsList(location);
-        updateWeatherDataAndReturn(location);
+        updateWeatherDataAndReturn(location.getLat(), location.getLon());
     }
 
     private void updateAndSaveRecentLocationsList(RecentLocation location) {
@@ -220,14 +266,14 @@ public class LocationPresenter {
             RecentLocation location = mapSelectionNameToRecentLocation(selection);
             recentLocations = recentLocationsUpdater.updateRecentLocations(recentLocations, location);
             database.insertRecentLocations(recentLocations);
-            updateWeatherDataAndReturn(location);
+            updateWeatherDataAndReturn(location.getLat(), location.getLon());
         }
     }
 
     @Nullable
     private RecentLocation mapSelectionNameToRecentLocation(String selection) {
         RecentLocation location = null;
-        if (recentLocations != null) {
+        if (recentLocations != null && selection != null) {
             List<RecentLocation> locations = recentLocations.getRecentLocations();
             for (int i = 0; i < locations.size(); i++) {
                 RecentLocation currLocation = recentLocations.getRecentLocations().get(i);
@@ -242,9 +288,7 @@ public class LocationPresenter {
     // Update weather data and return to main activity
     // --------------------------------------------------------------------------------
 
-    public void updateWeatherDataAndReturn(RecentLocation location) {
-        float latitude = location.getLat();
-        float longitude = location.getLon();
+    public void updateWeatherDataAndReturn(float latitude, float longitude) {
         caller.getWeatherObservable(latitude, longitude)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -273,18 +317,6 @@ public class LocationPresenter {
 
     public void onViewPause() {
         database.insertRecentLocations(recentLocations);
-    }
-
-    public void useCurrentLocation() {
-        view.checkPermissions();
-    }
-
-    public void onLocationPermissionGranted() {
-        location.updateLocationData();
-    }
-
-    public void onLocationPermissionDenied() {
-        view.disableUseCurrentLocationOption();
     }
 
     public void onViewStop() {

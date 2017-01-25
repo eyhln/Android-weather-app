@@ -93,14 +93,15 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
         useCurrentLocation.setEnabled(false);
     }
 
-    public void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION);
-        }
+    public boolean permissionsGiven() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestPermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                PERMISSIONS_REQUEST_ACCESS_COURSE_LOCATION);
     }
 
     @Override
