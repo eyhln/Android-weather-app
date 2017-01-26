@@ -277,7 +277,7 @@ public class LocationPresenter implements LocationListener {
             List<RecentLocation> locations = recentLocations.getRecentLocations();
             for (int i = 0; i < locations.size(); i++) {
                 RecentLocation currLocation = recentLocations.getRecentLocations().get(i);
-                if (selection.equals(location.getName())) {
+                if (selection.equals(currLocation.getName())) {
                     location = currLocation;
                 }
             }
