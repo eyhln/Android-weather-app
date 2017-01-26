@@ -57,7 +57,7 @@ public class LocationActivity extends AppCompatActivity implements LocationViewC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onCreateResolveDaggerDependency();
-        setContentView(R.layout.activity_location1);
+        setContentView(R.layout.activity_location);
         ButterKnife.bind(this);
     }
 
