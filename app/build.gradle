@@ -39,9 +39,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.2.26'
 
-    // Location Services
-    compile 'com.google.android.gms:play-services-location:10.0.1'
-
     // ButterKnife
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
