@@ -6,7 +6,7 @@ This simple weather application provides current weather data and forecasts for 
 - Weather and forecast display
 - Set location to device location
 - Location search autocomplete
-- Select location from most recently used
+- Select location from 10 most recently used
 - Change frequency of background data updates
 - Select imperial or metric units
 
