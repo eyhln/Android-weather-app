@@ -21,7 +21,7 @@ This simple weather application provides current weather data and forecasts for 
 This project offered an opportunity to explore a variety of techniques and become aquainted with several popular libraries. I used:
 
 Android:
-- ContraintLayout
+- ConstraintLayout
 - RecyclerView
 - Android Data Binding
 
